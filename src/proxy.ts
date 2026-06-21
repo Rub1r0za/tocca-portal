@@ -10,6 +10,11 @@ const protectedRoutes = ['/dashboard', '/journey', '/meals', '/activities']
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
+  // Let auth callback pass through without locale handling
+  if (pathname.startsWith('/auth/')) {
+    return NextResponse.next()
+  }
+
   const pathnameWithoutLocale = pathname.replace(/^\/(en|es)/, '') || '/'
   const isProtected = protectedRoutes.some(
     (r) => pathnameWithoutLocale === r || pathnameWithoutLocale.startsWith(r + '/')
