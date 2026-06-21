@@ -1,0 +1,56 @@
+{
+  "nav": {
+    "dashboard": "Your Trip",
+    "journey": "Itinerary",
+    "meals": "Meals",
+    "activities": "Activities",
+    "signOut": "Sign out"
+  },
+  "login": {
+    "title": "Welcome to Tocca Amalfi Coast",
+    "subtitle": "Enter your email to access your trip portal.",
+    "emailLabel": "Email address",
+    "emailPlaceholder": "you@example.com",
+    "submit": "Send magic link",
+    "sending": "Sending…",
+    "checkEmail": "Check your inbox",
+    "checkEmailDesc": "We've sent a link to {email}. Click it to sign in.",
+    "error": "Something went wrong. Please try again."
+  },
+  "dashboard": {
+    "greeting": "Welcome back",
+    "tripLabel": "Your trip",
+    "travelersLabel": "Travelers",
+    "datesLabel": "Dates",
+    "statusLabel": "Status",
+    "quickLinks": "Quick access",
+    "viewItinerary": "View itinerary",
+    "chooseMeals": "Choose meals",
+    "chooseActivities": "Choose activities"
+  },
+  "journey": {
+    "title": "Your Itinerary",
+    "subtitle": "Day by day on the Amalfi Coast"
+  },
+  "meals": {
+    "title": "Meals",
+    "subtitle": "Choose your meals for each day",
+    "traveler": "Traveler",
+    "day": "Day {n}",
+    "starter": "Starter",
+    "main": "Main",
+    "dessert": "Dessert",
+    "save": "Save",
+    "saved": "Saved",
+    "noMeals": "No meal options for this day."
+  },
+  "activities": {
+    "title": "Activities",
+    "subtitle": "Select activities for each traveler",
+    "capacity": "{n} spots left",
+    "price": "${price} per person",
+    "add": "Add",
+    "remove": "Remove",
+    "noActivities": "No activities available."
+  }
+}

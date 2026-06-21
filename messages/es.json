@@ -1,0 +1,56 @@
+{
+  "nav": {
+    "dashboard": "Tu viaje",
+    "journey": "Itinerario",
+    "meals": "Comidas",
+    "activities": "Actividades",
+    "signOut": "Cerrar sesión"
+  },
+  "login": {
+    "title": "Bienvenido a Tocca Amalfi Coast",
+    "subtitle": "Ingresa tu correo para acceder a tu portal de viaje.",
+    "emailLabel": "Correo electrónico",
+    "emailPlaceholder": "tu@correo.com",
+    "submit": "Enviar enlace mágico",
+    "sending": "Enviando…",
+    "checkEmail": "Revisa tu bandeja de entrada",
+    "checkEmailDesc": "Enviamos un enlace a {email}. Haz clic para ingresar.",
+    "error": "Algo salió mal. Intenta de nuevo."
+  },
+  "dashboard": {
+    "greeting": "Bienvenido de vuelta",
+    "tripLabel": "Tu viaje",
+    "travelersLabel": "Viajeros",
+    "datesLabel": "Fechas",
+    "statusLabel": "Estado",
+    "quickLinks": "Acceso rápido",
+    "viewItinerary": "Ver itinerario",
+    "chooseMeals": "Elegir comidas",
+    "chooseActivities": "Elegir actividades"
+  },
+  "journey": {
+    "title": "Tu Itinerario",
+    "subtitle": "Día a día en la Costa Amalfitana"
+  },
+  "meals": {
+    "title": "Comidas",
+    "subtitle": "Elige tus comidas para cada día",
+    "traveler": "Viajero",
+    "day": "Día {n}",
+    "starter": "Entrada",
+    "main": "Plato principal",
+    "dessert": "Postre",
+    "save": "Guardar",
+    "saved": "Guardado",
+    "noMeals": "Sin opciones de comida para este día."
+  },
+  "activities": {
+    "title": "Actividades",
+    "subtitle": "Selecciona actividades para cada viajero",
+    "capacity": "{n} lugares disponibles",
+    "price": "${price} por persona",
+    "add": "Agregar",
+    "remove": "Quitar",
+    "noActivities": "No hay actividades disponibles."
+  }
+}

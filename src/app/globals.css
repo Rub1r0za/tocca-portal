@@ -1,26 +1,105 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
+/* ── Tocca brand tokens ── */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-sans);
   --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-display);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+
+  /* Tocca palette */
+  --color-cobalt: #11487E;
+  --color-lemon: #F2C200;
+  --color-sea: #2F7E72;
+  --color-chalk: #FBFAF6;
+  --color-ink: #14233A;
+  --color-sand: #E7E0D2;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+:root {
+  --background: #FBFAF6;
+  --foreground: #14233A;
+  --card: #ffffff;
+  --card-foreground: #14233A;
+  --popover: #ffffff;
+  --popover-foreground: #14233A;
+  --primary: #11487E;
+  --primary-foreground: #FBFAF6;
+  --secondary: #E7E0D2;
+  --secondary-foreground: #14233A;
+  --muted: #f4f1eb;
+  --muted-foreground: #6b7280;
+  --accent: #2F7E72;
+  --accent-foreground: #FBFAF6;
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: #E7E0D2;
+  --input: #E7E0D2;
+  --ring: #11487E;
+  --radius: 0.5rem;
+  --sidebar: #FBFAF6;
+  --sidebar-foreground: #14233A;
+  --sidebar-primary: #11487E;
+  --sidebar-primary-foreground: #FBFAF6;
+  --sidebar-accent: #E7E0D2;
+  --sidebar-accent-foreground: #14233A;
+  --sidebar-border: #E7E0D2;
+  --sidebar-ring: #11487E;
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
   }
-}
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+  h1, h2, h3 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
 }
