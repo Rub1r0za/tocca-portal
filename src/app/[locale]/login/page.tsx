@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
+import { Mail, Loader2 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { z } from 'zod'
 
@@ -27,39 +28,32 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-chalk flex items-center justify-center px-4">
+    <div className="flex min-h-screen items-center justify-center bg-night px-5">
       <div className="w-full max-w-sm">
         {/* Wordmark */}
         <div className="mb-10 text-center">
-          <p className="text-xs tracking-[0.25em] text-[#2F7E72] uppercase mb-2">Tocca</p>
-          <h1
-            className="text-4xl text-ink"
-            style={{ fontFamily: 'var(--font-display)', fontWeight: 500 }}
-          >
+          <p className="mb-2 text-xs tracking-[0.3em] text-azure uppercase">Tocca</p>
+          <h1 className="text-4xl text-foreground" style={{ fontFamily: 'var(--font-display)', fontWeight: 500 }}>
             Amalfi Coast
           </h1>
-          <div className="mt-3 mx-auto h-px w-16 bg-sand" />
+          <div className="mx-auto mt-3 h-px w-16 bg-gold/60" />
         </div>
 
         {status === 'sent' ? (
-          <div className="text-center space-y-3">
-            <div className="w-12 h-12 rounded-full bg-[#2F7E72]/10 flex items-center justify-center mx-auto">
-              <svg className="w-6 h-6 text-[#2F7E72]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-              </svg>
+          <div className="space-y-3 text-center">
+            <div className="mx-auto flex size-12 items-center justify-center rounded-full bg-azure/15">
+              <Mail className="size-6 text-azure" aria-hidden />
             </div>
-            <h2 className="text-xl text-ink" style={{ fontFamily: 'var(--font-display)' }}>
+            <h2 className="text-xl text-foreground" style={{ fontFamily: 'var(--font-display)' }}>
               {t('checkEmail')}
             </h2>
-            <p className="text-sm text-[#6b7280]">
-              {t('checkEmailDesc', { email })}
-            </p>
+            <p className="text-sm text-mist">{t('checkEmailDesc', { email })}</p>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-5">
+            <p className="mb-2 text-center text-sm text-mist">{t('subtitle')}</p>
             <div>
-              <p className="text-sm text-[#6b7280] text-center mb-6">{t('subtitle')}</p>
-              <label htmlFor="email" className="block text-xs tracking-widest text-[#6b7280] uppercase mb-2">
+              <label htmlFor="email" className="mb-2 block text-xs tracking-widest text-mist uppercase">
                 {t('emailLabel')}
               </label>
               <input
@@ -70,19 +64,18 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder={t('emailPlaceholder')}
-                className="w-full border border-sand rounded px-4 py-3 text-sm bg-white text-ink placeholder:text-sand focus:outline-none focus:ring-2 focus:ring-[#11487E]/30 focus:border-[#11487E] transition-colors"
+                className="w-full rounded-xl border border-input bg-panel-2 px-4 py-3 text-sm text-foreground placeholder:text-mist/50 focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/30"
               />
             </div>
 
-            {status === 'error' && (
-              <p className="text-xs text-red-600">{t('error')}</p>
-            )}
+            {status === 'error' && <p className="text-xs text-destructive">{t('error')}</p>}
 
             <button
               type="submit"
               disabled={status === 'sending'}
-              className="w-full bg-[#11487E] text-white rounded px-4 py-3 text-sm tracking-wide hover:bg-[#0d3a66] focus:outline-none focus:ring-2 focus:ring-[#11487E]/40 focus:ring-offset-2 transition-colors disabled:opacity-60"
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-gold px-4 py-3.5 text-sm font-medium tracking-wide text-accent-foreground transition-opacity hover:opacity-90 disabled:opacity-60 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/60 focus-visible:ring-offset-2 focus-visible:ring-offset-night"
             >
+              {status === 'sending' && <Loader2 className="size-4 animate-spin" aria-hidden />}
               {status === 'sending' ? t('sending') : t('submit')}
             </button>
           </form>

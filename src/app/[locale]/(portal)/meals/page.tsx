@@ -1,8 +1,18 @@
 import { getTranslations } from 'next-intl/server'
+import { redirect } from 'next/navigation'
 import { getMyBooking } from '@/lib/booking'
 import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
+import type { Booking, Meal } from '@/lib/types'
+import { AppHeader } from '@/components/app-header'
+import { EmptyState } from '@/components/primitives'
 import { MealDay } from './meal-day'
+
+type DayWithMeals = {
+  id: string
+  day_number: number
+  title: Record<string, string>
+  meals: Meal[]
+}
 
 export default async function MealsPage({
   params,
@@ -10,52 +20,48 @@ export default async function MealsPage({
   params: Promise<{ locale: string }>
 }) {
   const { locale } = await params
-  const t = await getTranslations('meals')
-  const booking = await getMyBooking()
+  const tSections = await getTranslations('sections')
 
+  const booking = (await getMyBooking()) as Booking | null
   if (!booking) redirect(`/${locale}/login`)
 
   const supabase = await createClient()
-
-  const { data: days } = await supabase
+  const { data } = await supabase
     .from('journey_days')
-    .select(`*, meals (*)`)
+    .select('*, meals (*)')
     .eq('booking_id', booking.id)
     .order('day_number', { ascending: true })
 
-  const { data: selections } = await supabase
+  const { data: selectionData } = await supabase
     .from('meal_selections')
     .select('meal_id, traveler_id')
     .eq('booking_id', booking.id)
 
+  const days = (data ?? []) as DayWithMeals[]
+  const selections = (selectionData ?? []) as { meal_id: string; traveler_id: string }[]
   const travelers = booking.travelers ?? []
 
-  return (
-    <div className="space-y-10">
-      <div>
-        <p className="text-xs tracking-[0.2em] text-[#2F7E72] uppercase mb-2">
-          {booking.title?.[locale] ?? booking.title?.['en']}
-        </p>
-        <h1
-          className="text-4xl sm:text-5xl text-ink"
-          style={{ fontFamily: 'var(--font-display)', fontWeight: 500 }}
-        >
-          {t('title')}
-        </h1>
-        <p className="mt-2 text-sm text-[#6b7280]">{t('subtitle')}</p>
-        <div className="mt-4 h-px bg-sand w-24" />
-      </div>
+  const daysWithMeals = days.filter((d) => d.meals && d.meals.length > 0)
 
-      {(days ?? []).map((day) => (
-        <MealDay
-          key={day.id}
-          day={day}
-          travelers={travelers}
-          selections={selections ?? []}
-          bookingId={booking.id}
-          locale={locale}
-        />
-      ))}
+  return (
+    <div>
+      <AppHeader title={tSections('meals.title')} subtitle={tSections('meals.subtitle')} locale={locale} />
+      <div className="space-y-8 px-5 py-6">
+        {daysWithMeals.length === 0 ? (
+          <EmptyState title={tSections('meals.empty')} />
+        ) : (
+          daysWithMeals.map((day) => (
+            <MealDay
+              key={day.id}
+              day={day}
+              travelers={travelers}
+              selections={selections}
+              bookingId={booking.id}
+              locale={locale}
+            />
+          ))
+        )}
+      </div>
     </div>
   )
 }

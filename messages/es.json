@@ -1,10 +1,50 @@
 {
-  "nav": {
-    "dashboard": "Tu viaje",
-    "journey": "Itinerario",
-    "meals": "Comidas",
+  "mobileNav": {
+    "label": "Navegación principal",
+    "guestView": "Inicio",
+    "timeline": "Cronograma",
+    "journey": "Viaje",
     "activities": "Actividades",
+    "meals": "Comidas",
+    "wellness": "Bienestar"
+  },
+  "menu": {
+    "title": "Menú",
+    "open": "Abrir menú",
+    "close": "Cerrar menú",
+    "back": "Atrás",
+    "language": "Idioma",
     "signOut": "Cerrar sesión"
+  },
+  "sections": {
+    "guestView": { "title": "Vista del huésped", "subtitle": "" },
+    "timeline": {
+      "title": "Cronograma del viaje",
+      "subtitle": "Tu viaje, hora a hora",
+      "empty": "Tu cronograma de viaje aparecerá aquí."
+    },
+    "journey": {
+      "title": "Mi viaje exclusivo",
+      "subtitle": "Día a día en la Costa Amalfitana",
+      "searchPlaceholder": "Busca días, lugares…",
+      "noResults": "Ningún día coincide con tu búsqueda.",
+      "empty": "Tu itinerario se está preparando."
+    },
+    "activities": {
+      "title": "Actividades de día libre",
+      "subtitle": "Experiencias curadas para reservar",
+      "empty": "Aún no hay actividades disponibles."
+    },
+    "meals": {
+      "title": "Selección de comidas",
+      "subtitle": "Elige tus platos para cada día",
+      "empty": "Aún no hay comidas para elegir."
+    },
+    "wellness": {
+      "title": "Bienestar",
+      "subtitle": "Spa, fitness y relajación",
+      "empty": "Aún no hay opciones de bienestar."
+    }
   },
   "login": {
     "title": "Bienvenido a Tocca Amalfi Coast",
@@ -19,38 +59,71 @@
   },
   "dashboard": {
     "greeting": "Bienvenido de vuelta",
-    "tripLabel": "Tu viaje",
-    "travelersLabel": "Viajeros",
     "datesLabel": "Fechas",
+    "travelersLabel": "Viajeros",
     "statusLabel": "Estado",
-    "quickLinks": "Acceso rápido",
-    "viewItinerary": "Ver itinerario",
-    "chooseMeals": "Elegir comidas",
-    "chooseActivities": "Elegir actividades"
+    "exploreEyebrow": "Explora",
+    "exploreTitle": "Tu concierge"
   },
-  "journey": {
-    "title": "Tu Itinerario",
-    "subtitle": "Día a día en la Costa Amalfitana"
+  "status": {
+    "approved": "Aprobado",
+    "pending": "Pendiente",
+    "cancelled": "Cancelado",
+    "confirmed": "Confirmado",
+    "declined": "Rechazado"
+  },
+  "common": {
+    "loading": "Cargando…",
+    "error": "Algo salió mal.",
+    "retry": "Reintentar",
+    "back": "Atrás",
+    "onRequest": "Bajo solicitud",
+    "viewDetails": "Ver detalles",
+    "perPerson": "por persona",
+    "day": "Día {n}"
+  },
+  "journeyDetail": {
+    "schedule": "Itinerario del día",
+    "included": "Qué incluye",
+    "meetingPoint": "Punto de encuentro",
+    "notes": "Bueno saber",
+    "gallery": "Galería"
+  },
+  "activities": {
+    "duration": "Duración",
+    "time": "Hora",
+    "overview": "Descripción",
+    "whatsIncluded": "Qué incluye",
+    "requirements": "Qué llevar",
+    "cancellationPolicy": "Política de cancelación",
+    "requestReservation": "Solicitar reserva",
+    "from": "Desde",
+    "capacity": "{n} cupos"
+  },
+  "wellness": {
+    "duration": "Duración",
+    "requestReservation": "Solicitar reserva",
+    "from": "Desde",
+    "included": "Incluido"
+  },
+  "reservation": {
+    "guests": "Huéspedes",
+    "decrease": "Menos huéspedes",
+    "increase": "Más huéspedes",
+    "date": "Fecha preferida",
+    "dateRequired": "Por favor elige una fecha.",
+    "notes": "Notas (opcional)",
+    "notesPlaceholder": "Preferencias o solicitudes…",
+    "submit": "Solicitar reserva",
+    "submitting": "Enviando…",
+    "successTitle": "Solicitud recibida",
+    "successBody": "Nuestro concierge confirmará por correo en breve.",
+    "errorTitle": "No se pudo enviar tu solicitud. Inténtalo de nuevo."
   },
   "meals": {
-    "title": "Comidas",
-    "subtitle": "Elige tus comidas para cada día",
-    "traveler": "Viajero",
-    "day": "Día {n}",
     "starter": "Entrada",
     "main": "Plato principal",
     "dessert": "Postre",
-    "save": "Guardar",
-    "saved": "Guardado",
-    "noMeals": "Sin opciones de comida para este día."
-  },
-  "activities": {
-    "title": "Actividades",
-    "subtitle": "Selecciona actividades para cada viajero",
-    "capacity": "{n} lugares disponibles",
-    "price": "${price} por persona",
-    "add": "Agregar",
-    "remove": "Quitar",
-    "noActivities": "No hay actividades disponibles."
+    "noMeals": "Sin opciones para este día."
   }
 }

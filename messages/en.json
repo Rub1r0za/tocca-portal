@@ -1,10 +1,50 @@
 {
-  "nav": {
-    "dashboard": "Your Trip",
-    "journey": "Itinerary",
-    "meals": "Meals",
+  "mobileNav": {
+    "label": "Main navigation",
+    "guestView": "Home",
+    "timeline": "Timeline",
+    "journey": "Journey",
     "activities": "Activities",
+    "meals": "Meals",
+    "wellness": "Wellness"
+  },
+  "menu": {
+    "title": "Menu",
+    "open": "Open menu",
+    "close": "Close menu",
+    "back": "Back",
+    "language": "Language",
     "signOut": "Sign out"
+  },
+  "sections": {
+    "guestView": { "title": "Guest View", "subtitle": "" },
+    "timeline": {
+      "title": "Travel Timeline",
+      "subtitle": "Your trip, hour by hour",
+      "empty": "Your travel timeline will appear here."
+    },
+    "journey": {
+      "title": "My Signature Journey",
+      "subtitle": "Day by day on the Amalfi Coast",
+      "searchPlaceholder": "Search days, places…",
+      "noResults": "No days match your search.",
+      "empty": "Your itinerary is being prepared."
+    },
+    "activities": {
+      "title": "Free Day Activities",
+      "subtitle": "Curated experiences to book",
+      "empty": "No activities available yet."
+    },
+    "meals": {
+      "title": "Meals Selection",
+      "subtitle": "Choose your dishes for each day",
+      "empty": "No meals to select yet."
+    },
+    "wellness": {
+      "title": "Wellness",
+      "subtitle": "Spa, fitness & relaxation",
+      "empty": "No wellness options available yet."
+    }
   },
   "login": {
     "title": "Welcome to Tocca Amalfi Coast",
@@ -19,38 +59,71 @@
   },
   "dashboard": {
     "greeting": "Welcome back",
-    "tripLabel": "Your trip",
-    "travelersLabel": "Travelers",
     "datesLabel": "Dates",
+    "travelersLabel": "Travelers",
     "statusLabel": "Status",
-    "quickLinks": "Quick access",
-    "viewItinerary": "View itinerary",
-    "chooseMeals": "Choose meals",
-    "chooseActivities": "Choose activities"
+    "exploreEyebrow": "Explore",
+    "exploreTitle": "Your concierge"
   },
-  "journey": {
-    "title": "Your Itinerary",
-    "subtitle": "Day by day on the Amalfi Coast"
+  "status": {
+    "approved": "Approved",
+    "pending": "Pending",
+    "cancelled": "Cancelled",
+    "confirmed": "Confirmed",
+    "declined": "Declined"
+  },
+  "common": {
+    "loading": "Loading…",
+    "error": "Something went wrong.",
+    "retry": "Try again",
+    "back": "Back",
+    "onRequest": "On request",
+    "viewDetails": "View details",
+    "perPerson": "per person",
+    "day": "Day {n}"
+  },
+  "journeyDetail": {
+    "schedule": "Schedule",
+    "included": "What's included",
+    "meetingPoint": "Meeting point",
+    "notes": "Good to know",
+    "gallery": "Gallery"
+  },
+  "activities": {
+    "duration": "Duration",
+    "time": "Time",
+    "overview": "Overview",
+    "whatsIncluded": "What's included",
+    "requirements": "What to bring",
+    "cancellationPolicy": "Cancellation policy",
+    "requestReservation": "Request reservation",
+    "from": "From",
+    "capacity": "{n} spots"
+  },
+  "wellness": {
+    "duration": "Duration",
+    "requestReservation": "Request reservation",
+    "from": "From",
+    "included": "Included"
+  },
+  "reservation": {
+    "guests": "Guests",
+    "decrease": "Decrease guests",
+    "increase": "Increase guests",
+    "date": "Preferred date",
+    "dateRequired": "Please choose a date.",
+    "notes": "Notes (optional)",
+    "notesPlaceholder": "Any preferences or requests…",
+    "submit": "Request reservation",
+    "submitting": "Sending…",
+    "successTitle": "Request received",
+    "successBody": "Our concierge will confirm by email shortly.",
+    "errorTitle": "Could not send your request. Please try again."
   },
   "meals": {
-    "title": "Meals",
-    "subtitle": "Choose your meals for each day",
-    "traveler": "Traveler",
-    "day": "Day {n}",
     "starter": "Starter",
     "main": "Main",
     "dessert": "Dessert",
-    "save": "Save",
-    "saved": "Saved",
-    "noMeals": "No meal options for this day."
-  },
-  "activities": {
-    "title": "Activities",
-    "subtitle": "Select activities for each traveler",
-    "capacity": "{n} spots left",
-    "price": "${price} per person",
-    "add": "Add",
-    "remove": "Remove",
-    "noActivities": "No activities available."
+    "noMeals": "No options for this day."
   }
 }

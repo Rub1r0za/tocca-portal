@@ -1,7 +1,12 @@
 import { getTranslations } from 'next-intl/server'
-import { getMyBooking } from '@/lib/booking'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
+import { Route, Sparkles, Compass, UtensilsCrossed, Flower2, ChevronRight, Users, CalendarDays } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
+import { getMyBooking } from '@/lib/booking'
+import type { Booking } from '@/lib/types'
+import { pick, formatDate } from '@/lib/format'
+import { StatusPill } from '@/components/primitives'
 
 export default async function DashboardPage({
   params,
@@ -10,99 +15,96 @@ export default async function DashboardPage({
 }) {
   const { locale } = await params
   const t = await getTranslations('dashboard')
-  const booking = await getMyBooking()
+  const tSections = await getTranslations('sections')
+  const tStatus = await getTranslations('status')
 
-  if (!booking) {
-    redirect(`/${locale}/login`)
-  }
+  const booking = (await getMyBooking()) as Booking | null
+  if (!booking) redirect(`/${locale}/login`)
 
-  const title = booking.title?.[locale] ?? booking.title?.['en'] ?? 'Your trip'
-  const startDate = booking.start_date
-    ? new Date(booking.start_date).toLocaleDateString(locale === 'es' ? 'es-ES' : 'en-GB', {
-        day: 'numeric', month: 'long', year: 'numeric',
-      })
-    : '—'
-  const endDate = booking.end_date
-    ? new Date(booking.end_date).toLocaleDateString(locale === 'es' ? 'es-ES' : 'en-GB', {
-        day: 'numeric', month: 'long', year: 'numeric',
-      })
-    : '—'
+  const title = pick(booking.title, locale) || 'Amalfi Coast'
+  const start = formatDate(booking.start_date, locale, { day: 'numeric', month: 'short' })
+  const end = formatDate(booking.end_date, locale, { day: 'numeric', month: 'short', year: 'numeric' })
+  const dateRange = start && end ? `${start} – ${end}` : start || end || '—'
+  const travelers = booking.travelers?.length ?? 0
+  const statusLabel = tStatus(booking.status)
 
-  const travelers = booking.travelers ?? []
+  const tiles: { href: string; Icon: LucideIcon; title: string; subtitle: string }[] = [
+    { href: `/${locale}/timeline`, Icon: Route, title: tSections('timeline.title'), subtitle: tSections('timeline.subtitle') },
+    { href: `/${locale}/activities`, Icon: Compass, title: tSections('activities.title'), subtitle: tSections('activities.subtitle') },
+    { href: `/${locale}/meals`, Icon: UtensilsCrossed, title: tSections('meals.title'), subtitle: tSections('meals.subtitle') },
+    { href: `/${locale}/wellness`, Icon: Flower2, title: tSections('wellness.title'), subtitle: tSections('wellness.subtitle') },
+  ]
 
   return (
-    <div className="space-y-10">
+    <div>
       {/* Hero */}
-      <div>
-        <p className="text-xs tracking-[0.2em] text-[#2F7E72] uppercase mb-2">{t('greeting')}</p>
+      <section className="bg-gradient-to-br from-azure to-[#16424f] px-5 pt-12 pb-8">
+        <p className="text-[0.65rem] tracking-[0.25em] text-white/70 uppercase">{t('greeting')}</p>
         <h1
-          className="text-4xl sm:text-5xl text-ink leading-tight"
+          className="mt-1 text-[2.1rem] leading-tight text-white"
           style={{ fontFamily: 'var(--font-display)', fontWeight: 500 }}
         >
           {title}
         </h1>
-        <div className="mt-4 h-px bg-sand w-24" />
-      </div>
-
-      {/* Trip summary */}
-      <div className="grid sm:grid-cols-3 gap-4">
-        <SummaryCard label={t('travelersLabel')} value={String(travelers.length)} />
-        <SummaryCard
-          label={t('datesLabel')}
-          value={`${startDate} – ${endDate}`}
-        />
-        <SummaryCard label={t('statusLabel')} value={booking.status} capitalize />
-      </div>
-
-      {/* Quick links */}
-      <div>
-        <p className="text-xs tracking-[0.2em] text-[#6b7280] uppercase mb-4">{t('quickLinks')}</p>
-        <div className="grid sm:grid-cols-3 gap-3">
-          <QuickLink href={`/${locale}/journey`} label={t('viewItinerary')} />
-          <QuickLink href={`/${locale}/meals`} label={t('chooseMeals')} accent />
-          <QuickLink href={`/${locale}/activities`} label={t('chooseActivities')} />
+        <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-white/85">
+          <span className="inline-flex items-center gap-1.5">
+            <CalendarDays className="size-4" aria-hidden />
+            {dateRange}
+          </span>
+          <span className="inline-flex items-center gap-1.5">
+            <Users className="size-4" aria-hidden />
+            {travelers} {t('travelersLabel').toLowerCase()}
+          </span>
+          <StatusPill status={booking.status} label={statusLabel} />
         </div>
-      </div>
-    </div>
-  )
-}
+      </section>
 
-function SummaryCard({
-  label,
-  value,
-  capitalize,
-}: {
-  label: string
-  value: string
-  capitalize?: boolean
-}) {
-  return (
-    <div className="border border-sand rounded-lg p-5 bg-white">
-      <p className="text-xs tracking-widest text-[#6b7280] uppercase mb-1">{label}</p>
-      <p className={`text-sm text-ink font-medium ${capitalize ? 'capitalize' : ''}`}>{value}</p>
-    </div>
-  )
-}
+      {/* Explore */}
+      <section className="px-5 py-7">
+        <p className="text-[0.65rem] tracking-[0.22em] text-gold uppercase">{t('exploreEyebrow')}</p>
+        <h2
+          className="mt-1 mb-4 text-2xl text-foreground"
+          style={{ fontFamily: 'var(--font-display)', fontWeight: 500 }}
+        >
+          {t('exploreTitle')}
+        </h2>
 
-function QuickLink({
-  href,
-  label,
-  accent,
-}: {
-  href: string
-  label: string
-  accent?: boolean
-}) {
-  return (
-    <Link
-      href={href}
-      className={`block rounded-lg px-5 py-4 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#11487E]/40 ${
-        accent
-          ? 'bg-[#11487E] text-white hover:bg-[#0d3a66]'
-          : 'border border-sand bg-white text-ink hover:border-[#11487E]/30 hover:bg-[#11487E]/4'
-      }`}
-    >
-      {label} →
-    </Link>
+        {/* Feature: Journey */}
+        <Link
+          href={`/${locale}/journey`}
+          className="group mb-3 flex items-center gap-4 overflow-hidden rounded-2xl border border-hairline bg-gradient-to-br from-panel to-panel-2 p-5 transition-colors hover:border-gold/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
+        >
+          <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-gold/15">
+            <Sparkles className="size-5 text-gold" strokeWidth={1.7} aria-hidden />
+          </span>
+          <div className="min-w-0 flex-1">
+            <h3 className="text-lg text-foreground" style={{ fontFamily: 'var(--font-display)', fontWeight: 500 }}>
+              {tSections('journey.title')}
+            </h3>
+            <p className="truncate text-sm text-mist">{tSections('journey.subtitle')}</p>
+          </div>
+          <ChevronRight className="size-5 shrink-0 text-mist/60 transition-transform group-hover:translate-x-0.5 group-hover:text-gold" aria-hidden />
+        </Link>
+
+        {/* Grid of sections */}
+        <div className="grid grid-cols-2 gap-3">
+          {tiles.map(({ href, Icon, title: tileTitle, subtitle }) => (
+            <Link
+              key={href}
+              href={href}
+              className="group flex flex-col rounded-2xl border border-hairline bg-panel p-4 transition-colors hover:border-gold/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
+            >
+              <span className="mb-3 flex size-10 items-center justify-center rounded-full bg-azure/15">
+                <Icon className="size-[18px] text-azure" strokeWidth={1.7} aria-hidden />
+              </span>
+              <h3 className="text-base leading-snug text-foreground" style={{ fontFamily: 'var(--font-display)', fontWeight: 500 }}>
+                {tileTitle}
+              </h3>
+              <p className="mt-0.5 line-clamp-2 text-xs text-mist">{subtitle}</p>
+            </Link>
+          ))}
+        </div>
+      </section>
+    </div>
   )
 }

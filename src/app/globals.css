@@ -40,43 +40,54 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) * 1.4);
 
-  /* Tocca palette */
+  /* Tocca palette (legacy light tokens, kept for reference) */
   --color-cobalt: #11487E;
   --color-lemon: #F2C200;
   --color-sea: #2F7E72;
   --color-chalk: #FBFAF6;
   --color-ink: #14233A;
   --color-sand: #E7E0D2;
+
+  /* ── Dark luxury palette (guest app) ── */
+  --color-void: #08090C;     /* canvas behind the phone frame */
+  --color-night: #0F1115;    /* app background */
+  --color-panel: #171A21;    /* card surface */
+  --color-panel-2: #1E222B;  /* raised surface / inputs */
+  --color-azure: #2D6F8E;    /* primary */
+  --color-gold: #D6B36A;     /* accent */
+  --color-mist: #A7AAB3;     /* secondary text */
+  --color-hairline: rgba(255, 255, 255, 0.08);
 }
 
 :root {
-  --background: #FBFAF6;
-  --foreground: #14233A;
-  --card: #ffffff;
-  --card-foreground: #14233A;
-  --popover: #ffffff;
-  --popover-foreground: #14233A;
-  --primary: #11487E;
-  --primary-foreground: #FBFAF6;
-  --secondary: #E7E0D2;
-  --secondary-foreground: #14233A;
-  --muted: #f4f1eb;
-  --muted-foreground: #6b7280;
-  --accent: #2F7E72;
-  --accent-foreground: #FBFAF6;
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: #E7E0D2;
-  --input: #E7E0D2;
-  --ring: #11487E;
-  --radius: 0.5rem;
-  --sidebar: #FBFAF6;
-  --sidebar-foreground: #14233A;
-  --sidebar-primary: #11487E;
-  --sidebar-primary-foreground: #FBFAF6;
-  --sidebar-accent: #E7E0D2;
-  --sidebar-accent-foreground: #14233A;
-  --sidebar-border: #E7E0D2;
-  --sidebar-ring: #11487E;
+  /* Dark luxury is the only theme for the guest app. */
+  --background: #0F1115;
+  --foreground: #FFFFFF;
+  --card: #171A21;
+  --card-foreground: #FFFFFF;
+  --popover: #171A21;
+  --popover-foreground: #FFFFFF;
+  --primary: #2D6F8E;
+  --primary-foreground: #FFFFFF;
+  --secondary: #1E222B;
+  --secondary-foreground: #FFFFFF;
+  --muted: #1A1D24;
+  --muted-foreground: #A7AAB3;
+  --accent: #D6B36A;
+  --accent-foreground: #0F1115;
+  --destructive: #E5685F;
+  --border: rgba(255, 255, 255, 0.08);
+  --input: rgba(255, 255, 255, 0.12);
+  --ring: #D6B36A;
+  --radius: 0.875rem;
+  --sidebar: #0F1115;
+  --sidebar-foreground: #FFFFFF;
+  --sidebar-primary: #2D6F8E;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #1E222B;
+  --sidebar-accent-foreground: #FFFFFF;
+  --sidebar-border: rgba(255, 255, 255, 0.08);
+  --sidebar-ring: #D6B36A;
   --font-display: 'Cormorant Garamond', Georgia, serif;
 }
 
@@ -85,10 +96,12 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground antialiased;
+    background-color: var(--color-void);
   }
   html {
     @apply font-sans;
+    -webkit-tap-highlight-color: transparent;
   }
   h1, h2, h3 {
     font-family: var(--font-display);
@@ -102,4 +115,27 @@
       transition-duration: 0.01ms !important;
     }
   }
+}
+
+/* ── Guest app helpers ── */
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+}
+
+/* Loading shimmer for image / skeleton placeholders */
+@keyframes tocca-shimmer {
+  0% { background-position: -468px 0; }
+  100% { background-position: 468px 0; }
+}
+.tocca-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.02) 0%,
+    rgba(255, 255, 255, 0.06) 50%,
+    rgba(255, 255, 255, 0.02) 100%
+  );
+  background-size: 936px 100%;
+  animation: tocca-shimmer 1.6s linear infinite;
 }
