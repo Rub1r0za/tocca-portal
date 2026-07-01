@@ -43,7 +43,9 @@ export async function proxy(request: NextRequest) {
 
     if (!user) {
       const locale = pathname.match(/^\/(en|es)/)?.[1] ?? routing.defaultLocale
-      return NextResponse.redirect(new URL(`/${locale}/login`, request.url))
+      const loginUrl = new URL(`/${locale}/login`, request.url)
+      loginUrl.searchParams.set('next', pathname)
+      return NextResponse.redirect(loginUrl)
     }
 
     // Merge any refreshed auth cookies into the intl response
