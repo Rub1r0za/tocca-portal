@@ -25,7 +25,6 @@ export function MenuDrawer({
   const router = useRouter()
   const panelRef = useRef<HTMLDivElement>(null)
 
-  // Lock body scroll + ESC to close while open
   useEffect(() => {
     if (!open) return
     const onKey = (e: KeyboardEvent) => {
@@ -61,7 +60,7 @@ export function MenuDrawer({
         type="button"
         aria-label={tMenu('close')}
         onClick={onClose}
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/40 backdrop-blur-sm"
         tabIndex={open ? 0 : -1}
       />
       <div className="relative h-full w-full max-w-[430px]">
@@ -72,17 +71,20 @@ export function MenuDrawer({
           aria-label={tMenu('title')}
           tabIndex={-1}
           className={cn(
-            'absolute inset-y-0 left-0 flex h-full w-[84%] max-w-[320px] flex-col border-r border-hairline bg-night shadow-2xl outline-none transition-transform duration-300',
+            'absolute inset-y-0 left-0 flex h-full w-[80%] max-w-[300px] flex-col border-r border-hairline bg-white shadow-[4px_0_32px_rgba(62,45,35,0.15)] outline-none transition-transform duration-300',
             open ? 'translate-x-0' : '-translate-x-full'
           )}
         >
           {/* Header */}
-          <div className="flex items-center justify-between px-5 pt-6 pb-5">
+          <div
+            className="flex items-end justify-between px-5 pt-8 pb-6"
+            style={{ background: 'linear-gradient(135deg, #23374D 0%, #1a2d3f 100%)' }}
+          >
             <div>
-              <p className="text-[0.65rem] tracking-[0.25em] text-azure uppercase">Tocca</p>
+              <p className="text-[0.6rem] tracking-[0.4em] text-white/50 uppercase">Tocca</p>
               <p
-                className="text-2xl text-foreground"
-                style={{ fontFamily: 'var(--font-display)', fontWeight: 500 }}
+                className="text-2xl text-white"
+                style={{ fontFamily: 'var(--font-display)', fontWeight: 400, fontStyle: 'italic' }}
               >
                 Amalfi Coast
               </p>
@@ -91,14 +93,14 @@ export function MenuDrawer({
               type="button"
               onClick={onClose}
               aria-label={tMenu('close')}
-              className="rounded-full p-1.5 text-mist transition-colors hover:text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
+              className="mb-0.5 rounded-full p-1.5 text-white/60 transition-colors hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
             >
               <X className="size-5" aria-hidden />
             </button>
           </div>
 
           {/* Nav */}
-          <nav aria-label={t('label')} className="flex-1 overflow-y-auto px-3">
+          <nav aria-label={t('label')} className="flex-1 overflow-y-auto px-3 py-4">
             <ul className="space-y-0.5">
               {navItems.map(({ key, path, Icon }) => {
                 const href = `/${locale}${path}`
@@ -110,13 +112,17 @@ export function MenuDrawer({
                       onClick={onClose}
                       aria-current={active ? 'page' : undefined}
                       className={cn(
-                        'flex items-center gap-3 rounded-xl px-3 py-3 text-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/50',
+                        'flex items-center gap-3 rounded-xl px-3 py-3 text-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-azure/40',
                         active
-                          ? 'bg-panel-2 text-gold'
-                          : 'text-mist hover:bg-panel hover:text-foreground'
+                          ? 'bg-azure/10 text-azure font-medium'
+                          : 'text-mist hover:bg-panel-2 hover:text-foreground'
                       )}
                     >
-                      <Icon className="size-[18px] shrink-0" strokeWidth={1.7} aria-hidden />
+                      <Icon
+                        className={cn('size-[18px] shrink-0', active ? 'text-azure' : 'text-mist')}
+                        strokeWidth={active ? 2 : 1.7}
+                        aria-hidden
+                      />
                       {t(key)}
                     </Link>
                   </li>
@@ -134,7 +140,7 @@ export function MenuDrawer({
             <button
               type="button"
               onClick={signOut}
-              className="flex w-full items-center gap-2 rounded-xl border border-hairline px-3 py-2.5 text-sm text-mist transition-colors hover:border-destructive/40 hover:text-destructive focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/50"
+              className="flex w-full items-center gap-2 rounded-xl border border-hairline px-3 py-2.5 text-sm text-mist transition-colors hover:border-destructive/30 hover:bg-destructive/5 hover:text-destructive focus:outline-none focus-visible:ring-2 focus-visible:ring-azure/40"
             >
               <LogOut className="size-4" aria-hidden />
               {tMenu('signOut')}

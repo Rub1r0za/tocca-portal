@@ -4,7 +4,7 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* ── Tocca brand tokens ── */
+/* ── Tocca brand tokens — light theme matching toccaamalficoast.com ── */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -40,55 +40,47 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) * 1.4);
 
-  /* Tocca palette (legacy light tokens, kept for reference) */
-  --color-cobalt: #11487E;
-  --color-lemon: #F2C200;
-  --color-sea: #2F7E72;
-  --color-chalk: #FBFAF6;
-  --color-ink: #14233A;
-  --color-sand: #E7E0D2;
-
-  /* ── Dark luxury palette (guest app) ── */
-  --color-void: #08090C;     /* canvas behind the phone frame */
-  --color-night: #0F1115;    /* app background */
-  --color-panel: #171A21;    /* card surface */
-  --color-panel-2: #1E222B;  /* raised surface / inputs */
-  --color-azure: #2D6F8E;    /* primary */
-  --color-gold: #D6B36A;     /* accent */
-  --color-mist: #A7AAB3;     /* secondary text */
-  --color-hairline: rgba(255, 255, 255, 0.08);
+  /* Tocca palette — from toccaamalficoast.com style.css */
+  --color-void:     #D8D3CB;               /* warm taupe canvas (desktop bg) */
+  --color-night:    #FAFAF8;               /* app background (chalk) */
+  --color-panel:    #FFFFFF;               /* card surface */
+  --color-panel-2:  #F4F1EB;               /* raised surfaces / inputs */
+  --color-azure:    #4A9A92;               /* primary teal (#4A9A92) */
+  --color-gold:     #8B6A47;               /* amber accent (readable on light) */
+  --color-mist:     #7A7168;               /* secondary text (warm gray-brown) */
+  --color-hairline: rgba(62, 45, 35, 0.12);
 }
 
 :root {
-  /* Dark luxury is the only theme for the guest app. */
-  --background: #0F1115;
-  --foreground: #FFFFFF;
-  --card: #171A21;
-  --card-foreground: #FFFFFF;
-  --popover: #171A21;
-  --popover-foreground: #FFFFFF;
-  --primary: #2D6F8E;
-  --primary-foreground: #FFFFFF;
-  --secondary: #1E222B;
-  --secondary-foreground: #FFFFFF;
-  --muted: #1A1D24;
-  --muted-foreground: #A7AAB3;
-  --accent: #D6B36A;
-  --accent-foreground: #0F1115;
-  --destructive: #E5685F;
-  --border: rgba(255, 255, 255, 0.08);
-  --input: rgba(255, 255, 255, 0.12);
-  --ring: #D6B36A;
-  --radius: 0.875rem;
-  --sidebar: #0F1115;
-  --sidebar-foreground: #FFFFFF;
-  --sidebar-primary: #2D6F8E;
+  /* Tocca light theme */
+  --background:               #FAFAF8;
+  --foreground:               #3E2D23;
+  --card:                     #FFFFFF;
+  --card-foreground:          #3E2D23;
+  --popover:                  #FFFFFF;
+  --popover-foreground:       #3E2D23;
+  --primary:                  #4A9A92;
+  --primary-foreground:       #FFFFFF;
+  --secondary:                #F4F1EB;
+  --secondary-foreground:     #3E2D23;
+  --muted:                    #F4F1EB;
+  --muted-foreground:         #7A7168;
+  --accent:                   #8B6A47;
+  --accent-foreground:        #FFFFFF;
+  --destructive:              #C0392B;
+  --border:                   rgba(62, 45, 35, 0.12);
+  --input:                    rgba(62, 45, 35, 0.08);
+  --ring:                     #4A9A92;
+  --radius:                   0.75rem;
+  --sidebar:                  #FAFAF8;
+  --sidebar-foreground:       #3E2D23;
+  --sidebar-primary:          #4A9A92;
   --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #1E222B;
-  --sidebar-accent-foreground: #FFFFFF;
-  --sidebar-border: rgba(255, 255, 255, 0.08);
-  --sidebar-ring: #D6B36A;
-  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --sidebar-accent:           #F4F1EB;
+  --sidebar-accent-foreground: #3E2D23;
+  --sidebar-border:           rgba(62, 45, 35, 0.12);
+  --sidebar-ring:             #4A9A92;
+  --font-display:             'Playfair Display', Georgia, serif;
 }
 
 @layer base {
@@ -126,15 +118,15 @@
 
 /* Loading shimmer for image / skeleton placeholders */
 @keyframes tocca-shimmer {
-  0% { background-position: -468px 0; }
-  100% { background-position: 468px 0; }
+  0%   { background-position: -468px 0; }
+  100% { background-position:  468px 0; }
 }
 .tocca-shimmer {
   background: linear-gradient(
     90deg,
-    rgba(255, 255, 255, 0.02) 0%,
-    rgba(255, 255, 255, 0.06) 50%,
-    rgba(255, 255, 255, 0.02) 100%
+    rgba(0, 0, 0, 0.03) 0%,
+    rgba(0, 0, 0, 0.08) 50%,
+    rgba(0, 0, 0, 0.03) 100%
   );
   background-size: 936px 100%;
   animation: tocca-shimmer 1.6s linear infinite;

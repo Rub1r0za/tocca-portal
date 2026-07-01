@@ -1,15 +1,23 @@
 import type { Metadata, Viewport } from 'next'
-import { Cormorant_Garamond } from 'next/font/google'
+import { Playfair_Display, Montserrat } from 'next/font/google'
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 import { routing } from '@/i18n/routing'
 import '../globals.css'
 
-const cormorant = Cormorant_Garamond({
+const playfair = Playfair_Display({
   subsets: ['latin'],
-  weight: ['400', '500', '600'],
+  weight: ['400', '500', '600', '700'],
+  style: ['normal', 'italic'],
   variable: '--font-display',
+  display: 'swap',
+})
+
+const montserrat = Montserrat({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700'],
+  variable: '--font-sans',
   display: 'swap',
 })
 
@@ -19,7 +27,7 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  themeColor: '#0F1115',
+  themeColor: '#23374D',
   width: 'device-width',
   initialScale: 1,
   viewportFit: 'cover',
@@ -41,7 +49,7 @@ export default async function LocaleLayout({
   const messages = await getMessages()
 
   return (
-    <html lang={locale} className={`${cormorant.variable} h-full`}>
+    <html lang={locale} className={`${playfair.variable} ${montserrat.variable} h-full`}>
       <body className="min-h-full antialiased">
         <NextIntlClientProvider messages={messages}>
           {children}
