@@ -21,7 +21,7 @@ export async function proxy(request: NextRequest) {
   )
 
   if (isProtected) {
-    let response = NextResponse.next({ request })
+    let refreshedCookies: Array<{ name: string; value: string; options?: object }> = []
 
     const supabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -33,10 +33,7 @@ export async function proxy(request: NextRequest) {
           },
           setAll(cookiesToSet) {
             cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value))
-            response = NextResponse.next({ request })
-            cookiesToSet.forEach(({ name, value, options }) =>
-              response.cookies.set(name, value, options)
-            )
+            refreshedCookies = cookiesToSet
           },
         },
       }
@@ -48,6 +45,13 @@ export async function proxy(request: NextRequest) {
       const locale = pathname.match(/^\/(en|es)/)?.[1] ?? routing.defaultLocale
       return NextResponse.redirect(new URL(`/${locale}/login`, request.url))
     }
+
+    // Merge any refreshed auth cookies into the intl response
+    const response = intlProxy(request)
+    refreshedCookies.forEach(({ name, value, options }) =>
+      response.cookies.set(name, value, options)
+    )
+    return response
   }
 
   return intlProxy(request)
