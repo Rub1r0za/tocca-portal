@@ -20,7 +20,7 @@ export default async function ActivitiesPage({
   const tCommon = await getTranslations('common')
 
   const booking = (await getMyBooking()) as Booking | null
-  if (!booking) redirect(`/${locale}/login`)
+  if (!booking) redirect(`/${locale}/dashboard`)
 
   const supabase = await createClient()
   const { data } = await supabase

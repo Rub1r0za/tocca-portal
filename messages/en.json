@@ -85,7 +85,11 @@
     "travelersLabel": "Travelers",
     "statusLabel": "Status",
     "exploreEyebrow": "Explore",
-    "exploreTitle": "Your concierge"
+    "exploreTitle": "Your concierge",
+    "waitingTitle": "Your journey is being prepared",
+    "waitingPending": "Your booking is under review. It will appear here as soon as it is confirmed by our team.",
+    "waitingNone": "Your account is active. Your trip details will appear here once our team assigns your booking.",
+    "waitingContact": "Questions? Contact your Tocca advisor."
   },
   "status": {
     "approved": "Approved",

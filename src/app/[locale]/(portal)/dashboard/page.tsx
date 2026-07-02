@@ -1,12 +1,46 @@
 import { getTranslations } from 'next-intl/server'
-import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { Route, Sparkles, Compass, UtensilsCrossed, Flower2, ChevronRight, Users, CalendarDays } from 'lucide-react'
+import { Route, Sparkles, Compass, UtensilsCrossed, Flower2, ChevronRight, Users, CalendarDays, Hourglass } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { getMyBooking } from '@/lib/booking'
+import { createClient } from '@/lib/supabase/server'
 import type { Booking } from '@/lib/types'
 import { pick, formatDate } from '@/lib/format'
 import { StatusPill } from '@/components/primitives'
+
+async function WaitingState() {
+  const t = await getTranslations('dashboard')
+
+  // Distinguish "booking pending review" from "no booking assigned yet"
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  const { data: anyBooking } = user
+    ? await supabase
+        .from('bookings')
+        .select('id, status')
+        .eq('user_id', user.id)
+        .limit(1)
+        .maybeSingle()
+    : { data: null }
+
+  return (
+    <div className="flex min-h-[70vh] flex-col items-center justify-center px-6 text-center">
+      <div className="flex size-16 items-center justify-center rounded-full bg-azure/10">
+        <Hourglass className="size-7 text-azure" aria-hidden />
+      </div>
+      <h1
+        className="mt-5 text-2xl text-foreground"
+        style={{ fontFamily: 'var(--font-display)', fontWeight: 500 }}
+      >
+        {t('waitingTitle')}
+      </h1>
+      <p className="mt-3 max-w-xs text-sm leading-relaxed text-mist">
+        {anyBooking ? t('waitingPending') : t('waitingNone')}
+      </p>
+      <p className="mt-6 text-xs text-mist/70">{t('waitingContact')}</p>
+    </div>
+  )
+}
 
 export default async function DashboardPage({
   params,
@@ -19,7 +53,7 @@ export default async function DashboardPage({
   const tStatus = await getTranslations('status')
 
   const booking = (await getMyBooking()) as Booking | null
-  if (!booking) redirect(`/${locale}/login`)
+  if (!booking) return <WaitingState />
 
   const title = pick(booking.title, locale) || 'Amalfi Coast'
   const start = formatDate(booking.start_date, locale, { day: 'numeric', month: 'short' })
