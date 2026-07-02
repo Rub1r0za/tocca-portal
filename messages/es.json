@@ -17,7 +17,10 @@
     "signOut": "Cerrar sesión"
   },
   "sections": {
-    "guestView": { "title": "Vista del huésped", "subtitle": "" },
+    "guestView": {
+      "title": "Vista del huésped",
+      "subtitle": ""
+    },
     "timeline": {
       "title": "Cronograma del viaje",
       "subtitle": "Tu viaje, hora a hora",
@@ -55,7 +58,26 @@
     "sending": "Enviando…",
     "checkEmail": "Revisa tu bandeja de entrada",
     "checkEmailDesc": "Enviamos un enlace a {email}. Haz clic para ingresar.",
-    "error": "Algo salió mal. Intenta de nuevo."
+    "error": "Algo salió mal. Intenta de nuevo.",
+    "passwordLabel": "Contraseña",
+    "passwordPlaceholder": "••••••••",
+    "signIn": "Entrar",
+    "signingIn": "Entrando…",
+    "createAccount": "Crear cuenta",
+    "creatingAccount": "Creando cuenta…",
+    "noAccount": "¿No tienes cuenta?",
+    "haveAccount": "¿Ya tienes cuenta?",
+    "signUpLink": "Créala aquí",
+    "signInLink": "Inicia sesión",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "magicLinkFallback": "Prefiero recibir un enlace por correo",
+    "backToPassword": "Volver a entrar con contraseña",
+    "invalidCredentials": "Correo o contraseña incorrectos.",
+    "passwordTooShort": "La contraseña debe tener al menos 8 caracteres.",
+    "confirmEmailSent": "Enviamos un enlace de confirmación a {email}. Ábrelo para activar tu cuenta.",
+    "resetSent": "Enviamos un enlace a {email} para restablecer tu contraseña.",
+    "signupTitle": "Crea tu cuenta",
+    "signupSubtitle": "Usa el correo con el que se hizo tu reserva."
   },
   "dashboard": {
     "greeting": "Bienvenido de vuelta",
@@ -125,5 +147,16 @@
     "main": "Plato principal",
     "dessert": "Postre",
     "noMeals": "Sin opciones para este día."
+  },
+  "account": {
+    "passwordTitle": "Define una nueva contraseña",
+    "passwordSubtitle": "Elige una contraseña de al menos 8 caracteres.",
+    "newPassword": "Nueva contraseña",
+    "confirmPassword": "Confirmar contraseña",
+    "mismatch": "Las contraseñas no coinciden.",
+    "save": "Guardar contraseña",
+    "saving": "Guardando…",
+    "saved": "Contraseña actualizada. Ya puedes entrar con ella.",
+    "goToDashboard": "Ir a mi portal"
   }
 }

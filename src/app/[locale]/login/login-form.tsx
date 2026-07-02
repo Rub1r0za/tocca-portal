@@ -1,37 +1,116 @@
 'use client'
 
 import { useState } from 'react'
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 import { useSearchParams } from 'next/navigation'
-import { Mail, Loader2, Send } from 'lucide-react'
+import { Mail, Loader2, Send, LogIn, UserPlus } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { z } from 'zod'
 
 const emailSchema = z.string().email()
 
+type Mode = 'signin' | 'signup' | 'magic'
+type Status = 'idle' | 'busy' | 'sent' | 'confirm-sent' | 'reset-sent'
+
 export default function LoginForm() {
   const t = useTranslations('login')
+  const locale = useLocale()
   const searchParams = useSearchParams()
   const nextPath = searchParams.get('next') ?? ''
+  const destination = nextPath || `/${locale}/dashboard`
+
+  const [mode, setMode] = useState<Mode>('signin')
   const [email, setEmail] = useState('')
-  const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')
+  const [password, setPassword] = useState('')
+  const [status, setStatus] = useState<Status>('idle')
+  const [error, setError] = useState('')
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    const parsed = emailSchema.safeParse(email)
-    if (!parsed.success) return
-    setStatus('sending')
+    setError('')
+    if (!emailSchema.safeParse(email).success) return
+
     const supabase = createClient()
-    // Final destination after login. The Magic Link email template appends
-    // token_hash + type and passes this as `next` to /auth/confirm.
-    const destination = nextPath || '/en/dashboard'
-    const emailRedirectTo = `${location.origin}${destination}`
-    const { error } = await supabase.auth.signInWithOtp({
+
+    if (mode === 'magic') {
+      setStatus('busy')
+      const { error: err } = await supabase.auth.signInWithOtp({
+        email,
+        options: { emailRedirectTo: `${location.origin}${destination}` },
+      })
+      if (err) {
+        setError(t('error'))
+        setStatus('idle')
+      } else {
+        setStatus('sent')
+      }
+      return
+    }
+
+    if (password.length < 8) {
+      setError(t('passwordTooShort'))
+      return
+    }
+    setStatus('busy')
+
+    if (mode === 'signin') {
+      const { error: err } = await supabase.auth.signInWithPassword({ email, password })
+      if (err) {
+        setError(err.message.includes('Invalid login credentials') ? t('invalidCredentials') : t('error'))
+        setStatus('idle')
+        return
+      }
+      // Full navigation so the middleware picks up the fresh session cookies
+      location.assign(destination)
+      return
+    }
+
+    // signup
+    const { data, error: err } = await supabase.auth.signUp({
       email,
-      options: { emailRedirectTo },
+      password,
+      options: { emailRedirectTo: `${location.origin}${destination}` },
     })
-    setStatus(error ? 'error' : 'sent')
+    if (err) {
+      setError(t('error'))
+      setStatus('idle')
+      return
+    }
+    if (data.session) {
+      // Email confirmation disabled → signed in immediately
+      location.assign(destination)
+      return
+    }
+    // Email confirmation required
+    setStatus('confirm-sent')
   }
+
+  async function handleForgotPassword() {
+    setError('')
+    if (!emailSchema.safeParse(email).success) {
+      setError(t('error'))
+      return
+    }
+    setStatus('busy')
+    const supabase = createClient()
+    const { error: err } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${location.origin}/${locale}/account/password`,
+    })
+    if (err) {
+      setError(t('error'))
+      setStatus('idle')
+    } else {
+      setStatus('reset-sent')
+    }
+  }
+
+  const isSent = status === 'sent' || status === 'confirm-sent' || status === 'reset-sent'
+  const sentDesc =
+    status === 'sent'
+      ? t('checkEmailDesc', { email })
+      : status === 'confirm-sent'
+        ? t('confirmEmailSent', { email })
+        : t('resetSent', { email })
 
   return (
     <div
@@ -60,7 +139,7 @@ export default function LoginForm() {
 
       {/* Card */}
       <div className="w-full max-w-[360px] sm:max-w-sm">
-        {status === 'sent' ? (
+        {isSent ? (
           <div className="rounded-2xl border border-hairline bg-white px-6 py-10 text-center shadow-[0_4px_24px_rgba(62,45,35,0.10)] sm:px-8">
             <div className="mx-auto mb-4 flex size-14 items-center justify-center rounded-full bg-azure/10">
               <Mail className="size-6 text-azure" aria-hidden />
@@ -71,14 +150,12 @@ export default function LoginForm() {
             >
               {t('checkEmail')}
             </h2>
-            <p className="mt-2.5 text-sm leading-relaxed text-mist">
-              {t('checkEmailDesc', { email })}
-            </p>
+            <p className="mt-2.5 text-sm leading-relaxed text-mist">{sentDesc}</p>
           </div>
         ) : (
           <div className="rounded-2xl border border-hairline bg-white px-6 py-8 shadow-[0_4px_24px_rgba(62,45,35,0.10)] sm:px-8">
             <p className="mb-6 text-center text-sm leading-relaxed text-mist">
-              {t('subtitle')}
+              {mode === 'signup' ? t('signupSubtitle') : t('subtitle')}
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -101,24 +178,118 @@ export default function LoginForm() {
                 />
               </div>
 
-              {status === 'error' && (
-                <p className="text-xs text-destructive">{t('error')}</p>
+              {mode !== 'magic' && (
+                <div>
+                  <label
+                    htmlFor="password"
+                    className="mb-2 block text-[0.7rem] font-semibold tracking-[0.2em] text-mist uppercase"
+                  >
+                    {t('passwordLabel')}
+                  </label>
+                  <input
+                    id="password"
+                    type="password"
+                    autoComplete={mode === 'signup' ? 'new-password' : 'current-password'}
+                    required
+                    minLength={8}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder={t('passwordPlaceholder')}
+                    className="w-full rounded-xl border border-[rgba(62,45,35,0.18)] bg-[#FAFAF8] px-4 py-3 text-sm text-foreground placeholder:text-mist/50 focus:border-azure focus:outline-none focus:ring-2 focus:ring-azure/20"
+                  />
+                </div>
               )}
+
+              {error && <p className="text-xs text-destructive">{error}</p>}
 
               <button
                 type="submit"
-                disabled={status === 'sending'}
+                disabled={status === 'busy'}
                 className="flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3.5 text-sm font-medium tracking-wide text-white transition-opacity hover:opacity-90 disabled:opacity-60 focus:outline-none focus-visible:ring-2 focus-visible:ring-azure/50"
                 style={{ background: 'linear-gradient(135deg, #23374D 0%, #1a2d3f 100%)' }}
               >
-                {status === 'sending' ? (
+                {status === 'busy' ? (
                   <Loader2 className="size-4 animate-spin" aria-hidden />
-                ) : (
+                ) : mode === 'magic' ? (
                   <Send className="size-4" aria-hidden />
+                ) : mode === 'signup' ? (
+                  <UserPlus className="size-4" aria-hidden />
+                ) : (
+                  <LogIn className="size-4" aria-hidden />
                 )}
-                {status === 'sending' ? t('sending') : t('submit')}
+                {status === 'busy'
+                  ? mode === 'signup'
+                    ? t('creatingAccount')
+                    : mode === 'magic'
+                      ? t('sending')
+                      : t('signingIn')
+                  : mode === 'signup'
+                    ? t('createAccount')
+                    : mode === 'magic'
+                      ? t('submit')
+                      : t('signIn')}
               </button>
             </form>
+
+            {/* Secondary actions */}
+            <div className="mt-5 space-y-2 border-t border-hairline pt-4 text-center text-xs">
+              {mode === 'signin' && (
+                <>
+                  <p className="text-mist">
+                    {t('noAccount')}{' '}
+                    <button
+                      type="button"
+                      onClick={() => { setMode('signup'); setError('') }}
+                      className="font-medium text-azure hover:underline"
+                    >
+                      {t('signUpLink')}
+                    </button>
+                  </p>
+                  <p>
+                    <button
+                      type="button"
+                      onClick={handleForgotPassword}
+                      disabled={status === 'busy'}
+                      className="text-mist hover:text-foreground hover:underline"
+                    >
+                      {t('forgotPassword')}
+                    </button>
+                  </p>
+                  <p>
+                    <button
+                      type="button"
+                      onClick={() => { setMode('magic'); setError('') }}
+                      className="text-mist hover:text-foreground hover:underline"
+                    >
+                      {t('magicLinkFallback')}
+                    </button>
+                  </p>
+                </>
+              )}
+              {mode === 'signup' && (
+                <p className="text-mist">
+                  {t('haveAccount')}{' '}
+                  <button
+                    type="button"
+                    onClick={() => { setMode('signin'); setError('') }}
+                    className="font-medium text-azure hover:underline"
+                  >
+                    {t('signInLink')}
+                  </button>
+                </p>
+              )}
+              {mode === 'magic' && (
+                <p>
+                  <button
+                    type="button"
+                    onClick={() => { setMode('signin'); setError('') }}
+                    className="text-mist hover:text-foreground hover:underline"
+                  >
+                    {t('backToPassword')}
+                  </button>
+                </p>
+              )}
+            </div>
           </div>
         )}
 

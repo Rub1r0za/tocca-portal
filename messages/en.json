@@ -17,7 +17,10 @@
     "signOut": "Sign out"
   },
   "sections": {
-    "guestView": { "title": "Guest View", "subtitle": "" },
+    "guestView": {
+      "title": "Guest View",
+      "subtitle": ""
+    },
     "timeline": {
       "title": "Travel Timeline",
       "subtitle": "Your trip, hour by hour",
@@ -55,7 +58,26 @@
     "sending": "Sending…",
     "checkEmail": "Check your inbox",
     "checkEmailDesc": "We've sent a link to {email}. Click it to sign in.",
-    "error": "Something went wrong. Please try again."
+    "error": "Something went wrong. Please try again.",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "••••••••",
+    "signIn": "Sign in",
+    "signingIn": "Signing in…",
+    "createAccount": "Create account",
+    "creatingAccount": "Creating account…",
+    "noAccount": "Don't have an account?",
+    "haveAccount": "Already have an account?",
+    "signUpLink": "Create one",
+    "signInLink": "Sign in",
+    "forgotPassword": "Forgot your password?",
+    "magicLinkFallback": "Email me a sign-in link instead",
+    "backToPassword": "Back to password sign-in",
+    "invalidCredentials": "Incorrect email or password.",
+    "passwordTooShort": "Password must be at least 8 characters.",
+    "confirmEmailSent": "We sent a confirmation link to {email}. Open it to activate your account.",
+    "resetSent": "We sent a password-reset link to {email}.",
+    "signupTitle": "Create your account",
+    "signupSubtitle": "Use the email address your trip was booked with."
   },
   "dashboard": {
     "greeting": "Welcome back",
@@ -125,5 +147,16 @@
     "main": "Main",
     "dessert": "Dessert",
     "noMeals": "No options for this day."
+  },
+  "account": {
+    "passwordTitle": "Set a new password",
+    "passwordSubtitle": "Choose a password of at least 8 characters.",
+    "newPassword": "New password",
+    "confirmPassword": "Confirm password",
+    "mismatch": "Passwords do not match.",
+    "save": "Save password",
+    "saving": "Saving…",
+    "saved": "Password updated. You can now sign in with it.",
+    "goToDashboard": "Go to my portal"
   }
 }

@@ -233,6 +233,51 @@ export async function deleteJourneyDay(dayId: string, bookingId: string, locale:
   revalidatePath(`/${locale}/admin/bookings/${bookingId}/journey`)
 }
 
+// ── Create client account (direct, no email required) ──────────────────────
+
+const createClientSchema = z.object({
+  email: z.string().email(),
+  full_name: z.string().optional(),
+  password: z.string().min(8),
+})
+
+export async function createClientUser(
+  locale: string,
+  _prev: { error?: string; ok?: boolean } | null,
+  formData: FormData,
+): Promise<{ error?: string; ok?: boolean }> {
+  const raw = Object.fromEntries(formData)
+  const parsed = createClientSchema.safeParse(raw)
+  if (!parsed.success) {
+    return { error: 'Datos inválidos: revisa el email y que la contraseña tenga al menos 8 caracteres.' }
+  }
+
+  const { email, full_name, password } = parsed.data
+  const admin = createAdminClient()
+
+  // email_confirm: true → the account is active immediately, no confirmation email
+  const { data, error } = await admin.auth.admin.createUser({
+    email,
+    password,
+    email_confirm: true,
+    user_metadata: full_name ? { full_name } : undefined,
+  })
+
+  if (error) {
+    if (error.message.toLowerCase().includes('already') || error.code === 'email_exists') {
+      return { error: `Ya existe una cuenta con el email "${email}".` }
+    }
+    return { error: error.message }
+  }
+
+  await admin
+    .from('profiles')
+    .upsert({ id: data.user.id, full_name: full_name || null }, { onConflict: 'id' })
+
+  revalidatePath(`/${locale}/admin`)
+  return { ok: true }
+}
+
 // ── Helpers ─────────────────────────────────────────────────────────────────
 
 /** Bilingual jsonb: { en, es } with es falling back to en. */

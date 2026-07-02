@@ -5,7 +5,7 @@ import { routing } from './i18n/routing'
 
 const intlProxy = createMiddleware(routing)
 
-const protectedRoutes = ['/dashboard', '/journey', '/meals', '/activities', '/timeline', '/wellness', '/admin']
+const protectedRoutes = ['/dashboard', '/journey', '/meals', '/activities', '/timeline', '/wellness', '/admin', '/account']
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
