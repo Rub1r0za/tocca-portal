@@ -73,14 +73,21 @@ export default async function BookingDetailPage({
       </div>
 
       {/* Quick nav */}
-      <div className="mb-6">
-        <Link
-          href={`/${locale}/admin/bookings/${id}/journey`}
-          className="inline-flex items-center gap-2 rounded-xl border border-[rgba(62,45,35,0.12)] bg-white px-4 py-2.5 text-sm text-[#4A9A92] shadow-[0_1px_4px_rgba(62,45,35,0.06)] transition-all hover:border-[#4A9A92]/40 hover:shadow-[0_2px_8px_rgba(74,154,146,0.12)]"
-        >
-          <Map className="size-4" />
-          Gestionar días del itinerario
-        </Link>
+      <div className="mb-6 flex flex-wrap gap-2">
+        {[
+          { href: `/${locale}/admin/bookings/${id}/journey`, label: 'Días del itinerario' },
+          { href: `/${locale}/admin/bookings/${id}/meals`, label: 'Comidas' },
+          { href: `/${locale}/admin/bookings/${id}/timeline`, label: 'Timeline' },
+        ].map(({ href, label }) => (
+          <Link
+            key={href}
+            href={href}
+            className="inline-flex items-center gap-2 rounded-xl border border-[rgba(62,45,35,0.12)] bg-white px-4 py-2.5 text-sm text-[#4A9A92] shadow-[0_1px_4px_rgba(62,45,35,0.06)] transition-all hover:border-[#4A9A92]/40 hover:shadow-[0_2px_8px_rgba(74,154,146,0.12)]"
+          >
+            <Map className="size-4" />
+            {label}
+          </Link>
+        ))}
       </div>
 
       <div className="space-y-5">
