@@ -22,12 +22,13 @@ export default function LoginForm() {
     if (!parsed.success) return
     setStatus('sending')
     const supabase = createClient()
-    const callbackUrl = nextPath
-      ? `${location.origin}/auth/callback?next=${encodeURIComponent(nextPath)}`
-      : `${location.origin}/auth/callback`
+    // Final destination after login. The Magic Link email template appends
+    // token_hash + type and passes this as `next` to /auth/confirm.
+    const destination = nextPath || '/en/dashboard'
+    const emailRedirectTo = `${location.origin}${destination}`
     const { error } = await supabase.auth.signInWithOtp({
       email,
-      options: { emailRedirectTo: callbackUrl },
+      options: { emailRedirectTo },
     })
     setStatus(error ? 'error' : 'sent')
   }
