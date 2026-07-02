@@ -1,7 +1,7 @@
 'use client'
 
-import { useActionState } from 'react'
-import { useParams } from 'next/navigation'
+import { Suspense, useActionState } from 'react'
+import { useParams, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, Loader2 } from 'lucide-react'
 import { createBooking } from '../../actions'
@@ -25,8 +25,18 @@ function SubmitButton({ pending }: { pending: boolean }) {
 }
 
 export default function NewBookingPage() {
+  return (
+    <Suspense>
+      <NewBookingForm />
+    </Suspense>
+  )
+}
+
+function NewBookingForm() {
   const params = useParams()
   const locale = params.locale as string
+  const searchParams = useSearchParams()
+  const prefillEmail = searchParams.get('email') ?? undefined
 
   const boundAction = createBooking.bind(null, locale)
   const [state, action, pending] = useActionState(boundAction, null)
@@ -67,6 +77,7 @@ export default function NewBookingPage() {
               name="email"
               type="email"
               required
+              defaultValue={prefillEmail}
               placeholder="cliente@email.com"
               className={inputClass}
             />
