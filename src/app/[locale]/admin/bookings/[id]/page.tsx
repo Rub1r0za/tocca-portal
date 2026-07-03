@@ -6,6 +6,7 @@ import { BookingStatusForm } from './booking-status-form'
 import { BookingDatesForm } from './booking-dates-form'
 import { BookingNotesForm } from './booking-notes-form'
 import { TravelersSection } from './travelers-section'
+import { DeleteBookingButton } from './delete-booking-button'
 import { cn } from '@/lib/utils'
 
 const STATUS_CLASS: Record<string, string> = {
@@ -126,6 +127,15 @@ export default async function BookingDetailPage({
             locale={locale}
             travelers={booking.travelers ?? []}
           />
+        </div>
+
+        {/* Danger zone */}
+        <div className="rounded-2xl border border-red-200 bg-red-50/40 p-5">
+          <h2 className="mb-1 text-base font-medium text-red-700">Eliminar reserva</h2>
+          <p className="mb-4 text-sm text-[#7A7168]">
+            Borra la reserva y todo su contenido (viajeros, días del itinerario y comidas). No se puede deshacer.
+          </p>
+          <DeleteBookingButton bookingId={id} locale={locale} />
         </div>
       </div>
     </div>

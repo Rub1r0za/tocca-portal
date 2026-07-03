@@ -121,6 +121,14 @@ export async function updateBookingNotes(
   return {}
 }
 
+export async function deleteBooking(bookingId: string, locale: string) {
+  const admin = createAdminClient()
+  // Cascade FKs remove travelers, journey_days, meals and selections.
+  await admin.from('bookings').delete().eq('id', bookingId)
+  revalidatePath(`/${locale}/admin`)
+  redirect(`/${locale}/admin`)
+}
+
 // ── Travelers ───────────────────────────────────────────────────────────────
 
 const travelerSchema = z.object({
