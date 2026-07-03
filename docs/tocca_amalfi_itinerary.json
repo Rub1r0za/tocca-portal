@@ -1,0 +1,506 @@
+{
+  "trip": {
+    "id": "tocca-amalfi-2026-07",
+    "name": "Tocca Amalfi Coast",
+    "region": "Amalfi Coast, Italy",
+    "base_town": "Maiori",
+    "hotel": {
+      "name": "Hotel Pietra di Luna",
+      "town": "Maiori",
+      "room_features": [
+        "Sea-view accommodations",
+        "Walking distance to the beach and Maiori's main promenade"
+      ]
+    },
+    "start_date": "2026-07-17",
+    "end_date": "2026-07-20",
+    "currency": "EUR",
+    "language": "en"
+  },
+  "days": [
+    {
+      "date": "2026-07-17",
+      "title": "Arrival to the Amalfi Coast",
+      "summary": "Airport welcome, private coastal transfer to Maiori, hotel check-in, welcome cocktail and welcome dinner.",
+      "activities": [
+        {
+          "id": "d1-arrival",
+          "time_start": "10:00",
+          "time_end": "11:40",
+          "type": "arrival",
+          "title": "Arrival Window — Naples International Airport",
+          "description": "Guests arrive into Naples International Airport within the arrival window. Host waiting outside the airport with a private transfer and a Tocca Amalfi Coast sign.",
+          "location": "Naples International Airport",
+          "meeting_point": "Outside the arrivals area",
+          "price": null,
+          "capacity": null,
+          "booking_status": "pending"
+        },
+        {
+          "id": "d1-transfer",
+          "time_start": null,
+          "time_end": null,
+          "type": "transfer",
+          "title": "Private Coastal Transfer to Maiori",
+          "description": "Scenic drive from Naples through the coast countryside and mountain landscapes toward the Amalfi Coast.",
+          "location": "Naples → Maiori",
+          "transport": "private",
+          "price": null,
+          "capacity": null,
+          "booking_status": "pending"
+        },
+        {
+          "id": "d1-checkin",
+          "time_start": null,
+          "time_end": null,
+          "type": "check_in",
+          "title": "Hotel Check-In — Pietra di Luna, Maiori",
+          "description": "Check-in at Hotel Pietra di Luna. Passport required. Free time to relax, refresh and enjoy the sea breeze.",
+          "location": "Hotel Pietra di Luna, Maiori",
+          "notes": "Passport in hand required at check-in.",
+          "price": null,
+          "capacity": null,
+          "booking_status": "pending"
+        },
+        {
+          "id": "d1-cocktail",
+          "time_start": "19:00",
+          "time_end": null,
+          "type": "cocktail",
+          "title": "Welcome Cocktail",
+          "description": "Official Tocca Amalfi Coast Welcome Cocktail on the hotel terrace main floor.",
+          "location": "Hotel Pietra di Luna — main floor terrace",
+          "price": null,
+          "capacity": null,
+          "booking_status": "pending"
+        },
+        {
+          "id": "d1-dinner",
+          "time_start": "19:30",
+          "time_end": null,
+          "type": "dinner",
+          "title": "Welcome Dinner in Maiori",
+          "description": "Relaxed, authentic welcome dinner along Maiori's main corso, introducing guests to the flavors of the Amalfi Coast.",
+          "location": "Maiori main corso",
+          "time_note": "Approximately 7:30 PM",
+          "requires_selection": true,
+          "menu_selection": {
+            "prompt": "July 17 — Vegetarian or Fish menu",
+            "min_choices": 1,
+            "max_choices": 1,
+            "options": [
+              {
+                "id": "d1-menu-vegetarian",
+                "label": "Vegetarian Menu",
+                "courses": [
+                  "Burrata",
+                  "Amalfi Ravioli"
+                ]
+              },
+              {
+                "id": "d1-menu-fish",
+                "label": "Fish Menu",
+                "courses": [
+                  "Stuffed Provoleta",
+                  "Gnocchi with clams and lemon"
+                ]
+              }
+            ]
+          },
+          "price": null,
+          "capacity": null,
+          "booking_status": "pending"
+        }
+      ]
+    },
+    {
+      "date": "2026-07-18",
+      "title": "Slow Morning & Lemon Trail Experience",
+      "summary": "Relaxed morning in Maiori, afternoon Maiori–Minori lemon path walk, lemon property visit, and a lemon-inspired dinner.",
+      "activities": [
+        {
+          "id": "d2-morning",
+          "time_start": null,
+          "time_end": null,
+          "type": "free_time",
+          "title": "Relaxed Morning in Maiori",
+          "description": "Free morning to sleep in and recharge, enjoy the beach in front of the hotel, explore Maiori, or walk the promenade.",
+          "location": "Maiori",
+          "price": null,
+          "capacity": null,
+          "booking_status": "pending"
+        },
+        {
+          "id": "d2-gathering",
+          "time_start": "14:30",
+          "time_end": null,
+          "type": "gathering",
+          "title": "Afternoon Gathering",
+          "description": "Meet in the lobby of Hotel Pietra di Luna before the lemon path experience.",
+          "location": "Hotel Pietra di Luna lobby",
+          "price": null,
+          "capacity": null,
+          "booking_status": "pending"
+        },
+        {
+          "id": "d2-lemonpath",
+          "time_start": null,
+          "time_end": null,
+          "type": "walk",
+          "title": "Maiori to Minori Lemon Path",
+          "description": "Scenic walk connecting Maiori and Minori through lemon groves, hidden pathways, coastline views, Maiori's church and historic center, and the local corso.",
+          "location": "Maiori → Minori",
+          "price": null,
+          "capacity": null,
+          "booking_status": "pending"
+        },
+        {
+          "id": "d2-lemonexperience",
+          "time_start": null,
+          "time_end": null,
+          "type": "experience",
+          "title": "The Lemon Trail Experience",
+          "description": "Welcome at a generational lemon property near Minori. Learn about Amalfi Coast lemon cultivation, family traditions, local products and craftsmanship.",
+          "location": "Generational lemon property, Minori",
+          "price": null,
+          "capacity": null,
+          "booking_status": "pending"
+        },
+        {
+          "id": "d2-dinner",
+          "time_start": null,
+          "time_end": null,
+          "type": "dinner",
+          "title": "Lemon-Inspired Dinner",
+          "description": "A lemon-inspired dinner highlighting the flavors and traditions of Amalfi lemons. Soft, relaxed and deeply local evening.",
+          "location": "Minori",
+          "requires_selection": false,
+          "menu_selection": null,
+          "price": null,
+          "capacity": null,
+          "booking_status": "pending"
+        }
+      ]
+    },
+    {
+      "date": "2026-07-19",
+      "title": "Positano, Conca dei Marini, Praiano & Ceramic Heritage",
+      "summary": "Afternoon transfer toward Positano with a ceramic atelier stop in Conca dei Marini, free time in Positano, and dinner overlooking the Positano panorama.",
+      "activities": [
+        {
+          "id": "d3-departure",
+          "time_start": "14:30",
+          "time_end": null,
+          "type": "transfer",
+          "title": "Departure for Positano",
+          "description": "Private transfer begins the afternoon journey toward Positano.",
+          "location": "Maiori → Positano",
+          "transport": "private",
+          "price": null,
+          "capacity": null,
+          "booking_status": "pending"
+        },
+        {
+          "id": "d3-ceramics",
+          "time_start": null,
+          "time_end": null,
+          "type": "experience",
+          "title": "Stop in Conca dei Marini — Amalfi Coast Ceramics",
+          "description": "Visit to an emblematic ceramic atelier. Explore ceramic collections, learn the history and artistry of Amalfi ceramics, and shop if desired.",
+          "location": "Conca dei Marini",
+          "price": null,
+          "capacity": null,
+          "booking_status": "pending"
+        },
+        {
+          "id": "d3-drive",
+          "time_start": null,
+          "time_end": null,
+          "type": "transfer",
+          "title": "Scenic Coastal Drive to Positano",
+          "description": "One of the most breathtaking drives along the Amalfi Coast before arriving in Positano.",
+          "location": "Conca dei Marini → Positano",
+          "transport": "private",
+          "price": null,
+          "capacity": null,
+          "booking_status": "pending"
+        },
+        {
+          "id": "d3-freetime",
+          "time_start": null,
+          "time_end": null,
+          "type": "free_time",
+          "title": "Free Time in Positano",
+          "description": "Independent exploration of Positano with host guidance on shopping, viewpoints, boutiques, cafés, beaches, and meeting points/timing.",
+          "location": "Positano",
+          "price": null,
+          "capacity": null,
+          "booking_status": "pending"
+        },
+        {
+          "id": "d3-dinner",
+          "time_start": null,
+          "time_end": null,
+          "type": "dinner",
+          "title": "Dinner in Positano",
+          "description": "Dinner overlooking the Positano panorama. Guests choose their courses in advance from the set menu below (standard or vegetarian).",
+          "location": "Positano",
+          "requires_selection": true,
+          "menu_selection": {
+            "prompt": "July 19 — Choose your courses in advance",
+            "menus": [
+              {
+                "id": "d3-menu-standard",
+                "label": "Standard Menu",
+                "note": "Choose 1 antipasto + 1 pasta + 1 secondo + 1 dessert. Alternatively: antipasto + secondo, or antipasto + pasta (no meat/fish).",
+                "courses": [
+                  {
+                    "course": "antipasto",
+                    "min_choices": 1,
+                    "max_choices": 1,
+                    "options": [
+                      {
+                        "id": "d3-ant-caprese",
+                        "it": "Caprese di Bufala con varietà di pomodori, pesto di basilico e fresella di mais",
+                        "en": "Buffalo Caprese salad with tomato varieties, basil pesto and corn fresella bread"
+                      },
+                      {
+                        "id": "d3-ant-zucchina",
+                        "it": "Fiore di zucchina ripieno di ricotta, Fiordilatte e zucchine su maionese al pomodoro",
+                        "en": "Zucchini flower stuffed with ricotta cheese, mozzarella and zucchini, served on tomato-scented mayonnaise"
+                      }
+                    ]
+                  },
+                  {
+                    "course": "pasta",
+                    "min_choices": 1,
+                    "max_choices": 1,
+                    "options": [
+                      {
+                        "id": "d3-pasta-linguine",
+                        "it": "Linguine ai sapori della Costiera",
+                        "en": "Linguini pasta with seafood, shrimps, scampi and squids"
+                      },
+                      {
+                        "id": "d3-pasta-spaghettoni",
+                        "it": "Spaghettoni di pasta fresca al limone e crudo di tonno rosso",
+                        "en": "Fresh, lemon-scented spaghettoni pasta with raw red tuna"
+                      }
+                    ]
+                  },
+                  {
+                    "course": "secondo",
+                    "min_choices": 1,
+                    "max_choices": 1,
+                    "options": [
+                      {
+                        "id": "d3-sec-parmigiana",
+                        "it": "Parmigiana di pescato del giorno su melanzane a funghetto",
+                        "en": "Fresh catch of the day in Parmigiana style, served with fried eggplant"
+                      },
+                      {
+                        "id": "d3-sec-pollo",
+                        "it": "Petto di pollo cotto a bassa temperatura ripieno al limone con cavolo viola marinato",
+                        "en": "Slow-cooked, lemon-stuffed chicken breast with marinated purple cabbage"
+                      }
+                    ]
+                  },
+                  {
+                    "course": "dessert",
+                    "min_choices": 1,
+                    "max_choices": 1,
+                    "options": [
+                      {
+                        "id": "d3-des-tiramisu",
+                        "it": "Tiramisù con pandispagna al caffè, Grand Marnier e cacao amaro",
+                        "en": "Tiramisu with coffee, Grand Marnier and bitter cocoa"
+                      },
+                      {
+                        "id": "d3-des-delizia",
+                        "it": "Delizia al Limone",
+                        "en": "Limoncello-scented spongecake with lemon Chantilly cream"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "d3-menu-vegetarian",
+                "label": "Vegetarian Menu",
+                "note": "Choose 1 antipasto + 1 pasta + 1 dessert.",
+                "courses": [
+                  {
+                    "course": "antipasto",
+                    "min_choices": 1,
+                    "max_choices": 1,
+                    "options": [
+                      {
+                        "id": "d3-veg-ant-caprese",
+                        "it": "Caprese di Bufala con varietà di pomodori, pesto di basilico e fresella di mais",
+                        "en": "Buffalo Caprese salad with tomato varieties, basil pesto and corn fresella bread"
+                      },
+                      {
+                        "id": "d3-veg-ant-zucchina",
+                        "it": "Fiore di zucchina ripieno di ricotta, Fiordilatte e zucchine su maionese al pomodoro",
+                        "en": "Zucchini flower stuffed with ricotta cheese, mozzarella and zucchini, served on tomato-scented mayonnaise"
+                      }
+                    ]
+                  },
+                  {
+                    "course": "pasta",
+                    "min_choices": 1,
+                    "max_choices": 1,
+                    "options": [
+                      {
+                        "id": "d3-veg-pasta-pomodoro",
+                        "it": "Spaghetto al pomodoro del Piennolo e ricotta",
+                        "en": "Spaghetti with Piennolo tomatoes sauce and ricotta cheese"
+                      },
+                      {
+                        "id": "d3-veg-pasta-ravioli",
+                        "it": "Ravioli di barbabietola ripieni di crema di anacardi, con salsa agli agrumi",
+                        "en": "Beet ravioli stuffed with a cream of cashews, with citrus sauce"
+                      }
+                    ]
+                  },
+                  {
+                    "course": "dessert",
+                    "min_choices": 1,
+                    "max_choices": 1,
+                    "options": [
+                      {
+                        "id": "d3-veg-des-tiramisu",
+                        "it": "Tiramisù con pandispagna al caffè, Grand Marnier e cacao amaro",
+                        "en": "Tiramisu with coffee, Grand Marnier and bitter cocoa"
+                      },
+                      {
+                        "id": "d3-veg-des-delizia",
+                        "it": "Delizia al Limone",
+                        "en": "Limoncello-scented spongecake with lemon Chantilly cream"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "price": null,
+          "capacity": null,
+          "booking_status": "pending"
+        }
+      ]
+    },
+    {
+      "date": "2026-07-20",
+      "title": "Amalfi, Atrani & Pizza Experience",
+      "summary": "Afternoon ferry to Amalfi, exploring Amalfi and Atrani on foot, and a hands-on pizza & mozzarella cooking experience before returning to Maiori.",
+      "activities": [
+        {
+          "id": "d4-ferry",
+          "time_start": "13:35",
+          "time_end": null,
+          "type": "ferry",
+          "title": "Afternoon Ferry to Amalfi",
+          "description": "Meet at the port of Maiori and board the ferry together toward Amalfi, with coastline views from the sea.",
+          "location": "Port of Maiori → Amalfi",
+          "transport": "ferry",
+          "price": null,
+          "capacity": null,
+          "booking_status": "pending"
+        },
+        {
+          "id": "d4-amalfi",
+          "time_start": "13:55",
+          "time_end": "15:00",
+          "type": "walking_tour",
+          "title": "Exploring Amalfi Together",
+          "description": "Explore Amalfi's historic center, the famous cathedral and piazza, local boutiques and artisan shops, hidden streets, and time for gelato or coffee.",
+          "location": "Amalfi",
+          "time_note": "Approximately 1:55 PM – 3:00 PM",
+          "price": null,
+          "capacity": null,
+          "booking_status": "pending"
+        },
+        {
+          "id": "d4-atrani",
+          "time_start": "15:00",
+          "time_end": "15:20",
+          "type": "walk",
+          "title": "Walk to Atrani",
+          "description": "Scenic walk connecting Amalfi and Atrani, the smallest village in Italy — quieter and more intimate side of the coast.",
+          "location": "Amalfi → Atrani",
+          "price": null,
+          "capacity": null,
+          "booking_status": "pending"
+        },
+        {
+          "id": "d4-transfer",
+          "time_start": "16:00",
+          "time_end": null,
+          "type": "transfer",
+          "title": "Private Transfer from Atrani",
+          "description": "Private transfer meets guests in Atrani to bring them to the pizza and mozzarella experience.",
+          "location": "Atrani",
+          "transport": "private",
+          "price": null,
+          "capacity": null,
+          "booking_status": "pending"
+        },
+        {
+          "id": "d4-dinner",
+          "time_start": null,
+          "time_end": null,
+          "type": "cooking_class",
+          "title": "Pizza & Mozzarella Cooking Experience",
+          "description": "Hands-on cooking class: traditional pizza-making techniques and fresh mozzarella preparation. The pizza and mozzarella experience is dinner for the evening.",
+          "location": "Amalfi Coast — local venue",
+          "requires_selection": false,
+          "menu_selection": null,
+          "price": null,
+          "capacity": null,
+          "booking_status": "pending"
+        },
+        {
+          "id": "d4-return",
+          "time_start": null,
+          "time_end": null,
+          "type": "transfer",
+          "title": "Return to Maiori",
+          "description": "Private transfer returns guests to Maiori for the evening.",
+          "location": "→ Maiori",
+          "transport": "private",
+          "price": null,
+          "capacity": null,
+          "booking_status": "pending"
+        }
+      ]
+    }
+  ],
+  "selection_summary": {
+    "note": "Only these days require a guest menu selection.",
+    "days_requiring_selection": [
+      {
+        "date": "2026-07-17",
+        "activity_id": "d1-dinner",
+        "choose": "1 of 2 menus (Vegetarian or Fish)"
+      },
+      {
+        "date": "2026-07-19",
+        "activity_id": "d3-dinner",
+        "choose": "1 menu (Standard or Vegetarian), then 1 option per course"
+      }
+    ],
+    "days_without_selection": [
+      {
+        "date": "2026-07-18",
+        "activity_id": "d2-dinner",
+        "note": "Lemon-Inspired Dinner — no choice, place as-is"
+      },
+      {
+        "date": "2026-07-20",
+        "activity_id": "d4-dinner",
+        "note": "Pizza & Mozzarella experience — no choice"
+      }
+    ]
+  }
+}
