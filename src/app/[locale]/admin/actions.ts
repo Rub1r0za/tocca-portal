@@ -4,6 +4,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { z } from 'zod'
+import { sendEmail, emailLayout } from '@/lib/email'
 
 // ── Create booking ─────────────────────────────────────────────────────────
 
@@ -69,12 +70,29 @@ export async function updateBookingStatus(
   if (!['pending', 'approved', 'cancelled'].includes(status)) return { error: 'Estado inválido' }
 
   const admin = createAdminClient()
-  const { error } = await admin
+  const { data: prev } = await admin.from('bookings').select('status').eq('id', bookingId).maybeSingle()
+  const { data: updated, error } = await admin
     .from('bookings')
     .update({ status, updated_at: new Date().toISOString() })
     .eq('id', bookingId)
+    .select('applicant_email, applicant_name')
+    .single()
 
   if (error) return { error: error.message }
+
+  // Correo automático de confirmación al aprobar
+  if (status === 'approved' && prev?.status !== 'approved' && updated?.applicant_email) {
+    await sendEmail({
+      to: updated.applicant_email,
+      subject: '¡Tu viaje está confirmado! — Tocca Amalfi Coast',
+      html: emailLayout(
+        'Benvenuti in Costiera Amalfitana ✨',
+        `<p>Hola ${updated.applicant_name || ''},</p>
+         <p>Tu reserva fue <strong>aprobada</strong>. Ya tienes acceso completo al portal de tu viaje: itinerario día a día, selección de comidas, experiencias opcionales y wellness.</p>
+         <p style="margin-top:20px;"><a href="https://tocca-portal.vercel.app/es/login" style="background:#23374D;color:#ffffff;padding:12px 24px;border-radius:10px;text-decoration:none;">Entrar a mi portal →</a></p>`,
+      ),
+    })
+  }
 
   revalidatePath(`/${locale}/admin/bookings/${bookingId}`)
   return {}
@@ -762,4 +780,97 @@ export async function addFullJourneyToBooking(
 
   revalidatePath(`/${locale}/admin/bookings/${bookingId}/journey`)
   return {}
+}
+
+// ── Pagos y cronograma ──────────────────────────────────────────────────────
+
+export async function setBookingTotal(
+  bookingId: string,
+  locale: string,
+  _prev: unknown,
+  formData: FormData,
+): Promise<{ error?: string }> {
+  const raw = String(formData.get('total_price') || '').trim()
+  const total = raw === '' ? null : Number(raw)
+  if (total !== null && (!Number.isFinite(total) || total < 0)) return { error: 'Monto inválido' }
+
+  const admin = createAdminClient()
+  const { error } = await admin
+    .from('bookings')
+    .update({ total_price: total, updated_at: new Date().toISOString() })
+    .eq('id', bookingId)
+  if (error) return { error: error.message }
+
+  revalidatePath(`/${locale}/admin/bookings/${bookingId}/payments`)
+  return {}
+}
+
+export async function addScheduleItem(
+  bookingId: string,
+  locale: string,
+  _prev: { error?: string } | null,
+  formData: FormData,
+): Promise<{ error?: string }> {
+  const due_date = String(formData.get('due_date') || '')
+  const amount = Number(formData.get('amount'))
+  const label_es = String(formData.get('label_es') || '').trim()
+  const label_en = String(formData.get('label_en') || '').trim()
+  if (!due_date || !Number.isFinite(amount) || amount <= 0) return { error: 'Fecha y monto son obligatorios' }
+
+  const admin = createAdminClient()
+  const { error } = await admin.from('payment_schedule').insert({
+    booking_id: bookingId,
+    due_date,
+    amount,
+    label: i18n(label_en || label_es, label_es || label_en),
+  })
+  if (error) return { error: error.message }
+
+  revalidatePath(`/${locale}/admin/bookings/${bookingId}/payments`)
+  return {}
+}
+
+export async function deleteScheduleItem(itemId: string, bookingId: string, locale: string) {
+  const admin = createAdminClient()
+  await admin.from('payment_schedule').delete().eq('id', itemId)
+  revalidatePath(`/${locale}/admin/bookings/${bookingId}/payments`)
+}
+
+export async function toggleSchedulePaid(itemId: string, paid: boolean, bookingId: string, locale: string) {
+  const admin = createAdminClient()
+  await admin.from('payment_schedule').update({ paid }).eq('id', itemId)
+  revalidatePath(`/${locale}/admin/bookings/${bookingId}/payments`)
+}
+
+export async function reviewPayment(
+  paymentId: string,
+  status: 'approved' | 'rejected',
+  locale: string,
+) {
+  const admin = createAdminClient()
+  const { data: payment } = await admin
+    .from('payments')
+    .update({ status, reviewed_at: new Date().toISOString() })
+    .eq('id', paymentId)
+    .select('amount, booking_id, bookings(applicant_email, applicant_name)')
+    .single()
+
+  if (payment && status === 'approved') {
+    const bookingInfo = payment.bookings as unknown as { applicant_email: string | null; applicant_name: string | null } | null
+    if (bookingInfo?.applicant_email) {
+      await sendEmail({
+        to: bookingInfo.applicant_email,
+        subject: 'Pago confirmado — Tocca Amalfi Coast',
+        html: emailLayout(
+          'Pago confirmado',
+          `<p>Hola ${bookingInfo.applicant_name || ''},</p>
+           <p>Tu pago de <strong>USD $${Number(payment.amount).toFixed(2)}</strong> fue revisado y aprobado. ¡Gracias!</p>
+           <p><a href="https://tocca-portal.vercel.app/es/payments" style="color:#4A9A92;">Ver mis pagos →</a></p>`,
+        ),
+      })
+    }
+  }
+
+  revalidatePath(`/${locale}/admin/payments`)
+  if (payment) revalidatePath(`/${locale}/admin/bookings/${payment.booking_id}/payments`)
 }

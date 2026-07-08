@@ -47,6 +47,10 @@
       "title": "Bienestar",
       "subtitle": "Spa, fitness y relajación",
       "empty": "Aún no hay opciones de bienestar."
+    },
+    "payments": {
+      "title": "Pagos",
+      "subtitle": "Balance y comprobantes"
     }
   },
   "login": {
@@ -89,7 +93,11 @@
     "waitingTitle": "Tu viaje se está preparando",
     "waitingPending": "Tu reserva está en revisión. Aparecerá aquí en cuanto nuestro equipo la confirme.",
     "waitingNone": "Tu cuenta está activa. Los detalles de tu viaje aparecerán aquí cuando nuestro equipo asigne tu reserva.",
-    "waitingContact": "¿Dudas? Contacta a tu asesor de Tocca."
+    "waitingContact": "¿Dudas? Contacta a tu asesor de Tocca.",
+    "registerTitle": "Bienvenido a Tocca",
+    "registerText": "Completa tu registro para comenzar tu viaje: quiénes viajan, y acepta los términos.",
+    "registerCta": "Completar mi registro",
+    "paymentsCta": "Ver / registrar pagos"
   },
   "status": {
     "approved": "Aprobado",
@@ -167,5 +175,66 @@
     "saving": "Guardando…",
     "saved": "Contraseña actualizada. Ya puedes entrar con ella.",
     "goToDashboard": "Ir a mi portal"
+  },
+  "register": {
+    "title": "Completa tu registro",
+    "subtitle": "Cuéntanos quiénes viajan para que Jess prepare tu viaje. Tu reserva será revisada y aprobada personalmente.",
+    "fullName": "Nombre completo",
+    "phone": "Teléfono",
+    "travelWith": "¿Viajas solo o acompañado?",
+    "solo": "Viajo solo",
+    "accompanied": "Acompañado",
+    "bookingType": "Tipo de reserva",
+    "individual": "Individual",
+    "group": "Grupal",
+    "bookingTypeHint": "Las reservas grupales comparten una sola reserva para todos los acompañantes.",
+    "companions": "Acompañantes",
+    "firstName": "Nombre",
+    "lastName": "Apellido",
+    "adult": "Adulto",
+    "child": "Niño",
+    "addCompanion": "Añadir acompañante",
+    "remove": "Quitar",
+    "notes": "Notas (opcional)",
+    "notesPlaceholder": "Alergias, peticiones especiales, detalles de llegada…",
+    "acceptTerms": "He leído y acepto los",
+    "termsLink": "Términos y Condiciones",
+    "submit": "Enviar registro",
+    "submitting": "Enviando…",
+    "errorBasics": "Escribe tu nombre completo y tu teléfono.",
+    "errorCompanions": "Completa el nombre de cada acompañante.",
+    "errorTerms": "Debes aceptar los Términos y Condiciones para continuar.",
+    "errorExists": "Ya tienes una reserva. Revisa tu portal.",
+    "errorGeneric": "Algo salió mal. Inténtalo de nuevo."
+  },
+  "payments": {
+    "title": "Pagos",
+    "subtitle": "Tu balance, comprobantes y próximos pagos",
+    "summaryTotal": "Total del viaje",
+    "summaryPaid": "Pagado",
+    "summaryBalance": "Saldo",
+    "upcoming": "Próximos pagos",
+    "paymentDue": "Pago pendiente",
+    "newPayment": "Registrar un pago",
+    "zelleInfo": "Paga por Zelle o transferencia bancaria y sube aquí tu comprobante — Jess lo confirmará pronto. Pídele los datos de Zelle si no los tienes.",
+    "amount": "Monto",
+    "method": "Método de pago",
+    "transfer": "Transferencia bancaria",
+    "stripeSoon": "Pago con tarjeta (Stripe) muy pronto — aplicará un cargo de servicio del 5,5%.",
+    "reference": "Número de confirmación / referencia",
+    "referencePlaceholder": "ej. ZELLE-1234",
+    "receipt": "Comprobante (foto o PDF)",
+    "receiptHint": "JPG, PNG, HEIC o PDF · máx. 10 MB",
+    "notes": "Notas (opcional)",
+    "submit": "Enviar pago",
+    "submitting": "Enviando…",
+    "sentTitle": "Pago enviado",
+    "sentBody": "Jess lo revisará y pronto lo verás aquí como aprobado.",
+    "errorGeneric": "No se pudo registrar el pago. Inténtalo de nuevo.",
+    "errorReceiptSize": "El comprobante supera los 10 MB.",
+    "statusPending": "En revisión",
+    "statusApproved": "Aprobado",
+    "statusRejected": "Rechazado",
+    "history": "Historial de pagos"
   }
 }

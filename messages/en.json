@@ -47,6 +47,10 @@
       "title": "Wellness",
       "subtitle": "Spa, fitness & relaxation",
       "empty": "No wellness options available yet."
+    },
+    "payments": {
+      "title": "Payments",
+      "subtitle": "Balance & receipts"
     }
   },
   "login": {
@@ -89,7 +93,11 @@
     "waitingTitle": "Your journey is being prepared",
     "waitingPending": "Your booking is under review. It will appear here as soon as it is confirmed by our team.",
     "waitingNone": "Your account is active. Your trip details will appear here once our team assigns your booking.",
-    "waitingContact": "Questions? Contact your Tocca advisor."
+    "waitingContact": "Questions? Contact your Tocca advisor.",
+    "registerTitle": "Welcome to Tocca",
+    "registerText": "Complete your registration to start your journey: who is traveling, and accept the terms.",
+    "registerCta": "Complete my registration",
+    "paymentsCta": "View / register payments"
   },
   "status": {
     "approved": "Approved",
@@ -167,5 +175,66 @@
     "saving": "Saving…",
     "saved": "Password updated. You can now sign in with it.",
     "goToDashboard": "Go to my portal"
+  },
+  "register": {
+    "title": "Complete your registration",
+    "subtitle": "Tell us who is traveling so Jess can prepare your journey. Your booking will be reviewed and approved personally.",
+    "fullName": "Full name",
+    "phone": "Phone",
+    "travelWith": "Are you traveling alone or accompanied?",
+    "solo": "Traveling alone",
+    "accompanied": "Accompanied",
+    "bookingType": "Type of booking",
+    "individual": "Individual",
+    "group": "Group",
+    "bookingTypeHint": "Group bookings share one reservation for all companions.",
+    "companions": "Companions",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "adult": "Adult",
+    "child": "Child",
+    "addCompanion": "Add companion",
+    "remove": "Remove",
+    "notes": "Notes (optional)",
+    "notesPlaceholder": "Allergies, special requests, arrival details…",
+    "acceptTerms": "I have read and accept the",
+    "termsLink": "Terms & Conditions",
+    "submit": "Submit registration",
+    "submitting": "Submitting…",
+    "errorBasics": "Please enter your full name and phone number.",
+    "errorCompanions": "Please complete the name of every companion.",
+    "errorTerms": "You must accept the Terms & Conditions to continue.",
+    "errorExists": "You already have a booking. Check your dashboard.",
+    "errorGeneric": "Something went wrong. Please try again."
+  },
+  "payments": {
+    "title": "Payments",
+    "subtitle": "Your balance, receipts and upcoming payments",
+    "summaryTotal": "Trip total",
+    "summaryPaid": "Paid",
+    "summaryBalance": "Balance",
+    "upcoming": "Upcoming payments",
+    "paymentDue": "Payment due",
+    "newPayment": "Register a payment",
+    "zelleInfo": "Pay via Zelle or bank transfer and upload your receipt here — Jess will confirm it shortly. Ask her for the Zelle details if you don’t have them.",
+    "amount": "Amount",
+    "method": "Payment method",
+    "transfer": "Bank transfer",
+    "stripeSoon": "Card payment (Stripe) coming soon — a 5.5% service fee will apply.",
+    "reference": "Confirmation / reference number",
+    "referencePlaceholder": "e.g. ZELLE-1234",
+    "receipt": "Receipt (photo or PDF)",
+    "receiptHint": "JPG, PNG, HEIC or PDF · max. 10 MB",
+    "notes": "Notes (optional)",
+    "submit": "Submit payment",
+    "submitting": "Submitting…",
+    "sentTitle": "Payment submitted",
+    "sentBody": "Jess will review it and you’ll see it as approved here soon.",
+    "errorGeneric": "Could not register the payment. Please try again.",
+    "errorReceiptSize": "The receipt exceeds 10 MB.",
+    "statusPending": "In review",
+    "statusApproved": "Approved",
+    "statusRejected": "Rejected",
+    "history": "Payment history"
   }
 }

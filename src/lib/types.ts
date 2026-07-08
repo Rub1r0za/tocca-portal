@@ -37,7 +37,35 @@ export type Booking = {
   applicant_name: string | null
   applicant_email: string | null
   notes: string | null
+  total_price: number | null
+  terms_accepted_at: string | null
   travelers: Traveler[] | null
+}
+
+export type PaymentMethod = 'zelle' | 'transfer' | 'stripe' | 'other'
+export type PaymentStatus = 'pending_review' | 'approved' | 'rejected'
+
+export type Payment = {
+  id: string
+  booking_id: string
+  amount: number
+  currency: string
+  method: PaymentMethod
+  status: PaymentStatus
+  reference: string | null
+  receipt_path: string | null
+  notes: string | null
+  created_at: string
+  reviewed_at: string | null
+}
+
+export type PaymentScheduleItem = {
+  id: string
+  booking_id: string
+  due_date: string
+  amount: number
+  label: Localized | null
+  paid: boolean
 }
 
 export type ScheduleItem = {

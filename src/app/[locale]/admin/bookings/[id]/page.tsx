@@ -79,6 +79,7 @@ export default async function BookingDetailPage({
           { href: `/${locale}/admin/bookings/${id}/journey`, label: 'Días del itinerario' },
           { href: `/${locale}/admin/bookings/${id}/meals`, label: 'Comidas' },
           { href: `/${locale}/admin/bookings/${id}/timeline`, label: 'Timeline' },
+          { href: `/${locale}/admin/bookings/${id}/payments`, label: 'Pagos' },
         ].map(({ href, label }) => (
           <Link
             key={href}
