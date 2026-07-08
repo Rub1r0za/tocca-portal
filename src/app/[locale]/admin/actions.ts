@@ -177,7 +177,28 @@ const daySchema = z.object({
   description_es: z.string().optional(),
   location: z.string().optional(),
   day_date: z.string().optional(),
+  day_vibe_en: z.string().optional(),
+  day_vibe_es: z.string().optional(),
+  tocca_tips_en: z.string().optional(),
+  tocca_tips_es: z.string().optional(),
+  good_to_know_en: z.string().optional(),
+  good_to_know_es: z.string().optional(),
+  is_free_day: z.string().optional(),
 })
+
+function dayPayload(d: z.infer<typeof daySchema>) {
+  return {
+    day_number: d.day_number,
+    title: i18n(d.title_en, d.title_es),
+    description: i18n(d.description_en, d.description_es),
+    location: d.location || null,
+    day_date: d.day_date || null,
+    day_vibe: i18n(d.day_vibe_en, d.day_vibe_es),
+    tocca_tips: zipLines(d.tocca_tips_en, d.tocca_tips_es),
+    good_to_know: zipLines(d.good_to_know_en, d.good_to_know_es),
+    is_free_day: d.is_free_day === 'on',
+  }
+}
 
 export async function createJourneyDay(
   bookingId: string,
@@ -189,16 +210,11 @@ export async function createJourneyDay(
   const parsed = daySchema.safeParse(raw)
   if (!parsed.success) return { error: 'Datos inválidos' }
 
-  const { day_number, title_en, title_es, description_en, description_es, location, day_date } = parsed.data
   const admin = createAdminClient()
 
   const { error } = await admin.from('journey_days').insert({
     booking_id: bookingId,
-    day_number,
-    title: { en: title_en, es: title_es || title_en },
-    description: { en: description_en || '', es: description_es || description_en || '' },
-    location: location || null,
-    day_date: day_date || null,
+    ...dayPayload(parsed.data),
   })
 
   if (error) return { error: error.message }
@@ -218,16 +234,9 @@ export async function updateJourneyDay(
   const parsed = daySchema.safeParse(raw)
   if (!parsed.success) return { error: 'Datos inválidos' }
 
-  const { day_number, title_en, title_es, description_en, description_es, location, day_date } = parsed.data
   const admin = createAdminClient()
 
-  const { error } = await admin.from('journey_days').update({
-    day_number,
-    title: { en: title_en, es: title_es || title_en },
-    description: { en: description_en || '', es: description_es || description_en || '' },
-    location: location || null,
-    day_date: day_date || null,
-  }).eq('id', dayId)
+  const { error } = await admin.from('journey_days').update(dayPayload(parsed.data)).eq('id', dayId)
 
   if (error) return { error: error.message }
 
@@ -549,4 +558,208 @@ export async function deleteMeal(mealId: string, bookingId: string, locale: stri
   const admin = createAdminClient()
   await admin.from('meals').delete().eq('id', mealId)
   revalidatePath(`/${locale}/admin/bookings/${bookingId}/meals`)
+}
+
+// ── Day templates (Signature Journey library) ───────────────────────────────
+
+const dayTemplateSchema = z.object({
+  sort_order: z.coerce.number().int().min(0).default(0),
+  title_en: z.string().min(1),
+  title_es: z.string().optional(),
+  description_en: z.string().optional(),
+  description_es: z.string().optional(),
+  location: z.string().optional(),
+  image_url: z.string().optional(),
+  day_vibe_en: z.string().optional(),
+  day_vibe_es: z.string().optional(),
+  tocca_tips_en: z.string().optional(),
+  tocca_tips_es: z.string().optional(),
+  good_to_know_en: z.string().optional(),
+  good_to_know_es: z.string().optional(),
+  schedule_en: z.string().optional(),
+  schedule_es: z.string().optional(),
+  is_free_day: z.string().optional(),
+})
+
+/** Zip "HH:MM | texto" per-line textareas into [{ time, title: {en, es} }]. */
+function zipSchedule(en?: string, es?: string) {
+  const parse = (raw?: string) =>
+    (raw || '')
+      .split('\n')
+      .map((l) => l.trim())
+      .filter(Boolean)
+      .map((l) => {
+        const sep = l.indexOf('|')
+        return sep === -1
+          ? { time: '', text: l }
+          : { time: l.slice(0, sep).trim(), text: l.slice(sep + 1).trim() }
+      })
+  const enItems = parse(en)
+  const esItems = parse(es)
+  const len = Math.max(enItems.length, esItems.length)
+  return Array.from({ length: len }, (_, i) => ({
+    time: enItems[i]?.time || esItems[i]?.time || '',
+    title: {
+      en: enItems[i]?.text || esItems[i]?.text || '',
+      es: esItems[i]?.text || enItems[i]?.text || '',
+    },
+  }))
+}
+
+export async function saveDayTemplate(
+  templateId: string | null,
+  locale: string,
+  _prev: { error?: string } | null,
+  formData: FormData,
+): Promise<{ error?: string }> {
+  const parsed = dayTemplateSchema.safeParse(Object.fromEntries(formData))
+  if (!parsed.success) return { error: 'Datos inválidos: revisa el título EN.' }
+
+  const d = parsed.data
+  const payload = {
+    sort_order: d.sort_order,
+    title: i18n(d.title_en, d.title_es),
+    description: i18n(d.description_en, d.description_es),
+    location: d.location || null,
+    image_url: d.image_url || null,
+    day_vibe: i18n(d.day_vibe_en, d.day_vibe_es),
+    tocca_tips: zipLines(d.tocca_tips_en, d.tocca_tips_es),
+    good_to_know: zipLines(d.good_to_know_en, d.good_to_know_es),
+    schedule: zipSchedule(d.schedule_en, d.schedule_es),
+    is_free_day: d.is_free_day === 'on',
+    updated_at: new Date().toISOString(),
+  }
+
+  const admin = createAdminClient()
+  const { error } = templateId
+    ? await admin.from('day_templates').update(payload).eq('id', templateId)
+    : await admin.from('day_templates').insert(payload)
+
+  if (error) return { error: error.message }
+
+  revalidatePath(`/${locale}/admin/days`)
+  return {}
+}
+
+export async function deleteDayTemplate(templateId: string, locale: string) {
+  const admin = createAdminClient()
+  await admin.from('day_templates').delete().eq('id', templateId)
+  revalidatePath(`/${locale}/admin/days`)
+}
+
+export async function toggleDayTemplateActive(templateId: string, active: boolean, locale: string) {
+  const admin = createAdminClient()
+  await admin.from('day_templates').update({ active }).eq('id', templateId)
+  revalidatePath(`/${locale}/admin/days`)
+}
+
+// Copia una plantilla como día de una reserva; los menús de la plantilla
+// se convierten en filas de `meals` para que el cliente pueda seleccionar.
+async function instantiateTemplate(
+  admin: ReturnType<typeof createAdminClient>,
+  template: Record<string, unknown>,
+  bookingId: string,
+  dayNumber: number,
+) {
+  const { data: day, error } = await admin
+    .from('journey_days')
+    .insert({
+      booking_id: bookingId,
+      day_number: dayNumber,
+      title: template.title,
+      description: template.description,
+      location: template.location,
+      image_url: template.image_url,
+      schedule: template.schedule,
+      included: template.included,
+      meeting_point: template.meeting_point,
+      day_notes: template.day_notes,
+      tocca_tips: template.tocca_tips,
+      good_to_know: template.good_to_know,
+      day_vibe: template.day_vibe,
+      is_free_day: template.is_free_day,
+    })
+    .select('id')
+    .single()
+
+  if (error) return { error: error.message }
+
+  const meals = (template.meals ?? []) as Array<{
+    course: string
+    name: Record<string, string>
+    description?: Record<string, string>
+  }>
+  if (meals.length > 0) {
+    const { error: mealErr } = await admin.from('meals').insert(
+      meals.map((m) => ({
+        journey_day_id: day.id,
+        course: m.course,
+        name: m.name,
+        description: m.description ?? {},
+      })),
+    )
+    if (mealErr) return { error: mealErr.message }
+  }
+  return {}
+}
+
+export async function addTemplateDayToBooking(
+  bookingId: string,
+  locale: string,
+  _prev: { error?: string } | null,
+  formData: FormData,
+): Promise<{ error?: string }> {
+  const templateId = formData.get('template_id') as string
+  if (!templateId) return { error: 'Elige una plantilla.' }
+
+  const admin = createAdminClient()
+  const { data: template } = await admin.from('day_templates').select('*').eq('id', templateId).maybeSingle()
+  if (!template) return { error: 'Plantilla no encontrada.' }
+
+  const { data: days } = await admin
+    .from('journey_days')
+    .select('day_number')
+    .eq('booking_id', bookingId)
+    .order('day_number', { ascending: false })
+    .limit(1)
+  const nextNumber = (days?.[0]?.day_number ?? 0) + 1
+
+  const result = await instantiateTemplate(admin, template, bookingId, nextNumber)
+  if (result.error) return result
+
+  revalidatePath(`/${locale}/admin/bookings/${bookingId}/journey`)
+  return {}
+}
+
+export async function addFullJourneyToBooking(
+  bookingId: string,
+  locale: string,
+  _prev: { error?: string } | null,
+  _formData: FormData,
+): Promise<{ error?: string }> {
+  const admin = createAdminClient()
+  const { data: templates } = await admin
+    .from('day_templates')
+    .select('*')
+    .eq('active', true)
+    .order('sort_order', { ascending: true })
+
+  if (!templates || templates.length === 0) return { error: 'No hay plantillas de día activas.' }
+
+  const { data: days } = await admin
+    .from('journey_days')
+    .select('day_number')
+    .eq('booking_id', bookingId)
+    .order('day_number', { ascending: false })
+    .limit(1)
+  let nextNumber = (days?.[0]?.day_number ?? 0) + 1
+
+  for (const template of templates) {
+    const result = await instantiateTemplate(admin, template, bookingId, nextNumber)
+    if (result.error) return { error: `Día ${nextNumber}: ${result.error}` }
+    nextNumber += 1
+  }
+
+  revalidatePath(`/${locale}/admin/bookings/${bookingId}/journey`)
+  return {}
 }

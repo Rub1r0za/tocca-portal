@@ -1,0 +1,1074 @@
+[
+  {
+    "sort_order": 1,
+    "location": "Maiori",
+    "is_free_day": false,
+    "title": {
+      "en": "Arrival to the Amalfi Coast ✨",
+      "es": "Llegada a la Costa Amalfitana ✨"
+    },
+    "day_vibe": {
+      "en": "Soft Arrivals & Slow Beginnings",
+      "es": "Llegadas suaves y comienzos lentos"
+    },
+    "description": {
+      "en": "Guests arrive into Naples International Airport between approximately 10:00 AM and 11:40 AM, where Jess will personally be waiting outside arrivals with your private transfer and a Tocca Amalfi Coast sign. A beautiful scenic drive through the countryside and mountains brings us to Maiori for check-in at Hotel Pietra di Luna (4 stars, sea-view rooms, walking distance to the beach — passport in hand, please). After time to relax and refresh, we gather on the hotel terrace for our official Tocca Welcome Cocktail, followed by a relaxed, authentic welcome dinner along Maiori's charming main corso. Guests may choose an appetizer + main course or a pasta + main course; dessert is included for everyone, along with two glasses of wine or soft drinks.",
+      "es": "Llegada al Aeropuerto Internacional de Nápoles entre las 10:00 AM y las 11:40 AM aprox., donde Jess estará esperándote personalmente a la salida con tu traslado privado y un cartel de Tocca Amalfi Coast. Un hermoso trayecto panorámico entre campos y montañas nos lleva a Maiori para el check-in en el Hotel Pietra di Luna (4 estrellas, habitaciones con vista al mar, a pasos de la playa — pasaporte en mano, por favor). Tras un tiempo para descansar, nos reunimos en la terraza del hotel para el Cóctel de Bienvenida oficial de Tocca, seguido de una cena de bienvenida relajada y auténtica por el corso principal de Maiori. Puedes elegir entrante + plato principal o pasta + plato principal; el postre está incluido para todos, junto con dos copas de vino o refrescos."
+    },
+    "schedule": [
+      {
+        "time": "10:00 AM – 11:40 AM",
+        "title": {
+          "en": "Arrival window — Naples International Airport",
+          "es": "Ventana de llegada — Aeropuerto de Nápoles"
+        }
+      },
+      {
+        "time": "Afternoon",
+        "title": {
+          "en": "Private transfer & check-in at Hotel Pietra di Luna",
+          "es": "Traslado privado y check-in en el Hotel Pietra di Luna"
+        }
+      },
+      {
+        "time": "7:00 PM",
+        "title": {
+          "en": "Welcome Cocktail — hotel terrace",
+          "es": "Cóctel de bienvenida — terraza del hotel"
+        }
+      },
+      {
+        "time": "7:30 PM",
+        "title": {
+          "en": "Welcome Dinner in Maiori",
+          "es": "Cena de bienvenida en Maiori"
+        }
+      }
+    ],
+    "tocca_tips": [
+      {
+        "en": "Open the balcony doors of your room, slow down, and simply take it all in — the sea, the sound of the waves, and the people walking through Maiori below. The Amalfi Coast is not about rushing; it's about arriving, relaxing, and easing into its rhythm.",
+        "es": "Abre las puertas del balcón de tu habitación, baja el ritmo y simplemente disfruta: el mar, el sonido de las olas y la gente paseando por Maiori. La Costa Amalfitana no va de prisas; va de llegar, relajarse y entrar en su ritmo."
+      }
+    ],
+    "good_to_know": [
+      {
+        "en": "Light, comfortable outfit",
+        "es": "Ropa ligera y cómoda"
+      },
+      {
+        "en": "Comfortable walking shoes or sandals",
+        "es": "Zapatos cómodos o sandalias"
+      },
+      {
+        "en": "The evening includes an approx. 5-minute relaxed walk through Maiori",
+        "es": "La noche incluye un paseo relajado de unos 5 minutos por Maiori"
+      },
+      {
+        "en": "Expect a calm, breezy, relaxed evening by the sea",
+        "es": "Espera una noche tranquila y con brisa junto al mar"
+      }
+    ],
+    "meals": [
+      {
+        "course": "main",
+        "name": {
+          "en": "Vegetarian Menu",
+          "es": "Menú vegetariano"
+        },
+        "description": {
+          "en": "Creamy burrata with cherry tomatoes and crunchy black pepper taralli · Handcrafted Amalfi ravioli filled with lemon-infused ricotta, served with cherry tomato coulis",
+          "es": "Burrata cremosa con tomates cherry y taralli crujientes a la pimienta negra · Ravioli amalfitano artesanal relleno de ricotta al limón, con coulis de tomates cherry"
+        }
+      },
+      {
+        "course": "main",
+        "name": {
+          "en": "Fish Menu",
+          "es": "Menú de pescado"
+        },
+        "description": {
+          "en": "Alici Panza & Panza — anchovies stuffed with smoked Provola, lemon gel and Puttanesca sauce · Sea Gnocchi — purple potato gnocchi with clams and lemon",
+          "es": "Alici Panza & Panza — anchoas rellenas de provola ahumada, gel de limón y salsa puttanesca · Gnocchi de mar — ñoquis de papa morada con almejas y limón"
+        }
+      }
+    ]
+  },
+  {
+    "sort_order": 2,
+    "location": "Maiori – Minori",
+    "is_free_day": false,
+    "title": {
+      "en": "Slow Morning & Lemon Trail Experience 🍋",
+      "es": "Mañana tranquila y Sendero del Limón 🍋"
+    },
+    "day_vibe": {
+      "en": "Slow Morning • Coastal Trail • Paths & Lemons",
+      "es": "Mañana lenta • Sendero costero • Caminos y limones"
+    },
+    "description": {
+      "en": "After a long travel day, the morning is intentionally left relaxed: sleep in, enjoy the beach in front of the hotel, walk the promenade or explore Maiori at your own pace (want to shop? Ask Jess for the best local spots). In the afternoon we meet in the hotel lobby and walk the scenic Lemon Path connecting Maiori and Minori — lemon groves cascading through the hills, hidden pathways, coastal views and everyday Amalfi life. As we approach Minori we are welcomed into a generational lemon property to explore the region's iconic lemons and family traditions — a special surprise awaits inside the grove. The evening continues with a beautiful lemon-inspired dinner.",
+      "es": "Tras un largo día de viaje, la mañana es intencionalmente libre: duerme hasta tarde, disfruta la playa frente al hotel, pasea por el malecón o explora Maiori a tu ritmo (¿quieres comprar? Pregúntale a Jess por los mejores rincones locales). Por la tarde nos encontramos en el lobby del hotel y caminamos el pintoresco Sendero del Limón que conecta Maiori y Minori: limonares cayendo por las colinas, caminos escondidos, vistas a la costa y la vida cotidiana amalfitana. Al acercarnos a Minori nos recibe una finca de limones generacional para conocer los limones icónicos de la región y sus tradiciones familiares — una sorpresa especial te espera dentro del limonar. La noche continúa con una hermosa cena inspirada en el limón."
+    },
+    "schedule": [
+      {
+        "time": "Morning",
+        "title": {
+          "en": "Free morning in Maiori — beach, promenade, local life",
+          "es": "Mañana libre en Maiori — playa, malecón, vida local"
+        }
+      },
+      {
+        "time": "4:30 PM",
+        "title": {
+          "en": "Meet in the hotel lobby — Lemon Path walk to Minori",
+          "es": "Encuentro en el lobby — caminata del Sendero del Limón a Minori"
+        }
+      },
+      {
+        "time": "Evening",
+        "title": {
+          "en": "Lemon Trail experience & lemon-inspired dinner",
+          "es": "Experiencia del limonar y cena inspirada en el limón"
+        }
+      }
+    ],
+    "tocca_tips": [
+      {
+        "en": "Enjoy the slow morning: open your balcony doors, take a swim, grab an espresso along the promenade. Today is about experiencing the coast beyond tourism — movement, local life, lemon groves and hidden paths.",
+        "es": "Disfruta la mañana lenta: abre el balcón, date un baño, tómate un espresso en el malecón. Hoy se trata de vivir la costa más allá del turismo: movimiento, vida local, limonares y caminos escondidos."
+      }
+    ],
+    "good_to_know": [
+      {
+        "en": "The Lemon Path includes many stairs, scenic pathways and moderate walking between Maiori and Minori",
+        "es": "El Sendero del Limón incluye bastantes escaleras, senderos panorámicos y caminata moderada entre Maiori y Minori"
+      },
+      {
+        "en": "Comfortable walking shoes are strongly recommended",
+        "es": "Se recomiendan mucho zapatos cómodos para caminar"
+      },
+      {
+        "en": "Light clothing, sunglasses, sunscreen and water are encouraged",
+        "es": "Lleva ropa ligera, lentes de sol, protector solar y agua"
+      },
+      {
+        "en": "You will experience a mix of coastal views, village life, nature and local traditions",
+        "es": "Vivirás una mezcla de vistas costeras, vida de pueblo, naturaleza y tradiciones locales"
+      }
+    ],
+    "meals": []
+  },
+  {
+    "sort_order": 3,
+    "location": "Positano",
+    "is_free_day": false,
+    "title": {
+      "en": "Positano, Conca dei Marini & Ceramic Heritage ✨",
+      "es": "Positano, Conca dei Marini y herencia cerámica ✨"
+    },
+    "day_vibe": {
+      "en": "Luxury • Curated • Cinematic",
+      "es": "Lujo • Curado • Cinematográfico"
+    },
+    "description": {
+      "en": "Our private transfer departs in the afternoon toward Positano. Along the way we stop in Conca dei Marini to visit one of the coast's most emblematic ceramic ateliers — explore the collections, learn the history behind Amalfi ceramics, and shop if you wish. We continue along one of the most breathtaking drives of the coast, passing through beautiful Praiano before arriving in Positano, where you'll have free time to explore at your own pace with Jess's suggestions on shopping, viewpoints, boutiques, cafés and beaches. We close the evening with dinner overlooking the breathtaking Positano panorama — menu selected in advance.",
+      "es": "Nuestro traslado privado sale por la tarde hacia Positano. En el camino paramos en Conca dei Marini para visitar uno de los talleres de cerámica más emblemáticos de la costa: explora las colecciones, conoce la historia de la cerámica amalfitana y compra si lo deseas. Seguimos por uno de los trayectos más impresionantes de la costa, pasando por el hermoso Praiano antes de llegar a Positano, donde tendrás tiempo libre para explorar a tu ritmo con las sugerencias de Jess sobre compras, miradores, boutiques, cafés y playas. Cerramos la noche con una cena frente al impresionante panorama de Positano — menú seleccionado con antelación."
+    },
+    "schedule": [
+      {
+        "time": "2:30 PM",
+        "title": {
+          "en": "Private transfer departs — stop at the ceramics atelier in Conca dei Marini",
+          "es": "Sale el traslado privado — parada en el taller de cerámica de Conca dei Marini"
+        }
+      },
+      {
+        "time": "Afternoon",
+        "title": {
+          "en": "Scenic drive via Praiano · free time in Positano",
+          "es": "Trayecto panorámico por Praiano · tiempo libre en Positano"
+        }
+      },
+      {
+        "time": "Evening",
+        "title": {
+          "en": "Dinner overlooking the Positano panorama",
+          "es": "Cena con vistas al panorama de Positano"
+        }
+      }
+    ],
+    "tocca_tips": [
+      {
+        "en": "The most beautiful photos are often found away from the main beach paths",
+        "es": "Las fotos más lindas suelen estar lejos de los caminos principales de la playa"
+      },
+      {
+        "en": "Sunset light along this route is truly magical, especially between Praiano and Positano — keep your phone or camera charged",
+        "es": "La luz del atardecer en esta ruta es mágica, sobre todo entre Praiano y Positano — lleva el teléfono o la cámara con batería"
+      },
+      {
+        "en": "Positano is incredibly colorful: light, colorful clothing photographs beautifully against the pastel buildings and the sea",
+        "es": "Positano es puro color: la ropa ligera y colorida luce hermosa en fotos junto a los edificios pastel y el mar"
+      },
+      {
+        "en": "Comfortable shoes are highly recommended due to Positano's stairways and inclined streets",
+        "es": "Muy recomendados los zapatos cómodos por las escaleras y calles inclinadas de Positano"
+      }
+    ],
+    "good_to_know": [
+      {
+        "en": "Evening temperatures can feel cooler near the sea; light layers are suggested",
+        "es": "Por la noche puede refrescar junto al mar; se sugiere llevar una capa ligera"
+      },
+      {
+        "en": "Summer traffic along the coast can occasionally affect timing; flexibility is part of the coastal rhythm",
+        "es": "El tráfico de verano en la costa puede afectar los horarios; la flexibilidad es parte del ritmo costero"
+      },
+      {
+        "en": "This experience was intentionally designed for the golden afternoon and sunset hours",
+        "es": "Esta experiencia fue diseñada para las horas doradas de la tarde y el atardecer"
+      }
+    ],
+    "meals": [
+      {
+        "course": "starter",
+        "name": {
+          "en": "Buffalo Caprese Salad",
+          "es": "Caprese de búfala"
+        },
+        "description": {
+          "en": "A selection of tomatoes, basil pesto and fresh cornbread",
+          "es": "Variedad de tomates, pesto de albahaca y fresella de maíz"
+        }
+      },
+      {
+        "course": "starter",
+        "name": {
+          "en": "Stuffed Zucchini Flower",
+          "es": "Flor de calabacín rellena"
+        },
+        "description": {
+          "en": "Filled with ricotta, mozzarella and zucchini, served with tomato-infused mayonnaise",
+          "es": "Rellena de ricotta, mozzarella y calabacín, sobre mayonesa al tomate"
+        }
+      },
+      {
+        "course": "main",
+        "name": {
+          "en": "Linguine ai Sapori della Costiera",
+          "es": "Linguine ai Sapori della Costiera"
+        },
+        "description": {
+          "en": "Linguine pasta with seafood, shrimp, langoustines and squid",
+          "es": "Linguine con mariscos, camarones, cigalas y calamar"
+        }
+      },
+      {
+        "course": "main",
+        "name": {
+          "en": "Lemon & Bluefin Tuna Spaghetti",
+          "es": "Spaghetti al limón y atún rojo"
+        },
+        "description": {
+          "en": "Fresh lemon-scented spaghettoni served with raw bluefin tuna",
+          "es": "Spaghettoni frescos perfumados al limón con atún rojo crudo"
+        }
+      },
+      {
+        "course": "main",
+        "name": {
+          "en": "Spaghetti al Pomodoro del Piennolo",
+          "es": "Spaghetti al Pomodoro del Piennolo"
+        },
+        "description": {
+          "en": "Spaghetti with Piennolo tomato sauce and ricotta cheese",
+          "es": "Spaghetti con salsa de tomate del Piennolo y ricotta"
+        }
+      },
+      {
+        "course": "main",
+        "name": {
+          "en": "Beetroot Ravioli",
+          "es": "Ravioli de remolacha"
+        },
+        "description": {
+          "en": "Beetroot ravioli filled with cashew cream, served with a citrus sauce",
+          "es": "Ravioli de remolacha relleno de crema de anacardos, con salsa de cítricos"
+        }
+      },
+      {
+        "course": "main",
+        "name": {
+          "en": "Catch of the Day Parmigiana",
+          "es": "Parmigiana de pesca del día"
+        },
+        "description": {
+          "en": "Fresh catch of the day prepared Parmigiana-style, served with fried eggplant",
+          "es": "Pesca del día estilo parmigiana, con berenjena frita"
+        }
+      },
+      {
+        "course": "main",
+        "name": {
+          "en": "Lemon-Stuffed Chicken Breast",
+          "es": "Pechuga de pollo rellena de limón"
+        },
+        "description": {
+          "en": "Slow-cooked chicken breast stuffed with lemon, served with marinated red cabbage",
+          "es": "Pechuga cocida a baja temperatura rellena de limón, con col morada marinada"
+        }
+      },
+      {
+        "course": "dessert",
+        "name": {
+          "en": "Tiramisu",
+          "es": "Tiramisú"
+        },
+        "description": {
+          "en": "Made with coffee, Grand Marnier and dark cocoa",
+          "es": "Con café, Grand Marnier y cacao amargo"
+        }
+      },
+      {
+        "course": "dessert",
+        "name": {
+          "en": "Delizia al Limone",
+          "es": "Delizia al Limone"
+        },
+        "description": {
+          "en": "A light sponge cake infused with limoncello and filled with lemon cream",
+          "es": "Bizcocho ligero al limoncello relleno de crema de limón"
+        }
+      }
+    ]
+  },
+  {
+    "sort_order": 4,
+    "location": "Amalfi – Atrani",
+    "is_free_day": false,
+    "title": {
+      "en": "Amalfi, Atrani & Pizza Experience 🍕✨",
+      "es": "Amalfi, Atrani y experiencia de pizza 🍕✨"
+    },
+    "day_vibe": {
+      "en": "Historic • Intimate • Delicious",
+      "es": "Histórico • Íntimo • Delicioso"
+    },
+    "description": {
+      "en": "After lunch we meet in the lobby and board the ferry at the port of Maiori toward Amalfi — a short ride with beautiful views of the coastline from the sea, just how the locals travel. In Amalfi we explore the historic center, the famous cathedral and piazza, artisan shops and hidden corners, with time for a gelato or coffee. We then enjoy the beautiful walk connecting Amalfi and Atrani, the smallest village in all of Italy — untouched and deeply authentic. In Atrani our private transfer brings us to a hands-on pizza & mozzarella cooking experience: traditional techniques, fresh mozzarella preparation and a relaxed, authentic evening. Dinner is the experience itself, and our transfer returns us to Maiori.",
+      "es": "Después del almuerzo nos encontramos en el lobby y tomamos el ferry en el puerto de Maiori hacia Amalfi: un trayecto corto con hermosas vistas de la costa desde el mar, tal como viajan los locales. En Amalfi exploramos el centro histórico, la famosa catedral y su piazza, tiendas artesanales y rincones escondidos, con tiempo para un gelato o un café. Luego disfrutamos la hermosa caminata que conecta Amalfi con Atrani, el pueblo más pequeño de toda Italia: intacto y profundamente auténtico. En Atrani nuestro traslado privado nos lleva a una experiencia práctica de pizza y mozzarella: técnicas tradicionales, preparación de mozzarella fresca y una noche relajada y auténtica. La cena es la experiencia misma, y el traslado nos regresa a Maiori."
+    },
+    "schedule": [
+      {
+        "time": "1:15 PM",
+        "title": {
+          "en": "Meet in the hotel lobby",
+          "es": "Encuentro en el lobby del hotel"
+        }
+      },
+      {
+        "time": "1:40 PM",
+        "title": {
+          "en": "Ferry from Maiori to Amalfi",
+          "es": "Ferry de Maiori a Amalfi"
+        }
+      },
+      {
+        "time": "1:55 PM – 3:30 PM",
+        "title": {
+          "en": "Exploring Amalfi together",
+          "es": "Explorando Amalfi juntos"
+        }
+      },
+      {
+        "time": "3:30 PM",
+        "title": {
+          "en": "Walk from Amalfi to Atrani",
+          "es": "Caminata de Amalfi a Atrani"
+        }
+      },
+      {
+        "time": "4:15 PM",
+        "title": {
+          "en": "Private transfer to the pizza & mozzarella experience",
+          "es": "Traslado privado a la experiencia de pizza y mozzarella"
+        }
+      }
+    ],
+    "tocca_tips": [
+      {
+        "en": "The ferry between Maiori and Amalfi offers some of the most beautiful coastal perspectives — keep your camera ready during the approach into Amalfi",
+        "es": "El ferry entre Maiori y Amalfi ofrece algunas de las perspectivas más hermosas de la costa — ten la cámara lista al acercarte a Amalfi"
+      },
+      {
+        "en": "Comfortable shoes are highly recommended for the Amalfi–Atrani walk due to uneven pathways and stairs",
+        "es": "Zapatos cómodos muy recomendados para la caminata Amalfi–Atrani por los caminos irregulares y escaleras"
+      },
+      {
+        "en": "During the cooking experience, don't be afraid to get hands-on — southern Italian cooking is about simplicity, freshness and enjoying the moment together",
+        "es": "En la experiencia de cocina no temas ensuciarte las manos: la cocina del sur de Italia va de sencillez, frescura y disfrutar el momento juntos"
+      }
+    ],
+    "good_to_know": [
+      {
+        "en": "Ferry schedules and sea conditions can occasionally affect date and timing",
+        "es": "Los horarios del ferry y el estado del mar pueden afectar fecha y horarios"
+      },
+      {
+        "en": "The pizza & mozzarella experience is intentionally relaxed, interactive and deeply local rather than formal",
+        "es": "La experiencia de pizza y mozzarella es intencionalmente relajada, interactiva y muy local, nada formal"
+      },
+      {
+        "en": "Light clothing is recommended; a light layer may help after the ferry ride or later near the sea",
+        "es": "Se recomienda ropa ligera; una capa extra ayuda después del ferry o por la noche junto al mar"
+      }
+    ],
+    "meals": []
+  },
+  {
+    "sort_order": 5,
+    "location": "Capri",
+    "is_free_day": false,
+    "title": {
+      "en": "Private Boat Day to Capri 🌊☀️",
+      "es": "Día en barco privado a Capri 🌊☀️"
+    },
+    "day_vibe": {
+      "en": "Luxurious • Sea Breeze • Iconic",
+      "es": "Lujoso • Brisa marina • Icónico"
+    },
+    "description": {
+      "en": "One of the most iconic experiences of the journey: a full day exploring Capri by sea. Our private boat awaits at the port of Maiori with prosecco, light snacks and a relaxed coastal atmosphere. As we cruise the coastline we make swimming stops near the Fiordo di Furore, coastal grottos and crystal-clear coves. In Capri, free time to explore at your own pace — the funicular to Capri town, the iconic convertible taxi to Anacapri, Monte Solaro by chairlift, the Piazzetta, the Gardens of Augustus, boutiques or an aperitivo overlooking the sea — with Jess there to guide and suggest. We return by private boat, and in the evening walk together to dinner at Ristorante Pineta 1903, known for its authentic atmosphere and elevated local cuisine.",
+      "es": "Una de las experiencias más icónicas del viaje: un día completo explorando Capri por mar. Nuestro barco privado espera en el puerto de Maiori con prosecco, snacks ligeros y un ambiente costero relajado. Navegando la costa hacemos paradas para nadar cerca del Fiordo di Furore, grutas costeras y calas cristalinas. En Capri, tiempo libre para explorar a tu ritmo: el funicular al pueblo de Capri, el icónico taxi descapotable a Anacapri, Monte Solaro en telesilla, la Piazzetta, los Jardines de Augusto, boutiques o un aperitivo frente al mar — con Jess ahí para guiarte y sugerirte. Regresamos en barco privado y por la noche caminamos juntos a cenar al Ristorante Pineta 1903, conocido por su ambiente auténtico y su cocina local elevada."
+    },
+    "schedule": [
+      {
+        "time": "9:15 AM",
+        "title": {
+          "en": "Depart Hotel Pietra di Luna toward Maiori Port",
+          "es": "Salida del Hotel Pietra di Luna hacia el puerto de Maiori"
+        }
+      },
+      {
+        "time": "9:30 AM",
+        "title": {
+          "en": "Private boat departs — Amalfi Coast by sea & swimming stops",
+          "es": "Sale el barco privado — la costa por mar y paradas para nadar"
+        }
+      },
+      {
+        "time": "Midday",
+        "title": {
+          "en": "Free time in Capri",
+          "es": "Tiempo libre en Capri"
+        }
+      },
+      {
+        "time": "5:30 PM – 6:00 PM",
+        "title": {
+          "en": "Return by private boat to Maiori",
+          "es": "Regreso en barco privado a Maiori"
+        }
+      },
+      {
+        "time": "7:45 PM",
+        "title": {
+          "en": "Dinner at Ristorante Pineta 1903",
+          "es": "Cena en el Ristorante Pineta 1903"
+        }
+      }
+    ],
+    "tocca_tips": [
+      {
+        "en": "Wearing swimwear under your clothing makes the swimming stops easier and more relaxed",
+        "es": "Llevar el traje de baño puesto bajo la ropa hace las paradas para nadar más fáciles y relajadas"
+      },
+      {
+        "en": "The funicular is great, but lines get crowded — a local tip is to use it on the way down from Capri town, when lines are shorter",
+        "es": "El funicular es genial, pero las filas se llenan: el truco local es usarlo de bajada desde el pueblo de Capri, cuando hay menos gente"
+      },
+      {
+        "en": "For a scenic, iconic ride, take the famous convertible taxi toward Anacapri (extra fee, not included)",
+        "es": "Para un trayecto icónico y panorámico, toma el famoso taxi descapotable hacia Anacapri (costo extra, no incluido)"
+      },
+      {
+        "en": "The chairlift to Monte Solaro is part of Capri's charm and highly recommended for first-time visitors (extra fee)",
+        "es": "La telesilla a Monte Solaro es parte del encanto de Capri y muy recomendada si es tu primera vez (costo extra)"
+      }
+    ],
+    "good_to_know": [
+      {
+        "en": "Sun protection is highly recommended: sunscreen, sunglasses, hats and breathable clothing",
+        "es": "Muy recomendada la protección solar: bloqueador, lentes, sombrero y ropa fresca"
+      },
+      {
+        "en": "Comfortable shoes for Capri and Anacapri's hills, stairs and cobblestones",
+        "es": "Zapatos cómodos para las cuestas, escaleras y adoquines de Capri y Anacapri"
+      },
+      {
+        "en": "Sea conditions may adjust swimming locations or timing for comfort and safety",
+        "es": "El estado del mar puede ajustar las paradas o los horarios por comodidad y seguridad"
+      },
+      {
+        "en": "Lunch is not included",
+        "es": "El almuerzo no está incluido"
+      }
+    ],
+    "meals": []
+  },
+  {
+    "sort_order": 6,
+    "location": "Amalfi Coast",
+    "is_free_day": true,
+    "title": {
+      "en": "Free Day — Optional Experiences 🌿",
+      "es": "Día libre — Experiencias opcionales 🌿"
+    },
+    "day_vibe": {
+      "en": "Your Coast • Your Rhythm",
+      "es": "Tu costa • Tu ritmo"
+    },
+    "description": {
+      "en": "For your free day along the Amalfi Coast, Jess has carefully curated a selection of optional experiences for those who would love to continue exploring — each one chosen for its balance of relaxation, culture, authenticity and unforgettable coastal moments. Browse the optional experiences in the Activities section and request the ones you love. You will also find two recommended restaurants for dinner, with the option of a fixed menu or ordering à la carte.",
+      "es": "Para tu día libre en la Costa Amalfitana, Jess ha curado con cuidado una selección de experiencias opcionales para quienes quieran seguir explorando — cada una elegida por su equilibrio entre relajación, cultura, autenticidad y momentos costeros inolvidables. Explora las experiencias opcionales en la sección de Actividades y solicita las que más te gusten. También encontrarás dos restaurantes recomendados para cenar, con opción de menú fijo o a la carta."
+    },
+    "schedule": [],
+    "tocca_tips": [
+      {
+        "en": "A free day doesn't have to mean a full schedule — sometimes the best Amalfi moment is a slow breakfast, a swim and an aperitivo at sunset",
+        "es": "Un día libre no tiene que significar agenda llena: a veces el mejor momento amalfitano es un desayuno lento, un baño en el mar y un aperitivo al atardecer"
+      }
+    ],
+    "good_to_know": [
+      {
+        "en": "All optional activities must be confirmed at least one week prior to arrival",
+        "es": "Todas las actividades opcionales deben confirmarse al menos una semana antes de la llegada"
+      },
+      {
+        "en": "Optional experiences are paid separately and some require a minimum number of guests",
+        "es": "Las experiencias opcionales se pagan aparte y algunas requieren un mínimo de participantes"
+      },
+      {
+        "en": "If you'd like an activity while already on the trip, let us know and we'll check availability",
+        "es": "Si ya durante el viaje te interesa una actividad, avísanos y revisamos disponibilidad"
+      }
+    ],
+    "meals": []
+  },
+  {
+    "sort_order": 7,
+    "location": "Pompeii – Tramonti",
+    "is_free_day": false,
+    "title": {
+      "en": "Pompeii & Dinner in the Mountains 🏛️🍷",
+      "es": "Pompeya y cena en las montañas 🏛️🍷"
+    },
+    "day_vibe": {
+      "en": "Ancient • Immersive • Soulful",
+      "es": "Antiguo • Inmersivo • Con alma"
+    },
+    "description": {
+      "en": "We meet in the hotel lobby and depart by private transfer toward the archaeological city of Pompeii, where a professional licensed guide takes us on an immersive journey through ancient Roman streets, preserved homes and marketplaces, the history of Mount Vesuvius's eruption and daily life in one of the world's most fascinating archaeological sites (approx. 2 hours). Afterwards we continue into the mountains of the Amalfi Coast to the beautiful village of Tramonti — a hidden, authentic side of the region many travelers never experience — for dinner surrounded by the peaceful countryside before returning to Maiori.",
+      "es": "Nos encontramos en el lobby del hotel y salimos en traslado privado hacia la ciudad arqueológica de Pompeya, donde un guía profesional certificado nos lleva por un recorrido inmersivo entre calles romanas antiguas, casas y mercados conservados, la historia de la erupción del Vesubio y la vida cotidiana de uno de los sitios arqueológicos más fascinantes del mundo (aprox. 2 horas). Después seguimos hacia las montañas de la costa, al hermoso pueblo de Tramonti — un lado escondido y auténtico de la región que pocos viajeros conocen — para cenar rodeados de la tranquilidad del campo antes de volver a Maiori."
+    },
+    "schedule": [
+      {
+        "time": "3:00 PM",
+        "title": {
+          "en": "Meet in the hotel lobby — private transfer to Pompeii",
+          "es": "Encuentro en el lobby — traslado privado a Pompeya"
+        }
+      },
+      {
+        "time": "Afternoon",
+        "title": {
+          "en": "Guided exploration of Pompeii (approx. 2 hours)",
+          "es": "Recorrido guiado por Pompeya (aprox. 2 horas)"
+        }
+      },
+      {
+        "time": "Evening",
+        "title": {
+          "en": "Dinner in the mountains of Tramonti",
+          "es": "Cena en las montañas de Tramonti"
+        }
+      }
+    ],
+    "tocca_tips": [
+      {
+        "en": "Pompeii is much larger than many expect — comfortable shoes, light clothing and water are highly recommended",
+        "es": "Pompeya es mucho más grande de lo que muchos esperan: zapatos cómodos, ropa ligera y agua muy recomendados"
+      },
+      {
+        "en": "Listening closely to the guide truly transforms the experience, bringing the ancient streets and homes back to life",
+        "es": "Escuchar con atención al guía transforma la experiencia: las calles y casas antiguas vuelven a la vida"
+      }
+    ],
+    "good_to_know": [
+      {
+        "en": "The archaeological grounds include uneven ancient stone streets and significant walking",
+        "es": "El sitio arqueológico incluye calles antiguas de piedra irregulares y bastante caminata"
+      },
+      {
+        "en": "Afternoon temperatures can be warm and some areas offer limited shade — sunscreen and hats encouraged",
+        "es": "Por la tarde puede hacer calor y hay poca sombra en algunas zonas: lleva bloqueador y sombrero"
+      },
+      {
+        "en": "Dinner in Tramonti has a relaxed countryside atmosphere; mountain evenings may feel slightly cooler",
+        "es": "La cena en Tramonti tiene un ambiente campestre relajado; por la noche en la montaña puede refrescar"
+      }
+    ],
+    "meals": []
+  },
+  {
+    "sort_order": 8,
+    "location": "Ravello",
+    "is_free_day": false,
+    "title": {
+      "en": "Ravello, Villas & Garden Dinner 🌺✨",
+      "es": "Ravello, villas y cena en el jardín 🌺✨"
+    },
+    "day_vibe": {
+      "en": "Romantic • Elegant • Timeless",
+      "es": "Romántico • Elegante • Atemporal"
+    },
+    "description": {
+      "en": "Our private transfer brings us to Ravello, known for its elegance, gardens and breathtaking panoramic views. We explore the piazzetta, hidden streets, artisan corners and scenic viewpoints, then enjoy guided visits through Villa Cimbrone and Villa Rufolo (entrance tickets and guide included) — historic gardens, architectural details and the panoramic terraces that have inspired artists and musicians for generations. We close with dinner at an authentic garden-style restaurant along the walk back from Villa Cimbrone: warm, intimate and deeply local. Guests choose one appetizer and one main course.",
+      "es": "Nuestro traslado privado nos lleva a Ravello, conocida por su elegancia, sus jardines y sus impresionantes vistas panorámicas. Exploramos la piazzetta, calles escondidas, rincones artesanos y miradores, y luego disfrutamos visitas guiadas por Villa Cimbrone y Villa Rufolo (entradas y guía incluidos): jardines históricos, detalles arquitectónicos y las terrazas panorámicas que han inspirado a artistas y músicos por generaciones. Cerramos con una cena en un auténtico restaurante estilo jardín en el camino de regreso desde Villa Cimbrone: cálido, íntimo y profundamente local. Cada huésped elige un entrante y un plato principal."
+    },
+    "schedule": [
+      {
+        "time": "3:00 PM",
+        "title": {
+          "en": "Private transfer departs for Ravello",
+          "es": "Sale el traslado privado hacia Ravello"
+        }
+      },
+      {
+        "time": "Afternoon",
+        "title": {
+          "en": "Guided visit — Villa Cimbrone & Villa Rufolo",
+          "es": "Visita guiada — Villa Cimbrone y Villa Rufolo"
+        }
+      },
+      {
+        "time": "Evening",
+        "title": {
+          "en": "Garden dinner in Ravello",
+          "es": "Cena en el jardín en Ravello"
+        }
+      }
+    ],
+    "tocca_tips": [
+      {
+        "en": "Comfortable shoes recommended — Ravello includes stone walkways, stairs and inclined streets",
+        "es": "Zapatos cómodos recomendados: Ravello tiene caminos de piedra, escaleras y calles inclinadas"
+      },
+      {
+        "en": "Carry your phone or camera fully charged — Ravello offers some of the most iconic photo locations on the coast",
+        "es": "Lleva el teléfono o la cámara con batería completa: Ravello tiene algunos de los rincones más icónicos para fotos de la costa"
+      },
+      {
+        "en": "Look beyond the main piazza — some of Ravello's most beautiful corners hide in small garden pathways and side streets",
+        "es": "Mira más allá de la piazza principal: los rincones más bellos de Ravello se esconden en pequeños senderos de jardín y calles laterales"
+      },
+      {
+        "en": "Light, elegant, flowy clothing photographs beautifully against the gardens and villas",
+        "es": "La ropa ligera, elegante y vaporosa luce hermosa en fotos junto a los jardines y las villas"
+      }
+    ],
+    "good_to_know": [
+      {
+        "en": "Villa visits include walking through gardens, terraces and uneven historic pathways",
+        "es": "Las visitas a las villas incluyen caminatas por jardines, terrazas y senderos históricos irregulares"
+      },
+      {
+        "en": "Ravello sits higher above the coastline, so evenings may feel slightly cooler",
+        "es": "Ravello está más alto sobre la costa, así que por la noche puede refrescar un poco"
+      },
+      {
+        "en": "Ravello feels quieter and more refined than the busier coastal villages — perfect for a slower, more romantic afternoon",
+        "es": "Ravello se siente más tranquilo y refinado que los pueblos costeros concurridos: perfecto para una tarde lenta y romántica"
+      }
+    ],
+    "meals": [
+      {
+        "course": "starter",
+        "name": {
+          "en": "Bruschetta with Seasonal Vegetables (Cianfotta)",
+          "es": "Bruschetta con verduras de temporada (Cianfotta)"
+        },
+        "description": {
+          "en": "",
+          "es": ""
+        }
+      },
+      {
+        "course": "starter",
+        "name": {
+          "en": "Caprese with Buffalo Mozzarella",
+          "es": "Caprese con mozzarella de búfala"
+        },
+        "description": {
+          "en": "",
+          "es": ""
+        }
+      },
+      {
+        "course": "starter",
+        "name": {
+          "en": "Caponata with Tuna",
+          "es": "Caponata con atún"
+        },
+        "description": {
+          "en": "Tuna, onions, cherry tomatoes, aubergines in olive oil, mozzarella and traditional Agerola biscuit bread",
+          "es": "Atún, cebolla, tomates cherry, berenjena en aceite de oliva, mozzarella y pan tradicional de Agerola"
+        }
+      },
+      {
+        "course": "starter",
+        "name": {
+          "en": "Totani e Patate",
+          "es": "Totani e Patate"
+        },
+        "description": {
+          "en": "Squid and potatoes stewed in cherry tomato sauce",
+          "es": "Calamar y papas guisados en salsa de tomates cherry"
+        }
+      },
+      {
+        "course": "starter",
+        "name": {
+          "en": "Local Cheese & Cured Meat Board",
+          "es": "Tabla de quesos y embutidos locales"
+        },
+        "description": {
+          "en": "Served with vegetables in olive oil and local jams",
+          "es": "Con verduras en aceite de oliva y mermeladas locales"
+        }
+      },
+      {
+        "course": "starter",
+        "name": {
+          "en": "Amalfi-Style Octopus Salad",
+          "es": "Ensalada de pulpo al estilo Amalfi"
+        },
+        "description": {
+          "en": "With capers and olives",
+          "es": "Con alcaparras y aceitunas"
+        }
+      },
+      {
+        "course": "main",
+        "name": {
+          "en": "Crespella alla Ravellese",
+          "es": "Crespella alla Ravellese"
+        },
+        "description": {
+          "en": "Béchamel sauce, ricotta, ham and mozzarella",
+          "es": "Bechamel, ricotta, jamón y mozzarella"
+        }
+      },
+      {
+        "course": "main",
+        "name": {
+          "en": "Pacchero alla Ravellese",
+          "es": "Pacchero alla Ravellese"
+        },
+        "description": {
+          "en": "Courgette and cherry tomato pasta",
+          "es": "Pasta con calabacín y tomates cherry"
+        }
+      },
+      {
+        "course": "main",
+        "name": {
+          "en": "Paccheri with Tuna Genovese Sauce",
+          "es": "Paccheri con salsa genovesa de atún"
+        },
+        "description": {
+          "en": "",
+          "es": ""
+        }
+      },
+      {
+        "course": "main",
+        "name": {
+          "en": "Cannelloni alla Napoletana",
+          "es": "Cannelloni alla Napoletana"
+        },
+        "description": {
+          "en": "Ricotta, mozzarella and minced meat",
+          "es": "Ricotta, mozzarella y carne molida"
+        }
+      },
+      {
+        "course": "main",
+        "name": {
+          "en": "Gnocchi alla Sorrentina",
+          "es": "Gnocchi alla Sorrentina"
+        },
+        "description": {
+          "en": "Tomato sauce, mozzarella and parmesan",
+          "es": "Salsa de tomate, mozzarella y parmesano"
+        }
+      },
+      {
+        "course": "main",
+        "name": {
+          "en": "Sea Bass Fillet",
+          "es": "Filete de lubina"
+        },
+        "description": {
+          "en": "",
+          "es": ""
+        }
+      },
+      {
+        "course": "main",
+        "name": {
+          "en": "Stuffed Squid",
+          "es": "Calamar relleno"
+        },
+        "description": {
+          "en": "With potatoes and provola cheese",
+          "es": "Con papas y queso provola"
+        }
+      },
+      {
+        "course": "main",
+        "name": {
+          "en": "Mussels & Beans Soup",
+          "es": "Sopa de mejillones y alubias"
+        },
+        "description": {
+          "en": "With garlic croutons",
+          "es": "Con crutones de ajo"
+        }
+      },
+      {
+        "course": "main",
+        "name": {
+          "en": "Meatballs in Tomato Sauce",
+          "es": "Albóndigas en salsa de tomate"
+        },
+        "description": {
+          "en": "",
+          "es": ""
+        }
+      },
+      {
+        "course": "main",
+        "name": {
+          "en": "Mixed Grilled Beef",
+          "es": "Parrillada mixta de res"
+        },
+        "description": {
+          "en": "",
+          "es": ""
+        }
+      }
+    ]
+  },
+  {
+    "sort_order": 9,
+    "location": "Tramonti – Maiori",
+    "is_free_day": false,
+    "title": {
+      "en": "Vineyard Experience & Farewell Rooftop Dinner 🍇✨",
+      "es": "Experiencia en viñedo y cena de despedida en el rooftop 🍇✨"
+    },
+    "day_vibe": {
+      "en": "Slow Living • Nonnas • Sunset",
+      "es": "Vida lenta • Nonnas • Atardecer"
+    },
+    "description": {
+      "en": "We depart toward the mountains of Tramonti to visit a family-owned vineyard passed down through generations: wine tastings, a traditional local lunch paired with different wines, vineyard exploration and connection with local families. One of the most special moments is watching the local grandmothers — the nonnas — preparing traditional dishes in front of us. Wines can be purchased to take home or shipped internationally. Back in Maiori, we gather at 7:45 PM for a special farewell dinner at a rooftop overlooking the coast — a celebratory closing of the memories, connections and experiences shared. Be ready to dance, laugh and toast. Guests select their menu (sea, land or vegetarian) and dessert in advance.",
+      "es": "Salimos hacia las montañas de Tramonti para visitar un viñedo familiar heredado por generaciones: catas de vino, un almuerzo local tradicional maridado con distintos vinos, recorrido por el viñedo y conexión con las familias locales. Uno de los momentos más especiales es ver a las abuelas locales — las nonnas — preparando platos tradicionales frente a nosotros. Puedes comprar vinos para llevar o con envío internacional. De regreso en Maiori, nos reunimos a las 7:45 PM para una cena especial de despedida en un rooftop con vistas a la costa: un cierre celebratorio de los recuerdos, conexiones y experiencias compartidas. Prepárate para bailar, reír y brindar. Cada huésped elige su menú (mar, tierra o vegetariano) y postre con antelación."
+    },
+    "schedule": [
+      {
+        "time": "12:00 PM",
+        "title": {
+          "en": "Private transfer departs for the Tramonti vineyard",
+          "es": "Sale el traslado privado hacia el viñedo de Tramonti"
+        }
+      },
+      {
+        "time": "Afternoon",
+        "title": {
+          "en": "Wine tastings, traditional lunch with the nonnas & vineyard walk",
+          "es": "Catas de vino, almuerzo tradicional con las nonnas y paseo por el viñedo"
+        }
+      },
+      {
+        "time": "3:30 PM – 4:00 PM",
+        "title": {
+          "en": "Return to Maiori",
+          "es": "Regreso a Maiori"
+        }
+      },
+      {
+        "time": "7:45 PM",
+        "title": {
+          "en": "Farewell Rooftop Dinner",
+          "es": "Cena de despedida en el rooftop"
+        }
+      }
+    ],
+    "tocca_tips": [
+      {
+        "en": "Tramonti shows a completely different side of the coast — quieter, greener, slower and deeply connected to local traditions",
+        "es": "Tramonti muestra un lado totalmente distinto de la costa: más tranquilo, verde, lento y conectado con las tradiciones locales"
+      },
+      {
+        "en": "Watching the nonnas cook by hand is one of the most authentic moments of the journey — have your camera ready",
+        "es": "Ver a las nonnas cocinar a mano es uno de los momentos más auténticos del viaje: ten la cámara lista"
+      },
+      {
+        "en": "The vineyard is countryside casual — linen, flowy outfits and comfortable shoes fit perfectly",
+        "es": "El viñedo es campestre casual: lino, ropa vaporosa y zapatos cómodos encajan perfecto"
+      },
+      {
+        "en": "Ask for recommendations on bottles unique to Tramonti that are hard to find internationally",
+        "es": "Pide recomendaciones de botellas únicas de Tramonti, difíciles de encontrar fuera de Italia"
+      }
+    ],
+    "good_to_know": [
+      {
+        "en": "Menu selection is not required for the vineyard lunch, but please communicate allergies, dietary restrictions or vegetarian preferences in advance",
+        "es": "No se requiere selección de menú para el almuerzo del viñedo, pero comunica con antelación alergias, restricciones o preferencias vegetarianas"
+      },
+      {
+        "en": "Some walking through vineyard paths and countryside terrain is involved",
+        "es": "Habrá algo de caminata por senderos del viñedo y terreno de campo"
+      },
+      {
+        "en": "Wines purchased at the vineyard can be arranged for international shipping",
+        "es": "Los vinos comprados en el viñedo pueden enviarse internacionalmente"
+      },
+      {
+        "en": "The farewell rooftop dinner is a celebratory, emotional closing — one last evening to enjoy the coast together",
+        "es": "La cena de despedida en el rooftop es un cierre celebratorio y emotivo: una última noche para disfrutar la costa juntos"
+      }
+    ],
+    "meals": [
+      {
+        "course": "main",
+        "name": {
+          "en": "Sea Menu",
+          "es": "Menú del mar"
+        },
+        "description": {
+          "en": "House mixed seafood appetizer (fried anchovies stuffed with provolone, marinated salmon, battered shrimp, seared octopus) · Traditional handmade seafood scialatielli · Potato-crusted sea bream fillet with julienned vegetables",
+          "es": "Antipasto mixto de mariscos de la casa (anchoas fritas rellenas de provolone, salmón marinado, camarones rebozados, pulpo sellado) · Scialatielli artesanales de mariscos · Filete de dorada en costra de papa con juliana de verduras"
+        }
+      },
+      {
+        "course": "main",
+        "name": {
+          "en": "Land Menu",
+          "es": "Menú de tierra"
+        },
+        "description": {
+          "en": "House appetizer with cured meats, parmigiana and buffalo mozzarella · Nerano-style scialatiello with zucchini and Provolone del Monaco · Pistachio-crusted entrecôte with julienned vegetables",
+          "es": "Antipasto de la casa con embutidos, parmigiana y mozzarella de búfala · Scialatiello estilo Nerano con calabacín y Provolone del Monaco · Entrecot en costra de pistacho con juliana de verduras"
+        }
+      },
+      {
+        "course": "main",
+        "name": {
+          "en": "Vegetarian Menu",
+          "es": "Menú vegetariano"
+        },
+        "description": {
+          "en": "Eggplant Parmigiana with ricotta on tomato cream · Scialatiello alla Nerano with zucchini and Provolone del Monaco · Baked peppers stuffed with bread and seasonal vegetables",
+          "es": "Parmigiana de berenjena con ricotta sobre crema de tomate · Scialatiello alla Nerano con calabacín y Provolone del Monaco · Pimientos horneados rellenos de pan y verduras de temporada"
+        }
+      },
+      {
+        "course": "dessert",
+        "name": {
+          "en": "Lemon Tiramisù",
+          "es": "Tiramisú de limón"
+        },
+        "description": {
+          "en": "",
+          "es": ""
+        }
+      },
+      {
+        "course": "dessert",
+        "name": {
+          "en": "Chocolate Tiramisù",
+          "es": "Tiramisú de chocolate"
+        },
+        "description": {
+          "en": "",
+          "es": ""
+        }
+      },
+      {
+        "course": "dessert",
+        "name": {
+          "en": "Coffee Tiramisù",
+          "es": "Tiramisú de café"
+        },
+        "description": {
+          "en": "",
+          "es": ""
+        }
+      }
+    ]
+  },
+  {
+    "sort_order": 10,
+    "location": "Naples Airport",
+    "is_free_day": false,
+    "title": {
+      "en": "Arrivederci ✈️",
+      "es": "Arrivederci ✈️"
+    },
+    "day_vibe": {
+      "en": "Bittersweet • Grateful • Memorable",
+      "es": "Agridulce • Agradecidos • Memorable"
+    },
+    "description": {
+      "en": "A bittersweet farewell. After breakfast, private transfer to Naples International Airport — carrying memories, flavors and friendships that will last a lifetime. Until we meet again on the Amalfi Coast…",
+      "es": "Una despedida agridulce. Después del desayuno, traslado privado al Aeropuerto Internacional de Nápoles — llevando recuerdos, sabores y amistades para toda la vida. Hasta que nos volvamos a ver en la Costa Amalfitana…"
+    },
+    "schedule": [
+      {
+        "time": "Morning",
+        "title": {
+          "en": "Breakfast & check-out",
+          "es": "Desayuno y check-out"
+        }
+      },
+      {
+        "time": "Per flight schedule",
+        "title": {
+          "en": "Private transfer to Naples International Airport",
+          "es": "Traslado privado al Aeropuerto de Nápoles"
+        }
+      }
+    ],
+    "tocca_tips": [],
+    "good_to_know": [
+      {
+        "en": "Private transportation to Naples International Airport is included",
+        "es": "El traslado privado al Aeropuerto de Nápoles está incluido"
+      },
+      {
+        "en": "Departure timing is coordinated according to individual flight schedules and traffic conditions",
+        "es": "La hora de salida se coordina según los vuelos de cada quien y el tráfico"
+      },
+      {
+        "en": "Coastal roads can experience summer traffic delays, so departures are planned with extra time for peace of mind",
+        "es": "Las carreteras de la costa pueden tener tráfico en verano, así que las salidas se planean con tiempo extra para tu tranquilidad"
+      }
+    ],
+    "meals": []
+  }
+]

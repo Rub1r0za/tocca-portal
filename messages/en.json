@@ -113,7 +113,12 @@
     "included": "What's included",
     "meetingPoint": "Meeting point",
     "notes": "Good to know",
-    "gallery": "Gallery"
+    "gallery": "Gallery",
+    "toccaTips": "Tocca Tips",
+    "goodToKnow": "Good to Know",
+    "freeDayTitle": "Your free day",
+    "freeDayText": "This day is yours. Explore the curated optional experiences and request the ones you love — Jess will confirm availability.",
+    "freeDayCta": "Browse optional experiences"
   },
   "activities": {
     "duration": "Duration",

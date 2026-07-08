@@ -16,6 +16,14 @@ type Day = {
   description: Record<string, string>
   location: string | null
   day_date: string | null
+  day_vibe: Record<string, string> | null
+  tocca_tips: Array<Record<string, string>> | null
+  good_to_know: Array<Record<string, string>> | null
+  is_free_day: boolean
+}
+
+function linesOf(items: Array<Record<string, string>> | null | undefined, lang: string) {
+  return (items ?? []).map((i) => i?.[lang] ?? '').join('\n')
 }
 
 function EditDayForm({
@@ -71,6 +79,45 @@ function EditDayForm({
           <textarea name="description_es" rows={3} defaultValue={day.description?.es ?? ''} className={inputClass} style={{ resize: 'vertical' }} />
         </div>
       </div>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label className={labelClass}>Day Vibe EN</label>
+          <input name="day_vibe_en" type="text" defaultValue={day.day_vibe?.en ?? ''} placeholder="Soft Arrivals & Slow Beginnings" className={inputClass} />
+        </div>
+        <div>
+          <label className={labelClass}>Day Vibe ES</label>
+          <input name="day_vibe_es" type="text" defaultValue={day.day_vibe?.es ?? ''} className={inputClass} />
+        </div>
+      </div>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label className={labelClass}>Tocca Tips EN (uno por línea)</label>
+          <textarea name="tocca_tips_en" rows={3} defaultValue={linesOf(day.tocca_tips, 'en')} className={inputClass} style={{ resize: 'vertical' }} />
+        </div>
+        <div>
+          <label className={labelClass}>Tocca Tips ES</label>
+          <textarea name="tocca_tips_es" rows={3} defaultValue={linesOf(day.tocca_tips, 'es')} className={inputClass} style={{ resize: 'vertical' }} />
+        </div>
+      </div>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label className={labelClass}>Good to Know EN (uno por línea)</label>
+          <textarea name="good_to_know_en" rows={3} defaultValue={linesOf(day.good_to_know, 'en')} className={inputClass} style={{ resize: 'vertical' }} />
+        </div>
+        <div>
+          <label className={labelClass}>Good to Know ES</label>
+          <textarea name="good_to_know_es" rows={3} defaultValue={linesOf(day.good_to_know, 'es')} className={inputClass} style={{ resize: 'vertical' }} />
+        </div>
+      </div>
+      <label className="flex items-center gap-2 text-sm text-[#3E2D23]">
+        <input
+          name="is_free_day"
+          type="checkbox"
+          defaultChecked={day.is_free_day}
+          className="size-4 rounded border-[rgba(62,45,35,0.3)] accent-[#4A9A92]"
+        />
+        Día libre (el cliente elige actividades opcionales)
+      </label>
       <div className="flex gap-2">
         <button
           type="submit"
@@ -129,6 +176,11 @@ export function DayCard({
           <div className="mt-1 flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-[#7A7168]">
             {day.day_date && <span>{day.day_date}</span>}
             {day.location && <span>📍 {day.location}</span>}
+            {day.is_free_day && (
+              <span className="inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-2 py-0.5 text-[0.65rem] font-medium text-amber-700">
+                Día libre
+              </span>
+            )}
           </div>
         </div>
 

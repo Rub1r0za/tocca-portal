@@ -59,6 +59,35 @@ export type JourneyDay = {
   meeting_point: Localized | null
   day_notes: Localized | null
   gallery: string[] | null
+  tocca_tips: Localized[] | null
+  good_to_know: Localized[] | null
+  day_vibe: Localized | null
+  is_free_day: boolean
+}
+
+export type TemplateMeal = {
+  course: MealCourse
+  name: Localized
+  description: Localized
+}
+
+export type DayTemplate = {
+  id: string
+  sort_order: number
+  title: Localized | null
+  description: Localized | null
+  location: string | null
+  image_url: string | null
+  schedule: ScheduleItem[] | null
+  included: Localized[] | null
+  meeting_point: Localized | null
+  day_notes: Localized | null
+  tocca_tips: Localized[] | null
+  good_to_know: Localized[] | null
+  day_vibe: Localized | null
+  is_free_day: boolean
+  meals: TemplateMeal[] | null
+  active: boolean
 }
 
 export type Meal = {

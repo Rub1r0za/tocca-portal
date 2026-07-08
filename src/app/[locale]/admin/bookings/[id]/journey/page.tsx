@@ -3,6 +3,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { notFound } from 'next/navigation'
 import { ArrowLeft } from 'lucide-react'
 import { AddDayForm } from './add-day-form'
+import { AddFromTemplate } from './add-from-template'
 import { DayCard } from './day-card'
 
 export default async function JourneyAdminPage({
@@ -13,13 +14,18 @@ export default async function JourneyAdminPage({
   const { locale, id } = await params
   const admin = createAdminClient()
 
-  const [{ data: booking }, { data: days }] = await Promise.all([
+  const [{ data: booking }, { data: days }, { data: templates }] = await Promise.all([
     admin.from('bookings').select('id, title, start_date').eq('id', id).single(),
     admin
       .from('journey_days')
       .select('*')
       .eq('booking_id', id)
       .order('day_number', { ascending: true }),
+    admin
+      .from('day_templates')
+      .select('id, sort_order, title, is_free_day, meals')
+      .eq('active', true)
+      .order('sort_order', { ascending: true }),
   ])
 
   if (!booking) notFound()
@@ -65,9 +71,24 @@ export default async function JourneyAdminPage({
         )}
       </div>
 
+      {/* Add from template */}
+      <div className="mb-6">
+        <AddFromTemplate
+          bookingId={id}
+          locale={locale}
+          templates={(templates ?? []).map((t) => ({
+            id: t.id,
+            sort_order: t.sort_order,
+            title: (t.title ?? {}) as Record<string, string>,
+            is_free_day: t.is_free_day,
+            mealsCount: Array.isArray(t.meals) ? t.meals.length : 0,
+          }))}
+        />
+      </div>
+
       {/* Add day form */}
       <div className="rounded-2xl border border-[rgba(62,45,35,0.12)] bg-white p-5 shadow-[0_1px_4px_rgba(62,45,35,0.06)]">
-        <h2 className="mb-4 text-base font-medium text-[#3E2D23]">Añadir día</h2>
+        <h2 className="mb-4 text-base font-medium text-[#3E2D23]">Añadir día manualmente</h2>
         <AddDayForm bookingId={id} locale={locale} nextDayNumber={(days?.length ?? 0) + 1} />
       </div>
     </div>

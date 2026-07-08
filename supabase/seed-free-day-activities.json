@@ -1,0 +1,288 @@
+[
+  {
+    "name": {
+      "en": "Full-Day Naples Experience",
+      "es": "Experiencia de día completo en Nápoles"
+    },
+    "description": {
+      "en": "Discover the vibrant soul of Naples — one of the most authentic, historic and culturally rich cities in Italy.",
+      "es": "Descubre el alma vibrante de Nápoles: una de las ciudades más auténticas, históricas y ricas en cultura de Italia."
+    },
+    "overview": {
+      "en": "Spend a full day discovering the real Naples: the UNESCO historic center, Spaccanapoli, the artisan street of San Gregorio Armeno, authentic Neapolitan pizza, Piazza del Plebiscito, the Lungomare seaside promenade, espresso and sfogliatella stops, boutiques and hidden local neighborhoods — colorful streets, music in the air and the true soul of southern Italy.",
+      "es": "Pasa un día completo descubriendo la Nápoles real: el centro histórico (Patrimonio UNESCO), Spaccanapoli, la calle artesana de San Gregorio Armeno, la auténtica pizza napolitana, la Piazza del Plebiscito, el paseo marítimo Lungomare, paradas de espresso y sfogliatella, boutiques y barrios locales escondidos — calles llenas de color, música en el aire y el verdadero espíritu del sur de Italia."
+    },
+    "price": 250,
+    "duration": {
+      "en": "Approx. 9:00 AM – 6:00 PM",
+      "es": "Aprox. 9:00 AM – 6:00 PM"
+    },
+    "time_label": {
+      "en": "Full day",
+      "es": "Día completo"
+    },
+    "included": [
+      {
+        "en": "Historic Center of Naples (UNESCO World Heritage Site)",
+        "es": "Centro histórico de Nápoles (Patrimonio de la Humanidad UNESCO)"
+      },
+      {
+        "en": "Spaccanapoli & Via San Gregorio Armeno",
+        "es": "Spaccanapoli y Via San Gregorio Armeno"
+      },
+      {
+        "en": "Authentic Neapolitan pizza experience",
+        "es": "Experiencia de auténtica pizza napolitana"
+      },
+      {
+        "en": "Piazza del Plebiscito & Royal Palace area",
+        "es": "Piazza del Plebiscito y zona del Palacio Real"
+      },
+      {
+        "en": "Naples waterfront (Lungomare)",
+        "es": "Paseo marítimo de Nápoles (Lungomare)"
+      },
+      {
+        "en": "Local espresso & pastry stops",
+        "es": "Paradas de espresso y repostería local"
+      },
+      {
+        "en": "Private transportation",
+        "es": "Transporte privado"
+      },
+      {
+        "en": "Private guide",
+        "es": "Guía privado"
+      }
+    ],
+    "requirements": [
+      {
+        "en": "Minimum of 4 guests required",
+        "es": "Se requiere un mínimo de 4 personas"
+      },
+      {
+        "en": "€250 per person",
+        "es": "€250 por persona"
+      }
+    ],
+    "capacity": null,
+    "cancellation_policy": {},
+    "active": true
+  },
+  {
+    "name": {
+      "en": "Amalfi Coast Vespa Experience + Sorrento",
+      "es": "Experiencia en Vespa por la costa + Sorrento"
+    },
+    "description": {
+      "en": "Drive the coastline by Vespa with scenic stops in the most iconic villages, ending with free time and lunch in Sorrento.",
+      "es": "Recorre la costa en Vespa con paradas panorámicas en los pueblos más icónicos, terminando con tiempo libre y almuerzo en Sorrento."
+    },
+    "overview": {
+      "en": "One of the most iconic ways to experience the Amalfi Coast: the day begins in Maiori with your Vespa guide, driving the coastal road through Minori, Atrani, Amalfi, Conca dei Marini, the Furore Fjord, Praiano and Positano toward Sorrento — with stops for panoramic photos, hidden viewpoints, lemon granita or aperitivo, and free time to explore. In Sorrento: historic center, charming shopping streets and lunch overlooking the sea (included). Relaxed, cinematic and immersive rather than rushed. 🛵",
+      "es": "Una de las formas más icónicas de vivir la Costa Amalfitana: el día empieza en Maiori con tu guía en Vespa, conduciendo la carretera costera por Minori, Atrani, Amalfi, Conca dei Marini, el fiordo de Furore, Praiano y Positano hacia Sorrento — con paradas para fotos panorámicas, miradores escondidos, granita de limón o aperitivo, y tiempo libre para explorar. En Sorrento: centro histórico, encantadoras calles comerciales y almuerzo frente al mar (incluido). Relajado, cinematográfico e inmersivo, sin prisas. 🛵"
+    },
+    "price": 172,
+    "duration": {
+      "en": "Approx. 10:00 AM – 6:30/7:00 PM",
+      "es": "Aprox. 10:00 AM – 6:30/7:00 PM"
+    },
+    "time_label": {
+      "en": "Full day",
+      "es": "Día completo"
+    },
+    "included": [
+      {
+        "en": "Vespa guide from Maiori along the coastal road",
+        "es": "Guía en Vespa desde Maiori por la carretera costera"
+      },
+      {
+        "en": "Scenic stops: Minori, Atrani, Amalfi, Furore Fjord, Praiano, Positano",
+        "es": "Paradas panorámicas: Minori, Atrani, Amalfi, fiordo de Furore, Praiano, Positano"
+      },
+      {
+        "en": "Free time and lunch overlooking the sea in Sorrento (included)",
+        "es": "Tiempo libre y almuerzo frente al mar en Sorrento (incluido)"
+      }
+    ],
+    "requirements": [
+      {
+        "en": "Minimum of 2 Vespas required",
+        "es": "Se requiere un mínimo de 2 Vespas"
+      },
+      {
+        "en": "Self-driving: €344 per Vespa (€172 per person)",
+        "es": "Conduciendo tú: €344 por Vespa (€172 por persona)"
+      },
+      {
+        "en": "With professional driver: €385 per Vespa",
+        "es": "Con conductor profesional: €385 por Vespa"
+      }
+    ],
+    "capacity": null,
+    "cancellation_policy": {},
+    "active": true
+  },
+  {
+    "name": {
+      "en": "Private Photography Experience",
+      "es": "Experiencia de fotografía privada"
+    },
+    "description": {
+      "en": "Capture your memories professionally along the coast — fully customized to what you would like.",
+      "es": "Captura tus recuerdos profesionalmente en la costa — totalmente personalizada a lo que quieras."
+    },
+    "overview": {
+      "en": "Private photography sessions can be arranged and fully customized: Amalfi Coast photoshoot, couple sessions, solo/editorial style, lifestyle moments around the coast or sunset photography. Pricing depends on the style, location and timing requested — contact Jess directly to personalize the experience, on your free day or another free moment.",
+      "es": "Se pueden organizar sesiones de fotografía privadas totalmente personalizadas: sesión en la Costa Amalfitana, sesiones de pareja, estilo solo/editorial, momentos lifestyle por la costa o fotografía al atardecer. El precio depende del estilo, la locación y el horario — contacta a Jess directamente para personalizar la experiencia, en tu día libre u otro momento libre."
+    },
+    "price": 0,
+    "duration": {
+      "en": "Custom",
+      "es": "A medida"
+    },
+    "time_label": {
+      "en": "Flexible",
+      "es": "Flexible"
+    },
+    "included": [
+      {
+        "en": "Amalfi Coast photoshoot, couples, solo/editorial, lifestyle or sunset",
+        "es": "Sesión en la costa, parejas, solo/editorial, lifestyle o atardecer"
+      }
+    ],
+    "requirements": [
+      {
+        "en": "Pricing depends on style, location and timing — ask Jess",
+        "es": "El precio depende del estilo, locación y horario — consulta con Jess"
+      }
+    ],
+    "capacity": null,
+    "cancellation_policy": {},
+    "active": true
+  },
+  {
+    "name": {
+      "en": "Ischia Thermal Island Day Experience",
+      "es": "Día en la isla termal de Ischia"
+    },
+    "description": {
+      "en": "Escape for the day to Ischia — thermal waters, relaxed island atmosphere and authentic Italian charm.",
+      "es": "Escápate por el día a Ischia: aguas termales, ambiente isleño relajado y auténtico encanto italiano."
+    },
+    "overview": {
+      "en": "A full-day escape to the beautiful island of Ischia: explore the island with a private local driver, relax in thermal waters and spas (entry included), enjoy scenic coastal views and island villages, with free time for lunch, cafés, shopping or the beach. Ferry tickets both ways included.",
+      "es": "Una escapada de día completo a la hermosa isla de Ischia: recorre la isla con un conductor local privado, relájate en aguas termales y spas (entrada incluida), disfruta vistas costeras y pueblos isleños, con tiempo libre para almorzar, cafés, compras o playa. Boletos de ferry ida y vuelta incluidos."
+    },
+    "price": 285,
+    "duration": {
+      "en": "7:30 AM – 8:00 PM",
+      "es": "7:30 AM – 8:00 PM"
+    },
+    "time_label": {
+      "en": "Full day",
+      "es": "Día completo"
+    },
+    "included": [
+      {
+        "en": "Private local driver around the island",
+        "es": "Conductor local privado por la isla"
+      },
+      {
+        "en": "Thermal waters / spa — entry included",
+        "es": "Aguas termales / spa — entrada incluida"
+      },
+      {
+        "en": "Ferry tickets both ways",
+        "es": "Boletos de ferry ida y vuelta"
+      },
+      {
+        "en": "Free time for lunch, cafés, shopping or the beach",
+        "es": "Tiempo libre para almuerzo, cafés, compras o playa"
+      }
+    ],
+    "requirements": [
+      {
+        "en": "Minimum of 4 guests required",
+        "es": "Se requiere un mínimo de 4 personas"
+      },
+      {
+        "en": "€285 per person",
+        "es": "€285 por persona"
+      }
+    ],
+    "capacity": null,
+    "cancellation_policy": {},
+    "active": true
+  },
+  {
+    "name": {
+      "en": "Free-Day Dinner — Torre Normanna",
+      "es": "Cena del día libre — Torre Normanna"
+    },
+    "description": {
+      "en": "One of the most iconic and highly recommended dining experiences on the Amalfi Coast.",
+      "es": "Una de las experiencias gastronómicas más icónicas y recomendadas de la Costa Amalfitana."
+    },
+    "overview": {
+      "en": "An extremely special and highly requested experience, so reservations must be secured in advance. If you prefer not to do the fixed menu, you are welcome to order directly from the restaurant's à la carte menu. torrenormanna.ovh",
+      "es": "Una experiencia sumamente especial y muy solicitada, por lo que la reserva debe asegurarse con antelación. Si prefieres no tomar el menú fijo, puedes ordenar directamente del menú a la carta del restaurante. torrenormanna.ovh"
+    },
+    "price": 0,
+    "duration": {
+      "en": "Evening",
+      "es": "Noche"
+    },
+    "time_label": {
+      "en": "Dinner",
+      "es": "Cena"
+    },
+    "included": [],
+    "requirements": [
+      {
+        "en": "Reservation required in advance",
+        "es": "Se requiere reserva con antelación"
+      },
+      {
+        "en": "Fixed menu or à la carte",
+        "es": "Menú fijo o a la carta"
+      }
+    ],
+    "capacity": null,
+    "cancellation_policy": {},
+    "active": true
+  },
+  {
+    "name": {
+      "en": "Free-Day Dinner — Casa Ferraiuolo",
+      "es": "Cena del día libre — Casa Ferraiuolo"
+    },
+    "description": {
+      "en": "A beautiful, traditional and authentic restaurant along the main corso of Maiori.",
+      "es": "Un restaurante hermoso, tradicional y auténtico en el corso principal de Maiori."
+    },
+    "overview": {
+      "en": "The atmosphere feels extremely local and cozy, with classic Vietri ceramics throughout and seating inside or outside near the central river of Maiori. Fixed fish or meat menus for €75 per person — a lovely option for a more classic Amalfi Coast dining experience.",
+      "es": "El ambiente se siente muy local y acogedor, con cerámica clásica de Vietri por todo el espacio y mesas dentro o fuera, junto al río central de Maiori. Menús fijos de pescado o carne por €75 por persona — una opción encantadora para una cena clásica de la Costa Amalfitana."
+    },
+    "price": 75,
+    "duration": {
+      "en": "Evening",
+      "es": "Noche"
+    },
+    "time_label": {
+      "en": "Dinner",
+      "es": "Cena"
+    },
+    "included": [],
+    "requirements": [
+      {
+        "en": "Fixed fish or meat menu — €75 per person (à la carte also possible)",
+        "es": "Menú fijo de pescado o carne — €75 por persona (también a la carta)"
+      }
+    ],
+    "capacity": null,
+    "cancellation_policy": {},
+    "active": true
+  }
+]

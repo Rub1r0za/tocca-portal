@@ -1,6 +1,7 @@
 import { getTranslations } from 'next-intl/server'
+import Link from 'next/link'
 import { redirect, notFound } from 'next/navigation'
-import { Check, MapPin } from 'lucide-react'
+import { Check, MapPin, Lightbulb, Sparkles, Compass, ChevronRight } from 'lucide-react'
 import { getMyBooking } from '@/lib/booking'
 import { createClient } from '@/lib/supabase/server'
 import type { Booking, JourneyDay } from '@/lib/types'
@@ -41,6 +42,9 @@ export default async function JourneyDayPage({
   const meetingPoint = pick(day.meeting_point, locale)
   const notes = pick(day.day_notes, locale)
   const gallery = day.gallery ?? []
+  const toccaTips = day.tocca_tips ?? []
+  const goodToKnow = day.good_to_know ?? []
+  const dayVibe = pick(day.day_vibe, locale)
 
   return (
     <div>
@@ -54,10 +58,40 @@ export default async function JourneyDayPage({
             {tCommon('day', { n: day.day_number })}
             {day.location ? ` · ${day.location}` : ''}
           </p>
+          {dayVibe && (
+            <p className="mt-1.5 inline-flex items-center gap-1.5 rounded-full border border-gold/30 bg-gold/10 px-3 py-1 text-xs text-gold">
+              <Sparkles className="size-3.5" aria-hidden />
+              {dayVibe}
+            </p>
+          )}
           {description && (
             <p className="mt-2 text-sm leading-relaxed text-mist">{description}</p>
           )}
         </div>
+
+        {day.is_free_day && (
+          <Link
+            href={`/${locale}/activities`}
+            className="group flex items-center gap-4 rounded-2xl border border-azure/30 bg-azure/5 p-5 transition-all hover:border-azure/50 hover:bg-azure/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-azure/50"
+          >
+            <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-azure/15">
+              <Compass className="size-5 text-azure" strokeWidth={1.7} aria-hidden />
+            </span>
+            <span className="min-w-0 flex-1">
+              <span
+                className="block text-base text-foreground"
+                style={{ fontFamily: 'var(--font-display)', fontWeight: 500 }}
+              >
+                {t('freeDayTitle')}
+              </span>
+              <span className="mt-0.5 block text-xs leading-relaxed text-mist">{t('freeDayText')}</span>
+              <span className="mt-1.5 inline-flex items-center gap-1 text-xs font-medium text-azure">
+                {t('freeDayCta')}
+                <ChevronRight className="size-3.5 transition-transform group-hover:translate-x-0.5" aria-hidden />
+              </span>
+            </span>
+          </Link>
+        )}
 
         {schedule.length > 0 && (
           <section>
@@ -98,6 +132,34 @@ export default async function JourneyDayPage({
               <MapPin className="mt-0.5 size-4 shrink-0 text-gold" aria-hidden />
               {meetingPoint}
             </p>
+          </section>
+        )}
+
+        {toccaTips.length > 0 && (
+          <section>
+            <SectionHeading eyebrow={t('toccaTips')} className="mb-3" />
+            <ul className="space-y-2.5 rounded-xl border border-gold/25 bg-gold/5 px-4 py-3.5">
+              {toccaTips.map((tip, i) => (
+                <li key={i} className="flex items-start gap-2.5 text-sm leading-relaxed text-mist">
+                  <Lightbulb className="mt-0.5 size-4 shrink-0 text-gold" aria-hidden />
+                  {pick(tip, locale)}
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        {goodToKnow.length > 0 && (
+          <section>
+            <SectionHeading eyebrow={t('goodToKnow')} className="mb-3" />
+            <ul className="space-y-2">
+              {goodToKnow.map((item, i) => (
+                <li key={i} className="flex items-start gap-2.5 text-sm leading-relaxed text-mist">
+                  <Sparkles className="mt-0.5 size-4 shrink-0 text-azure" aria-hidden />
+                  {pick(item, locale)}
+                </li>
+              ))}
+            </ul>
           </section>
         )}
 
