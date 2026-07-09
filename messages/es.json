@@ -163,7 +163,10 @@
     "starter": "Entrada",
     "main": "Plato principal",
     "dessert": "Postre",
-    "noMeals": "Sin opciones para este día."
+    "noMeals": "Sin opciones para este día.",
+    "or": "o",
+    "chooseBelow": "Haz tu selección aquí abajo",
+    "selectionFor": "Selección de"
   },
   "account": {
     "passwordTitle": "Define una nueva contraseña",

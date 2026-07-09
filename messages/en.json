@@ -163,7 +163,10 @@
     "starter": "Starter",
     "main": "Main",
     "dessert": "Dessert",
-    "noMeals": "No options for this day."
+    "noMeals": "No options for this day.",
+    "or": "or",
+    "chooseBelow": "Make your selection below",
+    "selectionFor": "Selection for"
   },
   "account": {
     "passwordTitle": "Set a new password",
