@@ -57,11 +57,6 @@ export default async function AdminLayout({
           <AdminNav locale={locale} />
         </aside>
 
-        {/* Mobile nav strip */}
-        <div className="w-full lg:hidden">
-          {/* Mobile nav is inside the page header row */}
-        </div>
-
         <main className="min-w-0 flex-1 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
           {/* Mobile breadcrumb nav */}
           <div className="mb-6 lg:hidden">
