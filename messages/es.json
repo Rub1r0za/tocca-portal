@@ -63,6 +63,7 @@
     "checkEmail": "Revisa tu bandeja de entrada",
     "checkEmailDesc": "Enviamos un enlace a {email}. Haz clic para ingresar.",
     "error": "Algo salió mal. Intenta de nuevo.",
+    "linkExpired": "El enlace expiró o ya fue usado. Solicita uno nuevo.",
     "passwordLabel": "Contraseña",
     "passwordPlaceholder": "••••••••",
     "signIn": "Entrar",

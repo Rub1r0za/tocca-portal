@@ -63,6 +63,7 @@
     "checkEmail": "Check your inbox",
     "checkEmailDesc": "We've sent a link to {email}. Click it to sign in.",
     "error": "Something went wrong. Please try again.",
+    "linkExpired": "That link expired or was already used. Please request a new one.",
     "passwordLabel": "Password",
     "passwordPlaceholder": "••••••••",
     "signIn": "Sign in",

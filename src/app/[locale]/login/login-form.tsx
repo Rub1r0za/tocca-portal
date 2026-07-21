@@ -18,12 +18,16 @@ export default function LoginForm() {
   const searchParams = useSearchParams()
   const nextPath = searchParams.get('next') ?? ''
   const destination = nextPath || `/${locale}/dashboard`
+  // Email links must land on /auth/callback so the server can exchange the
+  // auth code for a session before hitting a protected route.
+  const callbackUrl = (next: string) =>
+    `${location.origin}/auth/callback?next=${encodeURIComponent(next)}`
 
   const [mode, setMode] = useState<Mode>('signin')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [status, setStatus] = useState<Status>('idle')
-  const [error, setError] = useState('')
+  const [error, setError] = useState(searchParams.get('error') === 'auth' ? t('linkExpired') : '')
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -36,7 +40,7 @@ export default function LoginForm() {
       setStatus('busy')
       const { error: err } = await supabase.auth.signInWithOtp({
         email,
-        options: { emailRedirectTo: `${location.origin}${destination}` },
+        options: { emailRedirectTo: callbackUrl(destination) },
       })
       if (err) {
         setError(t('error'))
@@ -69,7 +73,7 @@ export default function LoginForm() {
     const { data, error: err } = await supabase.auth.signUp({
       email,
       password,
-      options: { emailRedirectTo: `${location.origin}${destination}` },
+      options: { emailRedirectTo: callbackUrl(destination) },
     })
     if (err) {
       setError(t('error'))
@@ -94,7 +98,7 @@ export default function LoginForm() {
     setStatus('busy')
     const supabase = createClient()
     const { error: err } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${location.origin}/${locale}/account/password`,
+      redirectTo: callbackUrl(`/${locale}/account/password`),
     })
     if (err) {
       setError(t('error'))
