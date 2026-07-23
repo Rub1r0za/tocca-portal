@@ -59,7 +59,7 @@ export function MealForm({
         </div>
         <div>
           <label className={labelClass}>Imagen (URL)</label>
-          <input name="image_url" type="url" defaultValue={meal?.image_url ?? ''} placeholder="https://…" className={inputClass} />
+          <input name="image_url" type="text" inputMode="url" defaultValue={meal?.image_url ?? ''} placeholder="https://…" className={inputClass} />
         </div>
       </div>
 

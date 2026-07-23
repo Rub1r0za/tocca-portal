@@ -540,6 +540,24 @@ const mealSchema = z.object({
   image_url: z.string().optional(),
 })
 
+const MEAL_FIELD_LABEL: Record<string, string> = {
+  course: 'Plato',
+  name_en: 'Nombre EN',
+  name_es: 'Nombre ES',
+  description_en: 'Descripción EN',
+  description_es: 'Descripción ES',
+  allergens: 'Alérgenos',
+  image_url: 'Imagen (URL)',
+}
+
+function describeMealError(error: z.ZodError<z.infer<typeof mealSchema>>): string {
+  const fields = Object.keys(error.flatten().fieldErrors)
+    .map((f) => MEAL_FIELD_LABEL[f] ?? f)
+  return fields.length > 0
+    ? `Revisá este campo: ${fields.join(', ')}`
+    : 'Datos inválidos'
+}
+
 export async function saveMeal(
   mealId: string | null,
   journeyDayId: string,
@@ -550,7 +568,7 @@ export async function saveMeal(
 ): Promise<{ error?: string }> {
   const raw = Object.fromEntries(formData)
   const parsed = mealSchema.safeParse(raw)
-  if (!parsed.success) return { error: 'Datos inválidos' }
+  if (!parsed.success) return { error: describeMealError(parsed.error) }
   const d = parsed.data
 
   const row = {

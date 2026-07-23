@@ -1,9 +1,10 @@
 'use client'
 
 import { useState } from 'react'
-import { Pencil, Trash2, ChevronUp, PlusCircle } from 'lucide-react'
+import { Pencil, Trash2, ChevronUp, PlusCircle, Users } from 'lucide-react'
 import { deleteMeal } from '../../../actions'
 import { MealForm, COURSES, type Meal } from './meal-form'
+import type { Traveler } from '@/lib/types'
 
 type Day = {
   id: string
@@ -16,10 +17,14 @@ function MealRow({
   meal,
   bookingId,
   locale,
+  chosenBy,
+  totalTravelers,
 }: {
   meal: Meal
   bookingId: string
   locale: string
+  chosenBy: Traveler[]
+  totalTravelers: number
 }) {
   const [editing, setEditing] = useState(false)
   const deleteAction = deleteMeal.bind(null, meal.id, bookingId, locale)
@@ -40,6 +45,14 @@ function MealRow({
           {meal.allergens && (
             <p className="mt-0.5 text-xs text-amber-700">⚠ {meal.allergens}</p>
           )}
+          <p className="mt-1 flex items-center gap-1 text-xs text-[#7A7168]">
+            <Users className="size-3 shrink-0" />
+            {chosenBy.length > 0
+              ? `${chosenBy.map((t) => `${t.first_name} ${t.last_name}`).join(', ')} (${chosenBy.length}/${totalTravelers})`
+              : totalTravelers > 0
+                ? 'Nadie lo eligió aún'
+                : 'Sin viajeros cargados'}
+          </p>
         </div>
         <div className="flex shrink-0 items-center gap-1">
           <button
@@ -83,10 +96,14 @@ export function DayMeals({
   day,
   bookingId,
   locale,
+  travelersByMeal,
+  totalTravelers,
 }: {
   day: Day
   bookingId: string
   locale: string
+  travelersByMeal: Record<string, Traveler[]>
+  totalTravelers: number
 }) {
   const [adding, setAdding] = useState(false)
 
@@ -120,7 +137,14 @@ export function DayMeals({
       {meals.length > 0 ? (
         <ul className="mt-3 divide-y divide-[rgba(62,45,35,0.08)] border-t border-[rgba(62,45,35,0.08)]">
           {meals.map((meal) => (
-            <MealRow key={meal.id} meal={meal} bookingId={bookingId} locale={locale} />
+            <MealRow
+              key={meal.id}
+              meal={meal}
+              bookingId={bookingId}
+              locale={locale}
+              chosenBy={travelersByMeal[meal.id] ?? []}
+              totalTravelers={totalTravelers}
+            />
           ))}
         </ul>
       ) : (

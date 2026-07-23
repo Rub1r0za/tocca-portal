@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 import { ArrowLeft } from 'lucide-react'
 import { DayMeals } from './day-meals'
 import type { Meal } from './meal-form'
+import type { Traveler } from '@/lib/types'
 
 type DayWithMeals = {
   id: string
@@ -20,16 +21,28 @@ export default async function MealsAdminPage({
   const { locale, id } = await params
   const admin = createAdminClient()
 
-  const [{ data: booking }, { data: days }] = await Promise.all([
+  const [{ data: booking }, { data: days }, { data: travelers }, { data: selections }] = await Promise.all([
     admin.from('bookings').select('id, title').eq('id', id).single(),
     admin
       .from('journey_days')
       .select('id, day_number, title, meals (*)')
       .eq('booking_id', id)
       .order('day_number', { ascending: true }),
+    admin.from('travelers').select('*').eq('booking_id', id),
+    admin.from('meal_selections').select('meal_id, traveler_id').eq('booking_id', id),
   ])
 
   if (!booking) notFound()
+
+  const travelerList = (travelers ?? []) as Traveler[]
+  const travelersByMeal = new Map<string, Traveler[]>()
+  for (const s of selections ?? []) {
+    const traveler = travelerList.find((t) => t.id === s.traveler_id)
+    if (!traveler) continue
+    const list = travelersByMeal.get(s.meal_id) ?? []
+    list.push(traveler)
+    travelersByMeal.set(s.meal_id, list)
+  }
 
   const bookingTitle =
     (booking.title as Record<string, string>)?.en ||
@@ -76,7 +89,14 @@ export default async function MealsAdminPage({
       ) : (
         <div className="space-y-4">
           {list.map((day) => (
-            <DayMeals key={day.id} day={day} bookingId={id} locale={locale} />
+            <DayMeals
+              key={day.id}
+              day={day}
+              bookingId={id}
+              locale={locale}
+              travelersByMeal={Object.fromEntries(travelersByMeal)}
+              totalTravelers={travelerList.length}
+            />
           ))}
         </div>
       )}
