@@ -892,3 +892,69 @@ export async function reviewPayment(
   revalidatePath(`/${locale}/admin/payments`)
   if (payment) revalidatePath(`/${locale}/admin/bookings/${payment.booking_id}/payments`)
 }
+
+// ── Leads / CRM (contacts book) ──────────────────────────────────────────────
+
+const leadSchema = z.object({
+  full_name: z.string().min(1),
+  email: z.string().email().optional().or(z.literal('')),
+  phone: z.string().optional(),
+  source: z.string().optional(),
+  instagram_handle: z.string().optional(),
+  birthday: z.string().optional(),
+  status: z.enum(['potential', 'client', 'past']),
+  notes: z.string().optional(),
+})
+
+const LEAD_FIELD_LABEL: Record<string, string> = {
+  full_name: 'Nombre',
+  email: 'Email',
+  phone: 'Teléfono',
+  source: 'Origen',
+  instagram_handle: 'Instagram',
+  birthday: 'Cumpleaños',
+  status: 'Estado',
+  notes: 'Notas',
+}
+
+export async function saveLead(
+  leadId: string | null,
+  locale: string,
+  _prev: { error?: string } | null,
+  formData: FormData,
+): Promise<{ error?: string; ok?: boolean }> {
+  const raw = Object.fromEntries(formData)
+  const parsed = leadSchema.safeParse(raw)
+  if (!parsed.success) {
+    const fields = Object.keys(parsed.error.flatten().fieldErrors)
+      .map((f) => LEAD_FIELD_LABEL[f] ?? f)
+    return { error: fields.length > 0 ? `Revisá este campo: ${fields.join(', ')}` : 'Datos inválidos' }
+  }
+  const d = parsed.data
+
+  const row = {
+    full_name: d.full_name,
+    email: d.email || null,
+    phone: d.phone || null,
+    source: d.source || null,
+    instagram_handle: d.instagram_handle || null,
+    birthday: d.birthday || null,
+    status: d.status,
+    notes: d.notes || null,
+  }
+
+  const admin = createAdminClient()
+  const { error } = leadId
+    ? await admin.from('leads').update(row).eq('id', leadId)
+    : await admin.from('leads').insert(row)
+
+  if (error) return { error: error.message }
+  revalidatePath(`/${locale}/admin/leads`)
+  return { ok: true }
+}
+
+export async function deleteLead(leadId: string, locale: string) {
+  const admin = createAdminClient()
+  await admin.from('leads').delete().eq('id', leadId)
+  revalidatePath(`/${locale}/admin/leads`)
+}

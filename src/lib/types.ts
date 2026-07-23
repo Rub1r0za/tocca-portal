@@ -7,6 +7,21 @@ export type Localized = Record<string, string>
 export type BookingStatus = 'pending' | 'approved' | 'cancelled'
 export type MealCourse = 'starter' | 'main' | 'dessert'
 export type RequestStatus = 'pending' | 'confirmed' | 'declined' | 'cancelled'
+export type LeadStatus = 'potential' | 'client' | 'past'
+
+export type Lead = {
+  id: string
+  full_name: string
+  email: string | null
+  phone: string | null
+  source: string | null
+  instagram_handle: string | null
+  birthday: string | null
+  status: LeadStatus
+  notes: string | null
+  created_at: string
+  updated_at: string
+}
 export type TimelineEventType =
   | 'flight'
   | 'transfer'
