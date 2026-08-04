@@ -16,10 +16,29 @@ export function getStripe(): Stripe {
   return client
 }
 
+/**
+ * Normaliza a un origen absoluto, o null si no hay forma de sacarlo.
+ * Vercel expone sus hosts sin esquema (`mi-app.vercel.app`) y es fácil que la
+ * variable se configure a mano igual — pero Stripe rechaza el success_url si
+ * no es una URL absoluta, así que le ponemos el https:// nosotros.
+ */
+function toOrigin(raw: string | undefined): string | null {
+  const trimmed = raw?.trim().replace(/\/+$/, '')
+  if (!trimmed) return null
+  const withScheme = /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`
+  try {
+    return new URL(withScheme).origin
+  } catch {
+    return null
+  }
+}
+
 /** URL base para los links de retorno de Checkout. */
 export function siteUrl(): string {
-  const explicit = process.env.NEXT_PUBLIC_SITE_URL
-  if (explicit) return explicit.replace(/\/$/, '')
-  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`
-  return 'http://localhost:3000'
+  return (
+    toOrigin(process.env.NEXT_PUBLIC_SITE_URL) ??
+    toOrigin(process.env.VERCEL_PROJECT_PRODUCTION_URL) ??
+    toOrigin(process.env.VERCEL_URL) ??
+    'http://localhost:3000'
+  )
 }
