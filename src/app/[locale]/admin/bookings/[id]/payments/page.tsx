@@ -163,6 +163,8 @@ export default async function BookingPaymentsPage({
                     <div className="mt-1 flex flex-wrap items-center gap-x-3 text-xs text-[#7A7168]">
                       <span>{new Date(p.created_at).toLocaleDateString('es', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
                       {p.reference && <span>Ref: {p.reference}</span>}
+                      {Number(p.fee_amount) > 0 && <span>+ {fmtMoney(Number(p.fee_amount))} de cargo</span>}
+                      {p.method === 'stripe' && <span className="text-[#4A9A92]">Cobrado con tarjeta ✓</span>}
                       {receiptUrl && (
                         <a href={receiptUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-[#4A9A92] hover:underline">
                           <FileText className="size-3" /> Ver comprobante

@@ -228,7 +228,6 @@
     "amount": "Amount",
     "method": "Payment method",
     "transfer": "Bank transfer",
-    "stripeSoon": "Card payment (Stripe) coming soon — a 5.5% service fee will apply.",
     "reference": "Confirmation / reference number",
     "referencePlaceholder": "e.g. ZELLE-1234",
     "receipt": "Receipt (photo or PDF)",
@@ -243,6 +242,18 @@
     "statusPending": "In review",
     "statusApproved": "Approved",
     "statusRejected": "Rejected",
-    "history": "Payment history"
+    "history": "Payment history",
+    "cardTitle": "Pay by card",
+    "cardInfo": "Secure credit or debit card payment. Confirmed instantly — no receipt to upload.",
+    "cardBreakdownTrip": "Toward your trip",
+    "cardBreakdownFee": "Service fee ({pct}%)",
+    "cardBreakdownTotal": "Total charged",
+    "cardSubmit": "Pay by card",
+    "cardRedirecting": "Redirecting to Stripe…",
+    "cardSecure": "Processed by Stripe. Your card details never touch this site.",
+    "cardReturnOk": "Payment received! It is confirmed and shows in your history below.",
+    "cardReturnCancelled": "You cancelled the card payment. Nothing was charged.",
+    "errorCard": "We could not start the card payment. Please try again.",
+    "methodCard": "Card"
   }
 }

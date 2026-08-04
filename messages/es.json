@@ -228,7 +228,6 @@
     "amount": "Monto",
     "method": "Método de pago",
     "transfer": "Transferencia bancaria",
-    "stripeSoon": "Pago con tarjeta (Stripe) muy pronto — aplicará un cargo de servicio del 5,5%.",
     "reference": "Número de confirmación / referencia",
     "referencePlaceholder": "ej. ZELLE-1234",
     "receipt": "Comprobante (foto o PDF)",
@@ -243,6 +242,18 @@
     "statusPending": "En revisión",
     "statusApproved": "Aprobado",
     "statusRejected": "Rechazado",
-    "history": "Historial de pagos"
+    "history": "Historial de pagos",
+    "cardTitle": "Pagar con tarjeta",
+    "cardInfo": "Pago seguro con tarjeta de crédito o débito. Se confirma al instante — no hace falta subir comprobante.",
+    "cardBreakdownTrip": "Abono al viaje",
+    "cardBreakdownFee": "Cargo de servicio ({pct}%)",
+    "cardBreakdownTotal": "Total a cobrar",
+    "cardSubmit": "Pagar con tarjeta",
+    "cardRedirecting": "Redirigiendo a Stripe…",
+    "cardSecure": "Procesado por Stripe. Tus datos de tarjeta nunca pasan por este sitio.",
+    "cardReturnOk": "¡Pago recibido! Ya quedó confirmado y lo verás abajo en tu historial.",
+    "cardReturnCancelled": "Cancelaste el pago con tarjeta. No se cobró nada.",
+    "errorCard": "No se pudo iniciar el pago con tarjeta. Inténtalo de nuevo.",
+    "methodCard": "Tarjeta"
   }
 }

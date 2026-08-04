@@ -15,6 +15,12 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next()
   }
 
+  // Los webhooks (Stripe) no tienen locale ni sesión: si el proxy de intl los
+  // redirige a /es/api/... el POST se pierde y Stripe lo da por fallido.
+  if (pathname.startsWith('/api/')) {
+    return NextResponse.next()
+  }
+
   const pathnameWithoutLocale = pathname.replace(/^\/(en|es)/, '') || '/'
   const isProtected = protectedRoutes.some(
     (r) => pathnameWithoutLocale === r || pathnameWithoutLocale.startsWith(r + '/')

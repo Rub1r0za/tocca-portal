@@ -1,9 +1,12 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
+import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { notifyAdmin, emailLayout } from '@/lib/email'
+import { getStripe, siteUrl } from '@/lib/stripe'
+import { cardFee, toCents } from '@/lib/payments'
 
 const MAX_RECEIPT_BYTES = 10 * 1024 * 1024
 
@@ -69,4 +72,84 @@ export async function submitPayment(
 
   revalidatePath(`/${locale}/payments`)
   return { ok: true }
+}
+
+/**
+ * Pago con tarjeta: crea una Checkout Session y manda al cliente a Stripe.
+ * No se registra nada en `payments` todavía — eso lo hace el webhook cuando
+ * Stripe confirma el cobro, que es la única fuente confiable de que se pagó.
+ */
+export async function startCardPayment(
+  locale: string,
+  _prev: { error?: string } | null,
+  formData: FormData,
+): Promise<{ error?: string }> {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'auth' }
+
+  const amount = Number(formData.get('amount'))
+  if (!Number.isFinite(amount) || amount <= 0) return { error: 'amount' }
+
+  const admin = createAdminClient()
+  const { data: booking } = await admin
+    .from('bookings')
+    .select('id, title, applicant_email')
+    .eq('user_id', user.id)
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .maybeSingle()
+  if (!booking) return { error: 'no_booking' }
+
+  const fee = cardFee(amount)
+  const tripName = (booking.title as Record<string, string> | null)?.[locale] || 'Tocca Amalfi Coast'
+
+  let url: string | null = null
+  try {
+    const session = await getStripe().checkout.sessions.create({
+      mode: 'payment',
+      client_reference_id: booking.id,
+      customer_email: booking.applicant_email || user.email,
+      line_items: [
+        {
+          quantity: 1,
+          price_data: {
+            currency: 'usd',
+            unit_amount: toCents(amount),
+            product_data: {
+              name: tripName,
+              description: locale === 'en' ? 'Payment toward your trip' : 'Abono a tu viaje',
+            },
+          },
+        },
+        ...(fee > 0
+          ? [{
+              quantity: 1,
+              price_data: {
+                currency: 'usd' as const,
+                unit_amount: toCents(fee),
+                product_data: {
+                  name: locale === 'en' ? 'Card service fee' : 'Cargo de servicio por tarjeta',
+                },
+              },
+            }]
+          : []),
+      ],
+      // El webhook lee esto para saber cuánto abonar al viaje vs. cuánto fue cargo.
+      metadata: {
+        booking_id: booking.id,
+        base_amount: amount.toFixed(2),
+        fee_amount: fee.toFixed(2),
+      },
+      success_url: `${siteUrl()}/${locale}/payments?pago=ok`,
+      cancel_url: `${siteUrl()}/${locale}/payments?pago=cancelado`,
+    })
+    url = session.url
+  } catch (e) {
+    console.error('[stripe] no se pudo crear la Checkout Session', e)
+    return { error: 'stripe' }
+  }
+
+  if (!url) return { error: 'stripe' }
+  redirect(url)
 }

@@ -6,16 +6,19 @@ import type { Payment, PaymentScheduleItem } from '@/lib/types'
 import { pick, formatDate } from '@/lib/format'
 import { AppHeader } from '@/components/app-header'
 import { SectionHeading } from '@/components/primitives'
-import { PaymentForm } from './payment-form'
+import { PaymentForm, CardPaymentForm } from './payment-form'
 
 const fmtMoney = (n: number) => `$${Number(n).toLocaleString('en-US', { minimumFractionDigits: 2 })}`
 
 export default async function PaymentsPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ locale: string }>
+  searchParams: Promise<{ pago?: string }>
 }) {
   const { locale } = await params
+  const { pago } = await searchParams
   const t = await getTranslations('payments')
 
   const supabase = await createClient()
@@ -56,6 +59,20 @@ export default async function PaymentsPage({
       <AppHeader title={t('title')} subtitle={t('subtitle')} locale={locale} />
 
       <div className="space-y-8 px-5 py-6">
+        {/* Retorno de Stripe Checkout */}
+        {pago === 'ok' && (
+          <div className="flex items-start gap-3 rounded-2xl border border-azure/30 bg-azure/10 px-4 py-3.5">
+            <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-azure" aria-hidden />
+            <p className="text-sm text-foreground">{t('cardReturnOk')}</p>
+          </div>
+        )}
+        {pago === 'cancelado' && (
+          <div className="flex items-start gap-3 rounded-2xl border border-hairline bg-panel/60 px-4 py-3.5">
+            <XCircle className="mt-0.5 size-4 shrink-0 text-mist" aria-hidden />
+            <p className="text-sm text-mist">{t('cardReturnCancelled')}</p>
+          </div>
+        )}
+
         {/* Resumen */}
         <section className="grid grid-cols-3 gap-2.5">
           {[
@@ -95,7 +112,14 @@ export default async function PaymentsPage({
           </section>
         )}
 
-        {/* Registrar pago */}
+        {/* Pagar con tarjeta */}
+        <section className="rounded-2xl border border-hairline bg-panel/50 p-5">
+          <SectionHeading eyebrow={t('cardTitle')} className="mb-2" />
+          <p className="mb-4 text-xs leading-relaxed text-mist">{t('cardInfo')}</p>
+          <CardPaymentForm locale={locale} />
+        </section>
+
+        {/* Registrar pago manual */}
         <section className="rounded-2xl border border-hairline bg-panel/50 p-5">
           <SectionHeading eyebrow={t('newPayment')} className="mb-2" />
           <p className="mb-4 text-xs leading-relaxed text-mist">{t('zelleInfo')}</p>
@@ -113,7 +137,7 @@ export default async function PaymentsPage({
                   <li key={p.id} className="flex items-center gap-3 rounded-xl border border-hairline bg-panel/60 px-4 py-3">
                     <div className="min-w-0 flex-1">
                       <p className="text-sm text-foreground">
-                        {fmtMoney(Number(p.amount))} · {p.method === 'zelle' ? 'Zelle' : p.method === 'stripe' ? 'Stripe' : t('transfer')}
+                        {fmtMoney(Number(p.amount))} · {p.method === 'zelle' ? 'Zelle' : p.method === 'stripe' ? t('methodCard') : t('transfer')}
                       </p>
                       <p className="text-xs text-mist">
                         {formatDate(p.created_at, locale, { day: 'numeric', month: 'short', year: 'numeric' })}

@@ -64,6 +64,8 @@ export type Payment = {
   id: string
   booking_id: string
   amount: number
+  /** Cargo de servicio por tarjeta; no cuenta contra el total del viaje. */
+  fee_amount: number
   currency: string
   method: PaymentMethod
   status: PaymentStatus
@@ -72,6 +74,8 @@ export type Payment = {
   notes: string | null
   created_at: string
   reviewed_at: string | null
+  stripe_session_id: string | null
+  stripe_payment_intent_id: string | null
 }
 
 export type PaymentScheduleItem = {
