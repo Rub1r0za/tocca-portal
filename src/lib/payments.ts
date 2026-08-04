@@ -7,10 +7,10 @@
 /**
  * Cargo de servicio por pagar con tarjeta, sobre el monto abonado.
  * Ponlo en 0 para absorber la comisión de Stripe en el precio del viaje.
- * OJO: la cuenta es de EE.UU. y recargar por pagar con tarjeta está regulado
- * por las redes (tope del 3% en Visa, prohibido sobre débito).
+ * Fijado en 3% para no pasar el tope de Visa. Sigue sin ser válido sobre
+ * débito y requiere registro ante las redes — ver docs/stripe.md.
  */
-export const CARD_FEE_PCT = 0.055
+export const CARD_FEE_PCT = 0.03
 
 export const cardFee = (amount: number) => Math.round(amount * CARD_FEE_PCT * 100) / 100
 

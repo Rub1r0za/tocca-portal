@@ -45,22 +45,25 @@ fecha futura y cualquier CVC.
    `sk_live_…` (mejor una **restricted key**: escritura en Checkout Sessions,
    lectura en PaymentIntents) y `NEXT_PUBLIC_SITE_URL`.
 
-## El cargo del 5,5% — pendiente de decidir
+## El cargo por tarjeta — fijado en 3%
 
 Está en `src/lib/payments.ts` como `CARD_FEE_PCT`. Se cobra como línea aparte en
 Checkout y se guarda en `payments.fee_amount`; **no** cuenta contra el total del
-viaje, así que el saldo del cliente sigue cuadrando.
+viaje, así que el saldo del cliente sigue cuadrando. El desglose que ve el
+cliente sale del mismo constante, no hay porcentajes escritos a mano en el copy.
 
-Ojo con esto antes de ir a producción. Como se cobra solo al pagar con tarjeta
+Se bajó de 5,5% a **3%** para no pasar el tope de Visa. Queda pendiente esto,
+que no se resuelve con código — como el cargo aplica solo al pagar con tarjeta
 (Zelle y transferencia no lo llevan), legalmente es un *surcharge*, no un
-"service fee", y en EE.UU. las redes de tarjetas lo regulan:
+"service fee", y en EE.UU. las redes lo regulan:
 
-- Visa lo topa en **3%** — 5,5% está por encima.
-- Está **prohibido sobre débito**, aunque el cliente lo pase como crédito.
-- Hay que registrarlo ante las redes con antelación y declararlo al cobrar.
-- Varios estados lo prohíben o lo limitan.
+- **Prohibido sobre débito**, aunque el cliente la pase como crédito. Stripe no
+  distingue débito de crédito en Checkout, así que hoy se le cobra a ambos.
+- Hay que **registrarlo ante Visa/Mastercard** con antelación (~30 días) y
+  declararlo visiblemente al cobrar.
+- Varios estados lo prohíben o lo limitan por debajo del 3%.
 
-La salida limpia es **poner `CARD_FEE_PCT = 0`** y subir el precio del viaje para
-absorber la comisión de Stripe (~2,9% + $0,30, más para tarjetas internacionales).
-Es un cambio de una línea. Si igual se quiere cobrar aparte, que lo confirme un
-contador o abogado en EE.UU. primero.
+Conviene confirmarlo con un contador o abogado en EE.UU. Si sale que no se
+puede, **poner `CARD_FEE_PCT = 0`** y subir el precio del viaje para absorber la
+comisión de Stripe (~2,9% + $0,30, más en tarjetas internacionales) es un
+cambio de una línea.
