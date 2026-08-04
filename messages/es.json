@@ -82,7 +82,11 @@
     "confirmEmailSent": "Enviamos un enlace de confirmación a {email}. Ábrelo para activar tu cuenta.",
     "resetSent": "Enviamos un enlace a {email} para restablecer tu contraseña.",
     "signupTitle": "Crea tu cuenta",
-    "signupSubtitle": "Usa el correo con el que se hizo tu reserva."
+    "signupSubtitle": "Usa el correo con el que se hizo tu reserva.",
+    "emailNotConfirmed": "Tu cuenta aún no está confirmada. Busca el correo de confirmación (revisa spam) o escríbenos para activarla.",
+    "rateLimited": "Demasiados intentos seguidos. Espera unos minutos y vuelve a intentarlo.",
+    "userExists": "Ya existe una cuenta con este correo. Inicia sesión o usa \"¿Olvidaste tu contraseña?\".",
+    "invalidEmail": "Ese correo no parece válido."
   },
   "dashboard": {
     "greeting": "Bienvenido de vuelta",

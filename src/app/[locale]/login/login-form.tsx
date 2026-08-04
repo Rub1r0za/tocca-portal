@@ -29,6 +29,35 @@ export default function LoginForm() {
   const [status, setStatus] = useState<Status>('idle')
   const [error, setError] = useState(searchParams.get('error') === 'auth' ? t('linkExpired') : '')
 
+  /**
+   * Traduce el error de Supabase a algo accionable. Antes todo lo que no fuera
+   * "Invalid login credentials" caía en el genérico "algo salió mal", que
+   * escondía la causa real (típicamente la cuenta sin confirmar).
+   */
+  function messageFor(err: { code?: string; message: string }): string {
+    switch (err.code) {
+      case 'invalid_credentials':
+        return t('invalidCredentials')
+      case 'email_not_confirmed':
+        return t('emailNotConfirmed')
+      case 'over_email_send_rate_limit':
+      case 'over_request_rate_limit':
+        return t('rateLimited')
+      case 'user_already_exists':
+        return t('userExists')
+      case 'weak_password':
+        return t('passwordTooShort')
+      case 'email_address_invalid':
+        return t('invalidEmail')
+      default:
+        // Sin código conocido: al menos dejarlo en consola para poder depurar.
+        console.error('[auth]', err.code ?? 'sin-código', err.message)
+        return err.message.includes('Invalid login credentials')
+          ? t('invalidCredentials')
+          : t('error')
+    }
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setError('')
@@ -43,7 +72,7 @@ export default function LoginForm() {
         options: { emailRedirectTo: callbackUrl(destination) },
       })
       if (err) {
-        setError(t('error'))
+        setError(messageFor(err))
         setStatus('idle')
       } else {
         setStatus('sent')
@@ -60,7 +89,7 @@ export default function LoginForm() {
     if (mode === 'signin') {
       const { error: err } = await supabase.auth.signInWithPassword({ email, password })
       if (err) {
-        setError(err.message.includes('Invalid login credentials') ? t('invalidCredentials') : t('error'))
+        setError(messageFor(err))
         setStatus('idle')
         return
       }
@@ -76,7 +105,7 @@ export default function LoginForm() {
       options: { emailRedirectTo: callbackUrl(destination) },
     })
     if (err) {
-      setError(t('error'))
+      setError(messageFor(err))
       setStatus('idle')
       return
     }
@@ -101,7 +130,7 @@ export default function LoginForm() {
       redirectTo: callbackUrl(`/${locale}/account/password`),
     })
     if (err) {
-      setError(t('error'))
+      setError(messageFor(err))
       setStatus('idle')
     } else {
       setStatus('reset-sent')

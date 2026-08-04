@@ -82,7 +82,11 @@
     "confirmEmailSent": "We sent a confirmation link to {email}. Open it to activate your account.",
     "resetSent": "We sent a password-reset link to {email}.",
     "signupTitle": "Create your account",
-    "signupSubtitle": "Use the email address your trip was booked with."
+    "signupSubtitle": "Use the email address your trip was booked with.",
+    "emailNotConfirmed": "Your account is not confirmed yet. Look for the confirmation email (check spam) or contact us to activate it.",
+    "rateLimited": "Too many attempts in a row. Please wait a few minutes and try again.",
+    "userExists": "An account with this email already exists. Sign in, or use \"Forgot your password?\".",
+    "invalidEmail": "That email address does not look valid."
   },
   "dashboard": {
     "greeting": "Welcome back",
