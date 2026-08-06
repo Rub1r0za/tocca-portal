@@ -56,6 +56,11 @@ export function AddDayForm({
         </div>
       </div>
 
+      <div>
+        <label className={labelClass}>Imagen (URL)</label>
+        <input name="image_url" type="text" inputMode="url" placeholder="https://…" className={inputClass} />
+      </div>
+
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <label className={labelClass}>Título (inglés) *</label>

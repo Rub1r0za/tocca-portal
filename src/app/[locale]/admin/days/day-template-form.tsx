@@ -20,6 +20,17 @@ function scheduleLines(
   return (items ?? []).map((i) => `${i.time} | ${i.title?.[lang] ?? ''}`).join('\n')
 }
 
+const COURSE_ES: Record<string, string> = { starter: 'entrada', main: 'principal', dessert: 'postre' }
+
+/** Render the template meals back into "curso | nombre EN | nombre ES" lines. */
+function mealLines(
+  items: Array<{ course: string; name: Record<string, string> }> | null | undefined,
+) {
+  return (items ?? [])
+    .map((m) => `${COURSE_ES[m.course] ?? m.course} | ${m.name?.en ?? ''} | ${m.name?.es ?? ''}`)
+    .join('\n')
+}
+
 export function DayTemplateForm({
   template,
   locale,
@@ -126,7 +137,23 @@ export function DayTemplateForm({
 
       <div>
         <label className={labelClass}>Imagen (URL)</label>
-        <input name="image_url" type="url" defaultValue={template?.image_url ?? ''} placeholder="https://…" className={inputClass} />
+        <input name="image_url" type="text" inputMode="url" defaultValue={template?.image_url ?? ''} placeholder="https://…" className={inputClass} />
+      </div>
+
+      <div>
+        <label className={labelClass}>Menú del día (uno por línea: curso | nombre EN | nombre ES)</label>
+        <textarea
+          name="meals"
+          rows={4}
+          defaultValue={mealLines(template?.meals)}
+          placeholder={'entrada | Caprese salad | Ensalada caprese\nprincipal | Grilled sea bass | Lubina a la parrilla\npostre | Lemon delight | Delicia de limón'}
+          className={inputClass}
+          style={{ resize: 'vertical' }}
+        />
+        <p className="mt-1 text-xs text-[#7A7168]">
+          Curso: <strong>entrada</strong>, <strong>principal</strong> o <strong>postre</strong>. Estos platos se copian
+          a cada reserva donde uses este día — cárgalos una sola vez aquí.
+        </p>
       </div>
 
       <div className="flex gap-2">

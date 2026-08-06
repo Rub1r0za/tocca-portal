@@ -71,7 +71,7 @@ export function WellnessForm({
         </div>
         <div>
           <label className={labelClass}>Imagen (URL)</label>
-          <input name="image_url" type="url" defaultValue={option?.image_url ?? ''} placeholder="https://…" className={inputClass} />
+          <input name="image_url" type="text" inputMode="url" defaultValue={option?.image_url ?? ''} placeholder="https://…" className={inputClass} />
         </div>
       </div>
 

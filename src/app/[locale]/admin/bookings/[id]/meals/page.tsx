@@ -1,10 +1,11 @@
 import Link from 'next/link'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { notFound } from 'next/navigation'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, AlertTriangle, CheckCircle2 } from 'lucide-react'
 import { DayMeals } from './day-meals'
 import type { Meal } from './meal-form'
 import type { Traveler } from '@/lib/types'
+import { mealPending, mealTally, COURSE_LABEL } from '@/lib/meals-summary'
 
 type DayWithMeals = {
   id: string
@@ -52,6 +53,11 @@ export default async function MealsAdminPage({
   const list = (days ?? []) as DayWithMeals[]
   const totalMeals = list.reduce((sum, d) => sum + (d.meals?.length ?? 0), 0)
 
+  const selectionList = (selections ?? []) as { meal_id: string; traveler_id: string }[]
+  const pending = mealPending(list, travelerList, selectionList)
+  const tally = mealTally(list, travelerList, selectionList)
+  const anyChosen = tally.some((d) => d.courses.some((c) => c.meals.some((m) => m.eaters.length > 0)))
+
   return (
     <div className="mx-auto max-w-3xl">
       <Link
@@ -73,6 +79,76 @@ export default async function MealsAdminPage({
           {totalMeals} plato{totalMeals !== 1 ? 's' : ''}
         </span>
       </div>
+
+      {/* Alerta de comidas pendientes */}
+      {travelerList.length > 0 && pending.expectedSlots > 0 && (
+        pending.pendingSlots > 0 ? (
+          <div className="mb-6 rounded-2xl border border-amber-200 bg-amber-50 p-4">
+            <p className="flex items-center gap-2 text-sm font-medium text-amber-800">
+              <AlertTriangle className="size-4 shrink-0" />
+              Faltan {pending.pendingSlots} selección{pending.pendingSlots !== 1 ? 'es' : ''} de comida
+            </p>
+            <p className="mt-1 text-xs text-amber-700">
+              {pending.pendingTravelers
+                .map((r) => `${r.traveler.first_name} ${r.traveler.last_name} (${r.missing})`)
+                .join(' · ')}
+            </p>
+          </div>
+        ) : (
+          <div className="mb-6 rounded-2xl border border-teal-200 bg-teal-50 p-4">
+            <p className="flex items-center gap-2 text-sm font-medium text-teal-800">
+              <CheckCircle2 className="size-4 shrink-0" />
+              Todos los viajeros ya eligieron sus comidas.
+            </p>
+          </div>
+        )
+      )}
+
+      {/* Resumen para el restaurante */}
+      {anyChosen && (
+        <details className="mb-6 rounded-2xl border border-[rgba(62,45,35,0.12)] bg-white p-5 shadow-[0_1px_4px_rgba(62,45,35,0.06)]" open>
+          <summary className="cursor-pointer text-base font-medium text-[#3E2D23]">
+            Resumen para el restaurante
+          </summary>
+          <p className="mt-1 text-xs text-[#7A7168]">
+            Cuántos viajeros eligieron cada plato, por día. Ideal para ordenar de una.
+          </p>
+          <div className="mt-4 space-y-5">
+            {tally.map(({ day, courses }) => (
+              <div key={day.id}>
+                <p className="text-sm font-semibold text-[#3E2D23]">
+                  Día {day.day_number}
+                  {day.title?.es || day.title?.en ? ` · ${day.title?.es || day.title?.en}` : ''}
+                </p>
+                <div className="mt-2 space-y-2">
+                  {courses.map(({ course, meals }) => (
+                    <div key={course}>
+                      <p className="text-[0.7rem] font-semibold uppercase tracking-[0.14em] text-[#7A7168]">
+                        {COURSE_LABEL[course] ?? course}
+                      </p>
+                      <ul className="mt-1 space-y-0.5">
+                        {meals.map(({ meal, eaters }) => (
+                          <li key={meal.id} className="flex flex-wrap items-baseline gap-x-2 text-sm text-[#3E2D23]">
+                            <span className="inline-flex min-w-6 items-center justify-center rounded-full bg-[#4A9A92]/10 px-2 text-xs font-semibold text-[#4A9A92]">
+                              {eaters.length}
+                            </span>
+                            <span>{meal.name?.es || meal.name?.en || 'Sin nombre'}</span>
+                            {eaters.length > 0 && (
+                              <span className="text-xs text-[#7A7168]">
+                                — {eaters.map((t) => t.first_name).join(', ')}
+                              </span>
+                            )}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </details>
+      )}
 
       {list.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-[rgba(62,45,35,0.2)] bg-white p-8 text-center">

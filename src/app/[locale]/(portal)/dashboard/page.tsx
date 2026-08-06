@@ -1,6 +1,6 @@
 import { getTranslations, getLocale } from 'next-intl/server'
 import Link from 'next/link'
-import { Route, Sparkles, Compass, UtensilsCrossed, Flower2, ChevronRight, Users, CalendarDays, Hourglass, ClipboardList, Wallet } from 'lucide-react'
+import { Route, Sparkles, Compass, UtensilsCrossed, Flower2, ChevronRight, Users, CalendarDays, Hourglass, ClipboardList } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { getMyBooking } from '@/lib/booking'
 import { createClient } from '@/lib/supabase/server'
@@ -42,15 +42,7 @@ async function WaitingState() {
       <p className="mt-3 max-w-xs text-sm leading-relaxed text-mist">
         {anyBooking ? t('waitingPending') : t('registerText')}
       </p>
-      {anyBooking ? (
-        <Link
-          href={`/${locale}/payments`}
-          className="mt-6 inline-flex items-center gap-2 rounded-xl border border-gold/40 bg-gold/10 px-5 py-3 text-sm font-medium text-gold transition-colors hover:bg-gold/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
-        >
-          <Wallet className="size-4" aria-hidden />
-          {t('paymentsCta')}
-        </Link>
-      ) : (
+      {!anyBooking && (
         <Link
           href={`/${locale}/register`}
           className="mt-6 inline-flex items-center gap-2 rounded-xl bg-gold px-5 py-3 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
@@ -89,7 +81,6 @@ export default async function DashboardPage({
     { href: `/${locale}/activities`, Icon: Compass, title: tSections('activities.title'), subtitle: tSections('activities.subtitle') },
     { href: `/${locale}/meals`, Icon: UtensilsCrossed, title: tSections('meals.title'), subtitle: tSections('meals.subtitle') },
     { href: `/${locale}/wellness`, Icon: Flower2, title: tSections('wellness.title'), subtitle: tSections('wellness.subtitle') },
-    { href: `/${locale}/payments`, Icon: Wallet, title: tSections('payments.title'), subtitle: tSections('payments.subtitle') },
   ]
 
   return (

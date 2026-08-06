@@ -93,6 +93,18 @@ export default async function RequestsAdminPage({
 
   const pendingCount = rows.filter((r) => r.status === 'pending').length
 
+  // Resumen: personas confirmadas por actividad / wellness
+  const summaryMap = new Map<string, { itemName: string; kind: 'activity' | 'wellness'; guests: number; count: number }>()
+  for (const r of rows) {
+    if (r.status !== 'confirmed') continue
+    const key = `${r.kind}::${r.itemName}`
+    const cur = summaryMap.get(key) ?? { itemName: r.itemName, kind: r.kind, guests: 0, count: 0 }
+    cur.guests += r.numGuests
+    cur.count += 1
+    summaryMap.set(key, cur)
+  }
+  const summary = [...summaryMap.values()].sort((a, b) => b.guests - a.guests)
+
   return (
     <div className="mx-auto max-w-3xl">
       <div className="mb-6">
@@ -106,6 +118,32 @@ export default async function RequestsAdminPage({
           {pendingCount} pendiente{pendingCount !== 1 ? 's' : ''} de {rows.length} en total
         </p>
       </div>
+
+      {/* Resumen por actividad (confirmadas) */}
+      {summary.length > 0 && (
+        <details className="mb-6 rounded-2xl border border-[rgba(62,45,35,0.12)] bg-white p-5 shadow-[0_1px_4px_rgba(62,45,35,0.06)]" open>
+          <summary className="cursor-pointer text-base font-medium text-[#3E2D23]">
+            Resumen por actividad (confirmadas)
+          </summary>
+          <p className="mt-1 text-xs text-[#7A7168]">
+            Total de personas confirmadas en cada experiencia y wellness.
+          </p>
+          <ul className="mt-4 space-y-1.5">
+            {summary.map((s) => (
+              <li key={`${s.kind}-${s.itemName}`} className="flex flex-wrap items-baseline gap-x-2 text-sm text-[#3E2D23]">
+                <span className="inline-flex min-w-6 items-center justify-center rounded-full bg-[#4A9A92]/10 px-2 text-xs font-semibold text-[#4A9A92]">
+                  {s.guests}
+                </span>
+                <span>{s.itemName}</span>
+                <span className="text-[0.65rem] uppercase tracking-wider text-[#7A7168]/70">
+                  {s.kind === 'activity' ? 'Actividad' : 'Wellness'}
+                </span>
+                <span className="text-xs text-[#7A7168]">· {s.count} solicitud{s.count !== 1 ? 'es' : ''}</span>
+              </li>
+            ))}
+          </ul>
+        </details>
+      )}
 
       {rows.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-[rgba(62,45,35,0.2)] bg-white p-8 text-center">

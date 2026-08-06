@@ -1,12 +1,14 @@
 import Link from 'next/link'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { notFound } from 'next/navigation'
-import { ArrowLeft, Map } from 'lucide-react'
+import { ArrowLeft, Map, AlertTriangle } from 'lucide-react'
+import { mealPending, type SummaryDay, type SummaryTraveler, type MealSelection } from '@/lib/meals-summary'
 import { BookingStatusForm } from './booking-status-form'
 import { BookingDatesForm } from './booking-dates-form'
 import { BookingNotesForm } from './booking-notes-form'
 import { TravelersSection } from './travelers-section'
 import { DeleteBookingButton } from './delete-booking-button'
+import { ThankYouButton } from './thank-you-button'
 import { cn } from '@/lib/utils'
 
 const STATUS_CLASS: Record<string, string> = {
@@ -35,6 +37,17 @@ export default async function BookingDetailPage({
     .single()
 
   if (!booking) notFound()
+
+  // Estado de las comidas para la alerta del panel
+  const [{ data: mealDays }, { data: mealSelections }] = await Promise.all([
+    admin.from('journey_days').select('id, day_number, title, meals (id, course, name)').eq('booking_id', id).order('day_number', { ascending: true }),
+    admin.from('meal_selections').select('meal_id, traveler_id').eq('booking_id', id),
+  ])
+  const pendingMeals = mealPending(
+    (mealDays ?? []) as SummaryDay[],
+    (booking.travelers ?? []) as SummaryTraveler[],
+    (mealSelections ?? []) as MealSelection[],
+  )
 
   const title =
     (booking.title as Record<string, string>)?.en ||
@@ -72,6 +85,24 @@ export default async function BookingDetailPage({
           {STATUS_LABEL[booking.status] ?? booking.status}
         </span>
       </div>
+
+      {/* Alerta de comidas pendientes */}
+      {pendingMeals.pendingSlots > 0 && (
+        <Link
+          href={`/${locale}/admin/bookings/${id}/meals`}
+          className="mb-6 flex items-start gap-2 rounded-2xl border border-amber-200 bg-amber-50 p-4 transition-colors hover:bg-amber-100"
+        >
+          <AlertTriangle className="mt-0.5 size-4 shrink-0 text-amber-600" />
+          <div>
+            <p className="text-sm font-medium text-amber-800">
+              Faltan {pendingMeals.pendingSlots} selección{pendingMeals.pendingSlots !== 1 ? 'es' : ''} de comida
+            </p>
+            <p className="mt-0.5 text-xs text-amber-700">
+              {pendingMeals.pendingTravelers.map((r) => `${r.traveler.first_name} ${r.traveler.last_name}`).join(', ')} · toca para revisar
+            </p>
+          </div>
+        </Link>
+      )}
 
       {/* Quick nav */}
       <div className="mb-6 flex flex-wrap gap-2">
@@ -128,6 +159,15 @@ export default async function BookingDetailPage({
             locale={locale}
             travelers={booking.travelers ?? []}
           />
+        </div>
+
+        {/* Fin del viaje */}
+        <div className="rounded-2xl border border-[rgba(62,45,35,0.12)] bg-white p-5 shadow-[0_1px_4px_rgba(62,45,35,0.06)]">
+          <h2 className="mb-1 text-base font-medium text-[#3E2D23]">Al finalizar el viaje</h2>
+          <p className="mb-4 text-sm text-[#7A7168]">
+            Envía un correo de agradecimiento al viajero e invítalo a dejar su reseña en Google y Tripadvisor.
+          </p>
+          <ThankYouButton bookingId={id} locale={locale} />
         </div>
 
         {/* Danger zone */}

@@ -195,6 +195,7 @@ const daySchema = z.object({
   description_es: z.string().optional(),
   location: z.string().optional(),
   day_date: z.string().optional(),
+  image_url: z.string().optional(),
   day_vibe_en: z.string().optional(),
   day_vibe_es: z.string().optional(),
   tocca_tips_en: z.string().optional(),
@@ -211,6 +212,7 @@ function dayPayload(d: z.infer<typeof daySchema>) {
     description: i18n(d.description_en, d.description_es),
     location: d.location || null,
     day_date: d.day_date || null,
+    image_url: d.image_url || null,
     day_vibe: i18n(d.day_vibe_en, d.day_vibe_es),
     tocca_tips: zipLines(d.tocca_tips_en, d.tocca_tips_es),
     good_to_know: zipLines(d.good_to_know_en, d.good_to_know_es),
@@ -615,7 +617,35 @@ const dayTemplateSchema = z.object({
   schedule_en: z.string().optional(),
   schedule_es: z.string().optional(),
   is_free_day: z.string().optional(),
+  meals: z.string().optional(),
 })
+
+/**
+ * Parse the plantilla's meals textarea (one dish per line:
+ * "curso | nombre EN | nombre ES") into the TemplateMeal[] jsonb shape.
+ * The course accepts English or Spanish; anything unknown falls back to 'main'.
+ */
+function parseTemplateMeals(raw?: string) {
+  const courseOf = (s: string): 'starter' | 'main' | 'dessert' => {
+    const k = s.trim().toLowerCase()
+    if (['starter', 'entrada', 'entrante', 'primero'].includes(k)) return 'starter'
+    if (['dessert', 'postre'].includes(k)) return 'dessert'
+    return 'main'
+  }
+  return (raw || '')
+    .split('\n')
+    .map((l) => l.trim())
+    .filter(Boolean)
+    .map((l) => {
+      const [course, nameEn, nameEs] = l.split('|').map((p) => p.trim())
+      return {
+        course: courseOf(course || 'main'),
+        name: { en: nameEn || nameEs || '', es: nameEs || nameEn || '' },
+        description: { en: '', es: '' },
+      }
+    })
+    .filter((m) => m.name.en || m.name.es)
+}
 
 /** Zip "HH:MM | texto" per-line textareas into [{ time, title: {en, es} }]. */
 function zipSchedule(en?: string, es?: string) {
@@ -663,6 +693,7 @@ export async function saveDayTemplate(
     good_to_know: zipLines(d.good_to_know_en, d.good_to_know_es),
     schedule: zipSchedule(d.schedule_en, d.schedule_es),
     is_free_day: d.is_free_day === 'on',
+    meals: parseTemplateMeals(d.meals),
     updated_at: new Date().toISOString(),
   }
 
@@ -957,4 +988,67 @@ export async function deleteLead(leadId: string, locale: string) {
   const admin = createAdminClient()
   await admin.from('leads').delete().eq('id', leadId)
   revalidatePath(`/${locale}/admin/leads`)
+}
+
+// ── Email de agradecimiento + reseñas (fin del viaje) ────────────────────────
+
+/**
+ * Envía al viajero un correo de gracias e invita a dejar reseña en Google y
+ * Tripadvisor. Los enlaces salen de las env vars REVIEW_GOOGLE_URL y
+ * REVIEW_TRIPADVISOR_URL (se configuran en Vercel); si no están, el correo se
+ * envía igual sin esos botones.
+ */
+export async function sendTripThankYou(
+  bookingId: string,
+  locale: string,
+  _prev: { error?: string; ok?: boolean } | null,
+): Promise<{ error?: string; ok?: boolean }> {
+  const admin = createAdminClient()
+  const { data: booking } = await admin
+    .from('bookings')
+    .select('applicant_email, applicant_name')
+    .eq('id', bookingId)
+    .maybeSingle()
+
+  if (!booking?.applicant_email) {
+    return { error: 'Esta reserva no tiene email de contacto.' }
+  }
+
+  const googleUrl = process.env.REVIEW_GOOGLE_URL
+  const tripUrl = process.env.REVIEW_TRIPADVISOR_URL
+
+  const button = (href: string, label: string, bg: string) =>
+    `<a href="${href}" style="display:inline-block;margin:6px 8px 6px 0;background:${bg};color:#ffffff;padding:12px 20px;border-radius:10px;text-decoration:none;font-size:14px;">${label}</a>`
+
+  const buttons = [
+    googleUrl ? button(googleUrl, 'Reseña en Google', '#23374D') : '',
+    tripUrl ? button(tripUrl, 'Reseña en Tripadvisor', '#4A9A92') : '',
+  ].join('')
+
+  const { error } = await sendEmailResult({
+    to: booking.applicant_email,
+    subject: 'Grazie mille — Tocca Amalfi Coast',
+    html: emailLayout(
+      'Grazie di cuore ✨',
+      `<p>Hola ${booking.applicant_name || ''},</p>
+       <p>Gracias por viajar con Tocca Amalfi Coast. Fue un placer acompañarte en la Costiera y esperamos que te lleves recuerdos para toda la vida.</p>
+       <p>Si tienes un momento, nos ayudaría muchísimo que compartieras tu experiencia:</p>
+       <p style="margin-top:16px;">${buttons || 'Escríbenos y con gusto te compartimos dónde dejar tu opinión.'}</p>
+       <p style="margin-top:20px;">Con cariño,<br/>El equipo de Tocca Amalfi Coast</p>`,
+    ),
+  })
+
+  if (error) return { error }
+
+  revalidatePath(`/${locale}/admin/bookings/${bookingId}`)
+  return { ok: true }
+}
+
+/** Igual que sendEmail pero devolviendo el error para mostrarlo en el panel. */
+async function sendEmailResult(args: { to: string; subject: string; html: string }): Promise<{ error?: string }> {
+  if (!process.env.RESEND_API_KEY) {
+    return { error: 'Falta configurar el correo (RESEND_API_KEY) en Vercel.' }
+  }
+  await sendEmail(args)
+  return {}
 }

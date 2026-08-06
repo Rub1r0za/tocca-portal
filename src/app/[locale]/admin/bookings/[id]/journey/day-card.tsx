@@ -16,6 +16,7 @@ type Day = {
   description: Record<string, string>
   location: string | null
   day_date: string | null
+  image_url: string | null
   day_vibe: Record<string, string> | null
   tocca_tips: Array<Record<string, string>> | null
   good_to_know: Array<Record<string, string>> | null
@@ -58,6 +59,10 @@ function EditDayForm({
           <label className={labelClass}>Localización</label>
           <input name="location" type="text" defaultValue={day.location ?? ''} placeholder="Positano" className={inputClass} />
         </div>
+      </div>
+      <div>
+        <label className={labelClass}>Imagen (URL)</label>
+        <input name="image_url" type="text" inputMode="url" defaultValue={day.image_url ?? ''} placeholder="https://…" className={inputClass} />
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
