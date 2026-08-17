@@ -65,7 +65,7 @@ export async function updateBookingStatus(
   locale: string,
   _prev: unknown,
   formData: FormData,
-): Promise<{ error?: string }> {
+): Promise<{ error?: string; emailError?: string }> {
   const status = formData.get('status') as string
   if (!['pending', 'approved', 'cancelled'].includes(status)) return { error: 'Estado inválido' }
 
@@ -80,9 +80,11 @@ export async function updateBookingStatus(
 
   if (error) return { error: error.message }
 
-  // Correo automático de confirmación al aprobar
+  // Correo automático de confirmación al aprobar. Si el envío falla la reserva
+  // ya quedó aprobada, así que se avisa aparte en vez de dar por fallido todo.
+  let emailError: string | undefined
   if (status === 'approved' && prev?.status !== 'approved' && updated?.applicant_email) {
-    await sendEmail({
+    const sent = await sendEmail({
       to: updated.applicant_email,
       subject: '¡Tu viaje está confirmado! — Tocca Amalfi Coast',
       html: emailLayout(
@@ -92,10 +94,11 @@ export async function updateBookingStatus(
          <p style="margin-top:20px;"><a href="https://tocca-portal.vercel.app/es/login" style="background:#23374D;color:#ffffff;padding:12px 24px;border-radius:10px;text-decoration:none;">Entrar a mi portal →</a></p>`,
       ),
     })
+    emailError = sent.error
   }
 
   revalidatePath(`/${locale}/admin/bookings/${bookingId}`)
-  return {}
+  return emailError ? { emailError } : {}
 }
 
 export async function updateBookingDates(
@@ -1025,7 +1028,7 @@ export async function sendTripThankYou(
     tripUrl ? button(tripUrl, 'Reseña en Tripadvisor', '#4A9A92') : '',
   ].join('')
 
-  const { error } = await sendEmailResult({
+  const { error } = await sendEmail({
     to: booking.applicant_email,
     subject: 'Grazie mille — Tocca Amalfi Coast',
     html: emailLayout(
@@ -1042,13 +1045,4 @@ export async function sendTripThankYou(
 
   revalidatePath(`/${locale}/admin/bookings/${bookingId}`)
   return { ok: true }
-}
-
-/** Igual que sendEmail pero devolviendo el error para mostrarlo en el panel. */
-async function sendEmailResult(args: { to: string; subject: string; html: string }): Promise<{ error?: string }> {
-  if (!process.env.RESEND_API_KEY) {
-    return { error: 'Falta configurar el correo (RESEND_API_KEY) en Vercel.' }
-  }
-  await sendEmail(args)
-  return {}
 }
