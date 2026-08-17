@@ -109,6 +109,15 @@ export default function LoginForm() {
       setStatus('idle')
       return
     }
+    // Con la confirmación por correo activada, Supabase no delata si un correo ya
+    // está registrado (evita que alguien descubra quién tiene cuenta): responde
+    // 200 con un usuario sin identidades y no envía nada. Sin esto la pantalla
+    // pide "revisa tu correo" por un mensaje que nunca va a salir.
+    if (data.user && data.user.identities?.length === 0) {
+      setError(t('userExists'))
+      setStatus('idle')
+      return
+    }
     if (data.session) {
       // Email confirmation disabled → signed in immediately
       location.assign(destination)
