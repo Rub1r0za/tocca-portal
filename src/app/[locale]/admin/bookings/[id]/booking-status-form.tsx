@@ -44,6 +44,11 @@ export function BookingStatusForm({
       {state?.error && (
         <p className="w-full text-xs text-red-600">{state.error}</p>
       )}
+      {state?.emailError && (
+        <p className="w-full text-xs text-amber-700">
+          Estado actualizado, pero el correo al viajero no salió: {state.emailError}
+        </p>
+      )}
     </form>
   )
 }
