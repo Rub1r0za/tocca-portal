@@ -3,6 +3,7 @@
 import { useActionState, useRef } from 'react'
 import { Loader2 } from 'lucide-react'
 import { createJourneyDay } from '../../../actions'
+import { ImageField } from '@/components/admin/image-field'
 
 const inputClass =
   'w-full rounded-xl border border-[rgba(62,45,35,0.18)] bg-[#FAFAF8] px-4 py-2.5 text-sm text-[#3E2D23] placeholder:text-[#7A7168]/60 focus:border-[#4A9A92] focus:outline-none focus:ring-2 focus:ring-[#4A9A92]/20'
@@ -56,10 +57,7 @@ export function AddDayForm({
         </div>
       </div>
 
-      <div>
-        <label className={labelClass}>Imagen (URL)</label>
-        <input name="image_url" type="text" inputMode="url" placeholder="https://…" className={inputClass} />
-      </div>
+      <ImageField />
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div>

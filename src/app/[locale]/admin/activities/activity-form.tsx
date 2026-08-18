@@ -3,6 +3,7 @@
 import { useActionState } from 'react'
 import { Loader2 } from 'lucide-react'
 import { saveActivity } from '../actions'
+import { ImageField } from '@/components/admin/image-field'
 
 const inputClass =
   'w-full rounded-xl border border-[rgba(62,45,35,0.18)] bg-[#FAFAF8] px-4 py-2.5 text-sm text-[#3E2D23] placeholder:text-[#7A7168]/60 focus:border-[#4A9A92] focus:outline-none focus:ring-2 focus:ring-[#4A9A92]/20'
@@ -75,10 +76,7 @@ export function ActivityForm({
           <label className={labelClass}>Capacidad</label>
           <input name="capacity" type="number" min="1" defaultValue={activity?.capacity ?? ''} placeholder="Sin límite" className={inputClass} />
         </div>
-        <div>
-          <label className={labelClass}>Imagen (URL)</label>
-          <input name="image_url" type="text" inputMode="url" defaultValue={activity?.image_url ?? ''} placeholder="https://…" className={inputClass} />
-        </div>
+        <ImageField defaultValue={activity?.image_url} />
       </div>
 
       <div className="grid gap-4 sm:grid-cols-4">

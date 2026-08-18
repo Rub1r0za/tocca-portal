@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { LayoutDashboard, LogOut, PlusCircle, Sparkles, HeartPulse, Inbox, Users, CalendarRange, Wallet, Contact } from 'lucide-react'
+import { LayoutDashboard, LogOut, PlusCircle, Sparkles, HeartPulse, Inbox, Users, CalendarRange, Wallet, Contact, Images } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { createClient } from '@/lib/supabase/client'
 
@@ -16,6 +16,7 @@ const navItems = [
   { label: 'Actividades', path: '/admin/activities', exact: false, Icon: Sparkles },
   { label: 'Wellness', path: '/admin/wellness', exact: false, Icon: HeartPulse },
   { label: 'Solicitudes', path: '/admin/requests', exact: false, Icon: Inbox },
+  { label: 'Imágenes', path: '/admin/media', exact: false, Icon: Images },
 ]
 
 export function AdminNav({ locale, mobile }: { locale: string; mobile?: boolean }) {
