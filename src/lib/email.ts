@@ -53,11 +53,12 @@ export async function sendEmail({
 }
 
 /**
- * Aviso interno. Nunca corta el flujo de quien lo llama (un webhook de Stripe no
- * debe fallar porque el correo no salga); el motivo queda en los logs.
+ * Aviso interno. Nunca lanza, así que quien lo llame puede ignorar el resultado
+ * (un webhook de Stripe no debe fallar porque el correo no salga); el motivo
+ * queda en los logs y también se devuelve para quien quiera reaccionar.
  */
-export async function notifyAdmin(subject: string, html: string): Promise<void> {
-  await sendEmail({ to: ADMIN_EMAIL, subject, html })
+export async function notifyAdmin(subject: string, html: string): Promise<SendResult> {
+  return sendEmail({ to: ADMIN_EMAIL, subject, html })
 }
 
 /** Plantilla mínima con el estilo de la marca. */
