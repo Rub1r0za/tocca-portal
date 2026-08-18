@@ -127,3 +127,57 @@ export const COURSE_LABEL: Record<string, string> = {
   main: 'Principal',
   dessert: 'Postre',
 }
+
+/**
+ * La otra mitad del resumen: qué eligió cada viajero, día por día. El recuento
+ * por plato sirve para ordenar al restaurante; esto sirve para saber a quién
+ * hay que perseguir y qué se le pone delante en la mesa.
+ */
+export function mealByTraveler(
+  days: SummaryDay[],
+  travelers: SummaryTraveler[],
+  selections: MealSelection[],
+): {
+  day: SummaryDay
+  rows: {
+    traveler: SummaryTraveler
+    chosen: { course: string; meal: SummaryMeal }[]
+    missingCourses: string[]
+  }[]
+}[] {
+  const selectedByTraveler = new Map<string, Set<string>>()
+  for (const s of selections) {
+    const set = selectedByTraveler.get(s.traveler_id) ?? new Set<string>()
+    set.add(s.meal_id)
+    selectedByTraveler.set(s.traveler_id, set)
+  }
+
+  return days
+    .filter((d) => (d.meals ?? []).length > 0)
+    .map((day) => {
+      const mealsByCourse = new Map<string, SummaryMeal[]>()
+      for (const meal of day.meals ?? []) {
+        const arr = mealsByCourse.get(meal.course) ?? []
+        arr.push(meal)
+        mealsByCourse.set(meal.course, arr)
+      }
+      const orderedCourses = [
+        ...COURSE_ORDER.filter((c) => mealsByCourse.has(c)),
+        ...[...mealsByCourse.keys()].filter((c) => !COURSE_ORDER.includes(c)),
+      ]
+
+      const rows = travelers.map((traveler) => {
+        const picked = selectedByTraveler.get(traveler.id) ?? new Set<string>()
+        const chosen: { course: string; meal: SummaryMeal }[] = []
+        const missingCourses: string[] = []
+        for (const course of orderedCourses) {
+          const meal = (mealsByCourse.get(course) ?? []).find((m) => picked.has(m.id))
+          if (meal) chosen.push({ course, meal })
+          else missingCourses.push(course)
+        }
+        return { traveler, chosen, missingCourses }
+      })
+
+      return { day, rows }
+    })
+}
