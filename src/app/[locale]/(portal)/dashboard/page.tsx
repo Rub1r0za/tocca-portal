@@ -1,11 +1,12 @@
 import { getTranslations, getLocale } from 'next-intl/server'
 import Link from 'next/link'
-import { Route, Sparkles, Compass, UtensilsCrossed, Flower2, ChevronRight, Users, CalendarDays, Hourglass, ClipboardList } from 'lucide-react'
+import { Route, Sparkles, Compass, UtensilsCrossed, Flower2, ChevronRight, Users, CalendarDays, Hourglass, ClipboardList, AlertTriangle } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { getMyBooking } from '@/lib/booking'
 import { createClient } from '@/lib/supabase/server'
 import type { Booking } from '@/lib/types'
 import { pick, formatDate } from '@/lib/format'
+import { mealPending, type SummaryDay } from '@/lib/meals-summary'
 import { StatusPill } from '@/components/primitives'
 
 async function WaitingState() {
@@ -76,6 +77,22 @@ export default async function DashboardPage({
   const travelers = booking.travelers?.length ?? 0
   const statusLabel = tStatus(booking.status)
 
+  // Mismo cálculo que ve el admin: si al viajero le faltan platos, se lo decimos
+  // aquí en vez de esperar a que entre a "Comidas" por su cuenta.
+  const supabase = await createClient()
+  const [{ data: dayRows }, { data: selectionRows }] = await Promise.all([
+    supabase
+      .from('journey_days')
+      .select('id, day_number, title, meals (id, course, name)')
+      .eq('booking_id', booking.id),
+    supabase.from('meal_selections').select('meal_id, traveler_id').eq('booking_id', booking.id),
+  ])
+  const pendingMeals = mealPending(
+    (dayRows ?? []) as SummaryDay[],
+    booking.travelers ?? [],
+    selectionRows ?? [],
+  )
+
   const tiles: { href: string; Icon: LucideIcon; title: string; subtitle: string }[] = [
     { href: `/${locale}/timeline`, Icon: Route, title: tSections('timeline.title'), subtitle: tSections('timeline.subtitle') },
     { href: `/${locale}/activities`, Icon: Compass, title: tSections('activities.title'), subtitle: tSections('activities.subtitle') },
@@ -119,6 +136,23 @@ export default async function DashboardPage({
           <StatusPill status={booking.status} label={statusLabel} />
         </div>
       </section>
+
+      {/* Recordatorio de comidas sin elegir */}
+      {pendingMeals.pendingSlots > 0 && (
+        <Link
+          href={`/${locale}/meals`}
+          className="mx-4 mt-5 flex items-start gap-3 rounded-2xl border border-gold/40 bg-gold/10 p-4 transition-colors hover:bg-gold/15 sm:mx-5 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
+        >
+          <AlertTriangle className="mt-0.5 size-4 shrink-0 text-gold" aria-hidden />
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-medium text-foreground">{t('mealsPendingTitle')}</p>
+            <p className="mt-0.5 text-xs leading-relaxed text-mist">
+              {t('mealsPendingText', { count: pendingMeals.pendingSlots })}
+            </p>
+          </div>
+          <ChevronRight className="mt-0.5 size-4 shrink-0 text-mist/60" aria-hidden />
+        </Link>
+      )}
 
       {/* Explore */}
       <section className="px-4 py-6 sm:px-5 sm:py-7">

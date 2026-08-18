@@ -2,8 +2,9 @@ import { getTranslations } from 'next-intl/server'
 import { redirect } from 'next/navigation'
 import { getMyBooking } from '@/lib/booking'
 import { createClient } from '@/lib/supabase/server'
-import type { Booking, TimelineEvent } from '@/lib/types'
+import type { Booking, JourneyDay, TimelineEvent } from '@/lib/types'
 import { pick, formatDate } from '@/lib/format'
+import { timelineFromDays } from '@/lib/timeline'
 import { AppHeader } from '@/components/app-header'
 import { TimelineView, type TimelineGroup } from '@/components/timeline-view'
 import { EmptyState } from '@/components/primitives'
@@ -15,6 +16,7 @@ export default async function TimelinePage({
 }) {
   const { locale } = await params
   const tSections = await getTranslations('sections')
+  const tCommon = await getTranslations('common')
 
   const booking = (await getMyBooking()) as Booking | null
   if (!booking) redirect(`/${locale}/dashboard`)
@@ -46,6 +48,25 @@ export default async function TimelinePage({
     } else {
       groups.push({ dateText, items: [item] })
     }
+  }
+
+  // Sin eventos cargados a mano, el cronograma se arma con los días del
+  // itinerario. Es lo que el admin ya rellenó, así que nunca queda en blanco.
+  if (groups.length === 0) {
+    const { data: dayData } = await supabase
+      .from('journey_days')
+      .select('*')
+      .eq('booking_id', booking.id)
+      .order('day_number', { ascending: true })
+
+    groups.push(
+      ...timelineFromDays(
+        (dayData ?? []) as JourneyDay[],
+        booking,
+        locale,
+        (n) => tCommon('day', { n }),
+      ),
+    )
   }
 
   return (

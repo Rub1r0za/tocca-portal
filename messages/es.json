@@ -102,7 +102,9 @@
     "registerTitle": "Bienvenido a Tocca",
     "registerText": "Completa tu registro para comenzar tu viaje: quiénes viajan, y acepta los términos.",
     "registerCta": "Completar mi registro",
-    "paymentsCta": "Ver / registrar pagos"
+    "paymentsCta": "Ver / registrar pagos",
+    "mealsPendingTitle": "Te faltan platos por elegir",
+    "mealsPendingText": "Quedan {count, plural, =1 {# selección} other {# selecciones}} de comida sin hacer. Toca para completarlas."
   },
   "status": {
     "approved": "Aprobado",

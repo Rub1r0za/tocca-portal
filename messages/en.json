@@ -102,7 +102,9 @@
     "registerTitle": "Welcome to Tocca",
     "registerText": "Complete your registration to start your journey: who is traveling, and accept the terms.",
     "registerCta": "Complete my registration",
-    "paymentsCta": "View / register payments"
+    "paymentsCta": "View / register payments",
+    "mealsPendingTitle": "You still have dishes to choose",
+    "mealsPendingText": "{count, plural, =1 {# meal selection is} other {# meal selections are}} still missing. Tap to finish."
   },
   "status": {
     "approved": "Approved",
