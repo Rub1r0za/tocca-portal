@@ -4,9 +4,9 @@
     "guestView": "Home",
     "timeline": "Timeline",
     "journey": "Journey",
-    "activities": "Activities",
+    "activities": "Free Day",
     "meals": "Meals",
-    "wellness": "Wellness"
+    "wellness": "Experiences"
   },
   "menu": {
     "title": "Menu",
@@ -34,8 +34,8 @@
       "empty": "Your itinerary is being prepared."
     },
     "activities": {
-      "title": "Free Day Activities",
-      "subtitle": "Curated experiences to book",
+      "title": "Free Day Options",
+      "subtitle": "Experiences designed specifically to make the most of your free day.",
       "empty": "No activities available yet."
     },
     "meals": {
@@ -44,9 +44,9 @@
       "empty": "No meals to select yet."
     },
     "wellness": {
-      "title": "Wellness",
-      "subtitle": "Spa, fitness & relaxation",
-      "empty": "No wellness options available yet."
+      "title": "Any-Day Experiences",
+      "subtitle": "Extras that can be added at different points in your trip, subject to availability: photo sessions, massages, wellness, private experiences, and more.",
+      "empty": "No experiences available yet."
     },
     "payments": {
       "title": "Payments",

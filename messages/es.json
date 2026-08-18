@@ -4,9 +4,9 @@
     "guestView": "Inicio",
     "timeline": "Cronograma",
     "journey": "Viaje",
-    "activities": "Actividades",
+    "activities": "Día libre",
     "meals": "Comidas",
-    "wellness": "Bienestar"
+    "wellness": "Experiencias"
   },
   "menu": {
     "title": "Menú",
@@ -34,8 +34,8 @@
       "empty": "Tu itinerario se está preparando."
     },
     "activities": {
-      "title": "Actividades de día libre",
-      "subtitle": "Experiencias curadas para reservar",
+      "title": "Opciones para tu día libre",
+      "subtitle": "Experiencias pensadas específicamente para aprovechar el día libre.",
       "empty": "Aún no hay actividades disponibles."
     },
     "meals": {
@@ -44,9 +44,9 @@
       "empty": "Aún no hay comidas para elegir."
     },
     "wellness": {
-      "title": "Bienestar",
-      "subtitle": "Spa, fitness y relajación",
-      "empty": "Aún no hay opciones de bienestar."
+      "title": "Experiencias para cualquier día",
+      "subtitle": "Extras que pueden incorporarse en distintos momentos del viaje según disponibilidad: sesión de fotos, masaje, wellness, experiencias privadas, etc.",
+      "empty": "Aún no hay experiencias disponibles."
     },
     "payments": {
       "title": "Pagos",
