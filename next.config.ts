@@ -1,18 +1,17 @@
 import type { NextConfig } from 'next'
 import createNextIntlPlugin from 'next-intl/plugin'
+import { ALLOWED_IMAGE_HOSTS } from './src/lib/image-hosts'
 
 const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts')
 
 const nextConfig: NextConfig = {
   images: {
-    // Allow guest imagery. Put real assets in Supabase Storage (*.supabase.co).
-    // The picsum/unsplash hosts are only for the sample seed data.
-    remotePatterns: [
-      { protocol: 'https', hostname: '**.supabase.co' },
-      { protocol: 'https', hostname: 'images.unsplash.com' },
-      { protocol: 'https', hostname: 'picsum.photos' },
-      { protocol: 'https', hostname: 'fastly.picsum.photos' },
-    ],
+    // Lista blanca compartida con el panel (src/lib/image-hosts.ts), que avisa
+    // cuando se pega una URL de un dominio que no está aquí.
+    remotePatterns: ALLOWED_IMAGE_HOSTS.map((hostname) => ({
+      protocol: 'https' as const,
+      hostname,
+    })),
   },
 }
 

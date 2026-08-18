@@ -105,6 +105,23 @@ export default async function RequestsAdminPage({
   }
   const summary = [...summaryMap.values()].sort((a, b) => b.guests - a.guests)
 
+  // Agenda por día: lo mismo que el resumen de comidas, pero para experiencias.
+  // Solo lo vivo (pendiente o confirmado); lo rechazado no ocupa agenda.
+  const dayMap = new Map<string, RequestRow[]>()
+  for (const r of rows) {
+    if (r.status !== 'pending' && r.status !== 'confirmed') continue
+    const key = r.requestedDate ?? ''
+    dayMap.set(key, [...(dayMap.get(key) ?? []), r])
+  }
+  const byDay = [...dayMap.entries()]
+    // Sin fecha al final: `''` ordena antes que cualquier fecha, así que va aparte.
+    .sort(([a], [b]) => (a === '' ? 1 : b === '' ? -1 : a.localeCompare(b)))
+    .map(([date, items]) => ({
+      date,
+      items,
+      guests: items.reduce((s, r) => s + (r.status === 'confirmed' ? r.numGuests : 0), 0),
+    }))
+
   return (
     <div className="mx-auto max-w-3xl">
       <div className="mb-6">
@@ -142,6 +159,44 @@ export default async function RequestsAdminPage({
               </li>
             ))}
           </ul>
+        </details>
+      )}
+
+      {/* Agenda por día */}
+      {byDay.length > 0 && (
+        <details className="mb-6 rounded-2xl border border-[rgba(62,45,35,0.12)] bg-white p-5 shadow-[0_1px_4px_rgba(62,45,35,0.06)]" open>
+          <summary className="cursor-pointer text-base font-medium text-[#3E2D23]">
+            Agenda por día
+          </summary>
+          <p className="mt-1 text-xs text-[#7A7168]">
+            Qué hay que tener listo cada fecha. Cuenta solo las confirmadas; las pendientes salen marcadas.
+          </p>
+          <div className="mt-4 space-y-4">
+            {byDay.map(({ date, items, guests }) => (
+              <div key={date || 'sin-fecha'}>
+                <p className="text-sm font-semibold text-[#3E2D23]">
+                  {date || 'Sin fecha pedida'}
+                  <span className="ml-2 text-xs font-normal text-[#7A7168]">
+                    {guests} persona{guests !== 1 ? 's' : ''} confirmada{guests !== 1 ? 's' : ''}
+                  </span>
+                </p>
+                <ul className="mt-1.5 space-y-1">
+                  {items.map((r) => (
+                    <li key={`${r.kind}-${r.id}`} className="flex flex-wrap items-baseline gap-x-2 text-sm text-[#3E2D23]">
+                      <span className="inline-flex min-w-6 items-center justify-center rounded-full bg-[#4A9A92]/10 px-2 text-xs font-semibold text-[#4A9A92]">
+                        {r.numGuests}
+                      </span>
+                      <span>{r.itemName}</span>
+                      <span className="text-xs text-[#7A7168]">· {r.bookingTitle}</span>
+                      {r.status === 'pending' && (
+                        <span className="text-xs font-medium text-amber-700">· sin confirmar</span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
         </details>
       )}
 

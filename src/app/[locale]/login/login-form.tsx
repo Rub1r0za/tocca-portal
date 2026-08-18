@@ -118,6 +118,14 @@ export default function LoginForm() {
       setStatus('idle')
       return
     }
+    // Aviso al equipo de que hay una cuenta nueva. El servidor lo verifica
+    // contra Supabase; aquí no se espera ni se corta el alta si falla.
+    void fetch('/api/notify/new-user', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId: data.user?.id }),
+    }).catch(() => {})
+
     if (data.session) {
       // Email confirmation disabled → signed in immediately
       location.assign(destination)

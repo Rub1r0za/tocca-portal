@@ -61,7 +61,13 @@ export default async function TimelineAdminPage({
           ))
         ) : (
           <div className="rounded-2xl border border-dashed border-[rgba(62,45,35,0.2)] bg-white p-8 text-center">
-            <p className="text-sm text-[#7A7168]">No hay eventos aún. Añade el primero.</p>
+            <p className="text-sm text-[#7A7168]">No hay eventos cargados a mano.</p>
+            <p className="mx-auto mt-2 max-w-md text-xs text-[#7A7168]">
+              Mientras esta lista esté vacía el viajero ve un cronograma armado solo
+              con los horarios de cada día del itinerario. Añade eventos aquí únicamente
+              si quieres uno distinto (vuelos, traslados, algo fuera del itinerario):
+              en cuanto crees el primero, el automático deja de mostrarse.
+            </p>
           </div>
         )}
       </div>

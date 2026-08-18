@@ -5,7 +5,7 @@ import { ArrowLeft, AlertTriangle, CheckCircle2 } from 'lucide-react'
 import { DayMeals } from './day-meals'
 import type { Meal } from './meal-form'
 import type { Traveler } from '@/lib/types'
-import { mealPending, mealTally, COURSE_LABEL } from '@/lib/meals-summary'
+import { mealPending, mealTally, mealByTraveler, COURSE_LABEL } from '@/lib/meals-summary'
 
 type DayWithMeals = {
   id: string
@@ -56,7 +56,10 @@ export default async function MealsAdminPage({
   const selectionList = (selections ?? []) as { meal_id: string; traveler_id: string }[]
   const pending = mealPending(list, travelerList, selectionList)
   const tally = mealTally(list, travelerList, selectionList)
-  const anyChosen = tally.some((d) => d.courses.some((c) => c.meals.some((m) => m.eaters.length > 0)))
+  const byTraveler = mealByTraveler(list, travelerList, selectionList)
+  // Los resúmenes se muestran aunque nadie haya elegido todavía: ver "0 de 4"
+  // es información, y esconderlos hacía pensar que la sección no existía.
+  const showSummaries = tally.length > 0 && travelerList.length > 0
 
   return (
     <div className="mx-auto max-w-3xl">
@@ -104,8 +107,51 @@ export default async function MealsAdminPage({
         )
       )}
 
+      {/* Resumen por persona */}
+      {showSummaries && (
+        <details className="mb-6 rounded-2xl border border-[rgba(62,45,35,0.12)] bg-white p-5 shadow-[0_1px_4px_rgba(62,45,35,0.06)]" open>
+          <summary className="cursor-pointer text-base font-medium text-[#3E2D23]">
+            Resumen por persona
+          </summary>
+          <p className="mt-1 text-xs text-[#7A7168]">
+            Qué eligió cada viajero en cada día. Lo que falte sale marcado en ámbar.
+          </p>
+          <div className="mt-4 space-y-5">
+            {byTraveler.map(({ day, rows }) => (
+              <div key={day.id}>
+                <p className="text-sm font-semibold text-[#3E2D23]">
+                  Día {day.day_number}
+                  {day.title?.es || day.title?.en ? ` · ${day.title?.es || day.title?.en}` : ''}
+                </p>
+                <ul className="mt-2 space-y-1.5">
+                  {rows.map(({ traveler, chosen, missingCourses }) => (
+                    <li key={traveler.id} className="text-sm text-[#3E2D23]">
+                      <span className="font-medium">
+                        {traveler.first_name} {traveler.last_name}
+                      </span>
+                      <span className="text-[#7A7168]">
+                        {chosen.length > 0 && ' — '}
+                        {chosen
+                          .map(({ course, meal }) =>
+                            `${COURSE_LABEL[course] ?? course}: ${meal.name?.es || meal.name?.en || 'Sin nombre'}`)
+                          .join(' · ')}
+                      </span>
+                      {missingCourses.length > 0 && (
+                        <span className="ml-1.5 text-xs text-amber-700">
+                          falta {missingCourses.map((c) => (COURSE_LABEL[c] ?? c).toLowerCase()).join(', ')}
+                        </span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </details>
+      )}
+
       {/* Resumen para el restaurante */}
-      {anyChosen && (
+      {showSummaries && (
         <details className="mb-6 rounded-2xl border border-[rgba(62,45,35,0.12)] bg-white p-5 shadow-[0_1px_4px_rgba(62,45,35,0.06)]" open>
           <summary className="cursor-pointer text-base font-medium text-[#3E2D23]">
             Resumen para el restaurante
