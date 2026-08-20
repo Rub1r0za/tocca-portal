@@ -153,9 +153,10 @@
     "included": "Incluido"
   },
   "reservation": {
-    "guests": "Huéspedes",
-    "decrease": "Menos huéspedes",
-    "increase": "Más huéspedes",
+    "who": "Quién va",
+    "whoRequired": "Elige al menos una persona.",
+    "noTravelers": "Aún no hay viajeros en tu reserva.",
+    "capacityReached": "Aforo completo: {count} personas como máximo.",
     "date": "Fecha preferida",
     "dateRequired": "Por favor elige una fecha.",
     "notes": "Notas (opcional)",

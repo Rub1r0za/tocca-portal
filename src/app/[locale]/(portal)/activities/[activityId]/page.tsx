@@ -41,7 +41,7 @@ export default async function ActivityDetailPage({
   const requirements = activity.requirements ?? []
   const cancellation = pick(activity.cancellation_policy, locale)
   const priceText = activity.price > 0 ? formatMoney(activity.price, locale) : tCommon('onRequest')
-  const maxGuests = activity.capacity ?? (booking.travelers?.length || 12)
+  const travelers = booking.travelers ?? []
 
   return (
     <div>
@@ -121,7 +121,7 @@ export default async function ActivityDetailPage({
         {/* Reservation */}
         <section className="rounded-2xl border border-hairline bg-panel/50 p-5">
           <SectionHeading eyebrow={t('requestReservation')} className="mb-4" />
-          <ReservationForm kind="activity" bookingId={booking.id} targetId={activity.id} maxGuests={maxGuests} />
+          <ReservationForm kind="activity" bookingId={booking.id} targetId={activity.id} travelers={travelers} capacity={activity.capacity} />
         </section>
       </div>
     </div>

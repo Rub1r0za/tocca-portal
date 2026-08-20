@@ -42,7 +42,7 @@ export default async function WellnessDetailPage({
       : option.price === 0
         ? t('included')
         : formatMoney(option.price, locale)
-  const maxGuests = booking.travelers?.length || 12
+  const travelers = booking.travelers ?? []
 
   return (
     <div>
@@ -73,7 +73,7 @@ export default async function WellnessDetailPage({
 
         <section className="rounded-2xl border border-hairline bg-panel/50 p-5">
           <SectionHeading eyebrow={t('requestReservation')} className="mb-4" />
-          <ReservationForm kind="wellness" bookingId={booking.id} targetId={option.id} maxGuests={maxGuests} />
+          <ReservationForm kind="wellness" bookingId={booking.id} targetId={option.id} travelers={travelers} />
         </section>
       </div>
     </div>
