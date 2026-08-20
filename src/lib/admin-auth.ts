@@ -17,3 +17,12 @@ export async function isAdmin(): Promise<boolean> {
 
   return data?.role === 'admin'
 }
+
+/**
+ * Lanza si quien llama no es admin. Pensado para envolver al cliente de
+ * servicio: así ninguna acción puede tocar la base saltándose RLS sin haber
+ * pasado por aquí, en vez de depender de que nadie olvide comprobarlo.
+ */
+export async function requireAdmin(): Promise<void> {
+  if (!(await isAdmin())) throw new Error('No autorizado')
+}

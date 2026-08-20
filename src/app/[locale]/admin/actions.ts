@@ -1,10 +1,22 @@
 'use server'
 
 import { createAdminClient } from '@/lib/supabase/admin'
+import { requireAdmin } from '@/lib/admin-auth'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { z } from 'zod'
 import { sendEmail, emailLayout } from '@/lib/email'
+
+/**
+ * Cliente de servicio, solo para admins. Cada Server Action es un endpoint
+ * HTTP público: que el layout proteja la página no impide que alguien invoque
+ * la acción directamente, así que la comprobación va aquí, donde nace el
+ * acceso que se salta RLS.
+ */
+async function adminDb() {
+  await requireAdmin()
+  return createAdminClient()
+}
 
 // ── Create booking ─────────────────────────────────────────────────────────
 
@@ -27,7 +39,7 @@ export async function createBooking(
   if (!parsed.success) return { error: 'Datos inválidos' }
 
   const { email, title_en, title_es, start_date, end_date, notes } = parsed.data
-  const admin = createAdminClient()
+  const admin = await adminDb()
 
   // Find user by email
   const { data: { users }, error: listErr } = await admin.auth.admin.listUsers()
@@ -69,7 +81,7 @@ export async function updateBookingStatus(
   const status = formData.get('status') as string
   if (!['pending', 'approved', 'cancelled'].includes(status)) return { error: 'Estado inválido' }
 
-  const admin = createAdminClient()
+  const admin = await adminDb()
   const { data: prev } = await admin.from('bookings').select('status').eq('id', bookingId).maybeSingle()
   const { data: updated, error } = await admin
     .from('bookings')
@@ -110,7 +122,7 @@ export async function updateBookingDates(
   const start_date = formData.get('start_date') as string
   const end_date = formData.get('end_date') as string
 
-  const admin = createAdminClient()
+  const admin = await adminDb()
   const { error } = await admin
     .from('bookings')
     .update({ start_date: start_date || null, end_date: end_date || null, updated_at: new Date().toISOString() })
@@ -130,7 +142,7 @@ export async function updateBookingNotes(
 ): Promise<{ error?: string }> {
   const notes = formData.get('notes') as string
 
-  const admin = createAdminClient()
+  const admin = await adminDb()
   const { error } = await admin
     .from('bookings')
     .update({ notes: notes || null, updated_at: new Date().toISOString() })
@@ -143,7 +155,7 @@ export async function updateBookingNotes(
 }
 
 export async function deleteBooking(bookingId: string, locale: string) {
-  const admin = createAdminClient()
+  const admin = await adminDb()
   // Cascade FKs remove travelers, journey_days, meals and selections.
   await admin.from('bookings').delete().eq('id', bookingId)
   revalidatePath(`/${locale}/admin`)
@@ -169,7 +181,7 @@ export async function addTraveler(
   const parsed = travelerSchema.safeParse(raw)
   if (!parsed.success) return { error: 'Datos inválidos' }
 
-  const admin = createAdminClient()
+  const admin = await adminDb()
   const { error } = await admin.from('travelers').insert({
     booking_id: bookingId,
     ...parsed.data,
@@ -183,7 +195,7 @@ export async function addTraveler(
 }
 
 export async function deleteTraveler(travelerId: string, locale: string, bookingId: string) {
-  const admin = createAdminClient()
+  const admin = await adminDb()
   await admin.from('travelers').delete().eq('id', travelerId)
   revalidatePath(`/${locale}/admin/bookings/${bookingId}`)
 }
@@ -233,7 +245,7 @@ export async function createJourneyDay(
   const parsed = daySchema.safeParse(raw)
   if (!parsed.success) return { error: 'Datos inválidos' }
 
-  const admin = createAdminClient()
+  const admin = await adminDb()
 
   const { error } = await admin.from('journey_days').insert({
     booking_id: bookingId,
@@ -257,7 +269,7 @@ export async function updateJourneyDay(
   const parsed = daySchema.safeParse(raw)
   if (!parsed.success) return { error: 'Datos inválidos' }
 
-  const admin = createAdminClient()
+  const admin = await adminDb()
 
   const { error } = await admin.from('journey_days').update(dayPayload(parsed.data)).eq('id', dayId)
 
@@ -268,7 +280,7 @@ export async function updateJourneyDay(
 }
 
 export async function deleteJourneyDay(dayId: string, bookingId: string, locale: string) {
-  const admin = createAdminClient()
+  const admin = await adminDb()
   await admin.from('journey_days').delete().eq('id', dayId)
   revalidatePath(`/${locale}/admin/bookings/${bookingId}/journey`)
 }
@@ -293,7 +305,7 @@ export async function createClientUser(
   }
 
   const { email, full_name, password } = parsed.data
-  const admin = createAdminClient()
+  const admin = await adminDb()
 
   // email_confirm: true → the account is active immediately, no confirmation email
   const { data, error } = await admin.auth.admin.createUser({
@@ -386,7 +398,7 @@ export async function saveActivity(
     updated_at: new Date().toISOString(),
   }
 
-  const admin = createAdminClient()
+  const admin = await adminDb()
   const { error } = activityId
     ? await admin.from('activities').update(row).eq('id', activityId)
     : await admin.from('activities').insert(row)
@@ -397,13 +409,13 @@ export async function saveActivity(
 }
 
 export async function toggleActivityActive(activityId: string, active: boolean, locale: string) {
-  const admin = createAdminClient()
+  const admin = await adminDb()
   await admin.from('activities').update({ active, updated_at: new Date().toISOString() }).eq('id', activityId)
   revalidatePath(`/${locale}/admin/activities`)
 }
 
 export async function deleteActivity(activityId: string, locale: string) {
-  const admin = createAdminClient()
+  const admin = await adminDb()
   await admin.from('activities').delete().eq('id', activityId)
   revalidatePath(`/${locale}/admin/activities`)
 }
@@ -440,7 +452,7 @@ export async function saveWellnessOption(
     image_url: d.image_url || null,
   }
 
-  const admin = createAdminClient()
+  const admin = await adminDb()
   const { error } = optionId
     ? await admin.from('wellness_options').update(row).eq('id', optionId)
     : await admin.from('wellness_options').insert(row)
@@ -451,13 +463,13 @@ export async function saveWellnessOption(
 }
 
 export async function toggleWellnessActive(optionId: string, active: boolean, locale: string) {
-  const admin = createAdminClient()
+  const admin = await adminDb()
   await admin.from('wellness_options').update({ active }).eq('id', optionId)
   revalidatePath(`/${locale}/admin/wellness`)
 }
 
 export async function deleteWellnessOption(optionId: string, locale: string) {
-  const admin = createAdminClient()
+  const admin = await adminDb()
   await admin.from('wellness_options').delete().eq('id', optionId)
   revalidatePath(`/${locale}/admin/wellness`)
 }
@@ -475,7 +487,7 @@ export async function updateRequestStatus(
   if (!REQUEST_STATUSES.includes(status as (typeof REQUEST_STATUSES)[number])) return
 
   const table = kind === 'activity' ? 'activity_requests' : 'wellness_requests'
-  const admin = createAdminClient()
+  const admin = await adminDb()
   await admin.from(table).update({ status }).eq('id', requestId)
   revalidatePath(`/${locale}/admin/requests`)
 }
@@ -517,7 +529,7 @@ export async function saveTimelineEvent(
     location: d.location || null,
   }
 
-  const admin = createAdminClient()
+  const admin = await adminDb()
   const { error } = eventId
     ? await admin.from('timeline_events').update(row).eq('id', eventId)
     : await admin.from('timeline_events').insert(row)
@@ -528,7 +540,7 @@ export async function saveTimelineEvent(
 }
 
 export async function deleteTimelineEvent(eventId: string, bookingId: string, locale: string) {
-  const admin = createAdminClient()
+  const admin = await adminDb()
   await admin.from('timeline_events').delete().eq('id', eventId)
   revalidatePath(`/${locale}/admin/bookings/${bookingId}/timeline`)
 }
@@ -585,7 +597,7 @@ export async function saveMeal(
     image_url: d.image_url || null,
   }
 
-  const admin = createAdminClient()
+  const admin = await adminDb()
   const { error } = mealId
     ? await admin.from('meals').update(row).eq('id', mealId)
     : await admin.from('meals').insert(row)
@@ -596,7 +608,7 @@ export async function saveMeal(
 }
 
 export async function deleteMeal(mealId: string, bookingId: string, locale: string) {
-  const admin = createAdminClient()
+  const admin = await adminDb()
   await admin.from('meals').delete().eq('id', mealId)
   revalidatePath(`/${locale}/admin/bookings/${bookingId}/meals`)
 }
@@ -700,7 +712,7 @@ export async function saveDayTemplate(
     updated_at: new Date().toISOString(),
   }
 
-  const admin = createAdminClient()
+  const admin = await adminDb()
   const { error } = templateId
     ? await admin.from('day_templates').update(payload).eq('id', templateId)
     : await admin.from('day_templates').insert(payload)
@@ -712,13 +724,13 @@ export async function saveDayTemplate(
 }
 
 export async function deleteDayTemplate(templateId: string, locale: string) {
-  const admin = createAdminClient()
+  const admin = await adminDb()
   await admin.from('day_templates').delete().eq('id', templateId)
   revalidatePath(`/${locale}/admin/days`)
 }
 
 export async function toggleDayTemplateActive(templateId: string, active: boolean, locale: string) {
-  const admin = createAdminClient()
+  const admin = await adminDb()
   await admin.from('day_templates').update({ active }).eq('id', templateId)
   revalidatePath(`/${locale}/admin/days`)
 }
@@ -782,7 +794,7 @@ export async function addTemplateDayToBooking(
   const templateId = formData.get('template_id') as string
   if (!templateId) return { error: 'Elige una plantilla.' }
 
-  const admin = createAdminClient()
+  const admin = await adminDb()
   const { data: template } = await admin.from('day_templates').select('*').eq('id', templateId).maybeSingle()
   if (!template) return { error: 'Plantilla no encontrada.' }
 
@@ -807,7 +819,7 @@ export async function addFullJourneyToBooking(
   _prev: { error?: string } | null,
   _formData: FormData,
 ): Promise<{ error?: string }> {
-  const admin = createAdminClient()
+  const admin = await adminDb()
   const { data: templates } = await admin
     .from('day_templates')
     .select('*')
@@ -846,7 +858,7 @@ export async function setBookingTotal(
   const total = raw === '' ? null : Number(raw)
   if (total !== null && (!Number.isFinite(total) || total < 0)) return { error: 'Monto inválido' }
 
-  const admin = createAdminClient()
+  const admin = await adminDb()
   const { error } = await admin
     .from('bookings')
     .update({ total_price: total, updated_at: new Date().toISOString() })
@@ -869,7 +881,7 @@ export async function addScheduleItem(
   const label_en = String(formData.get('label_en') || '').trim()
   if (!due_date || !Number.isFinite(amount) || amount <= 0) return { error: 'Fecha y monto son obligatorios' }
 
-  const admin = createAdminClient()
+  const admin = await adminDb()
   const { error } = await admin.from('payment_schedule').insert({
     booking_id: bookingId,
     due_date,
@@ -883,13 +895,13 @@ export async function addScheduleItem(
 }
 
 export async function deleteScheduleItem(itemId: string, bookingId: string, locale: string) {
-  const admin = createAdminClient()
+  const admin = await adminDb()
   await admin.from('payment_schedule').delete().eq('id', itemId)
   revalidatePath(`/${locale}/admin/bookings/${bookingId}/payments`)
 }
 
 export async function toggleSchedulePaid(itemId: string, paid: boolean, bookingId: string, locale: string) {
-  const admin = createAdminClient()
+  const admin = await adminDb()
   await admin.from('payment_schedule').update({ paid }).eq('id', itemId)
   revalidatePath(`/${locale}/admin/bookings/${bookingId}/payments`)
 }
@@ -899,7 +911,7 @@ export async function reviewPayment(
   status: 'approved' | 'rejected',
   locale: string,
 ) {
-  const admin = createAdminClient()
+  const admin = await adminDb()
   const { data: payment } = await admin
     .from('payments')
     .update({ status, reviewed_at: new Date().toISOString() })
@@ -977,7 +989,7 @@ export async function saveLead(
     notes: d.notes || null,
   }
 
-  const admin = createAdminClient()
+  const admin = await adminDb()
   const { error } = leadId
     ? await admin.from('leads').update(row).eq('id', leadId)
     : await admin.from('leads').insert(row)
@@ -988,7 +1000,7 @@ export async function saveLead(
 }
 
 export async function deleteLead(leadId: string, locale: string) {
-  const admin = createAdminClient()
+  const admin = await adminDb()
   await admin.from('leads').delete().eq('id', leadId)
   revalidatePath(`/${locale}/admin/leads`)
 }
@@ -1006,7 +1018,7 @@ export async function sendTripThankYou(
   locale: string,
   _prev: { error?: string; ok?: boolean } | null,
 ): Promise<{ error?: string; ok?: boolean }> {
-  const admin = createAdminClient()
+  const admin = await adminDb()
   const { data: booking } = await admin
     .from('bookings')
     .select('applicant_email, applicant_name')
