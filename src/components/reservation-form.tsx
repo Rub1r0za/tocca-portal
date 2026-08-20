@@ -2,35 +2,56 @@
 
 import { useState, useTransition } from 'react'
 import { useTranslations } from 'next-intl'
-import { Minus, Plus, Check, Loader2 } from 'lucide-react'
+import { Check, Loader2 } from 'lucide-react'
 import { requestActivity } from '@/app/[locale]/(portal)/activities/actions'
 import { requestWellness } from '@/app/[locale]/(portal)/wellness/actions'
+import type { Traveler } from '@/lib/types'
 
 type Props = {
   kind: 'activity' | 'wellness'
   bookingId: string
   targetId: string
-  maxGuests?: number
+  travelers: Traveler[]
+  /** Aforo de la actividad; `null` = sin límite propio. */
+  capacity?: number | null
 }
 
 const today = () => new Date().toISOString().slice(0, 10)
 
-export function ReservationForm({ kind, bookingId, targetId, maxGuests = 12 }: Props) {
+export function ReservationForm({ kind, bookingId, targetId, travelers, capacity }: Props) {
   const t = useTranslations('reservation')
-  const [guests, setGuests] = useState(1)
+  // Con un solo viajero no hay nada que elegir: viene marcado de entrada.
+  const [selected, setSelected] = useState<string[]>(
+    travelers.length === 1 ? [travelers[0].id] : [],
+  )
   const [date, setDate] = useState('')
   const [notes, setNotes] = useState('')
   const [status, setStatus] = useState<'idle' | 'sent' | 'error'>('idle')
   const [dateError, setDateError] = useState(false)
+  const [peopleError, setPeopleError] = useState(false)
   const [isPending, startTransition] = useTransition()
+
+  const atCapacity = capacity != null && selected.length >= capacity
+
+  function toggle(id: string) {
+    setPeopleError(false)
+    setSelected((prev) =>
+      prev.includes(id)
+        ? prev.filter((x) => x !== id)
+        : atCapacity
+          ? prev
+          : [...prev, id],
+    )
+  }
 
   function submit(e: React.FormEvent) {
     e.preventDefault()
-    if (!date) {
-      setDateError(true)
-      return
-    }
-    setDateError(false)
+    const missingPeople = selected.length === 0
+    const missingDate = !date
+    setPeopleError(missingPeople)
+    setDateError(missingDate)
+    if (missingPeople || missingDate) return
+
     startTransition(async () => {
       try {
         const result =
@@ -38,14 +59,14 @@ export function ReservationForm({ kind, bookingId, targetId, maxGuests = 12 }: P
             ? await requestActivity({
                 bookingId,
                 activityId: targetId,
-                numGuests: guests,
+                travelerIds: selected,
                 requestedDate: date,
                 notes: notes.trim() || null,
               })
             : await requestWellness({
                 bookingId,
                 wellnessOptionId: targetId,
-                numGuests: guests,
+                travelerIds: selected,
                 requestedDate: date,
                 notes: notes.trim() || null,
               })
@@ -75,39 +96,46 @@ export function ReservationForm({ kind, bookingId, targetId, maxGuests = 12 }: P
 
   return (
     <form onSubmit={submit} className="space-y-5" noValidate>
-      {/* Guests */}
-      <div>
-        <label className="mb-2 block text-xs tracking-widest text-mist uppercase">
-          {t('guests')}
-        </label>
-        <div className="flex items-center gap-4">
-          <button
-            type="button"
-            onClick={() => setGuests((g) => Math.max(1, g - 1))}
-            disabled={guests <= 1}
-            aria-label={t('decrease')}
-            className="flex size-10 items-center justify-center rounded-full border border-hairline text-foreground transition-colors hover:border-gold/40 disabled:opacity-40 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
-          >
-            <Minus className="size-4" aria-hidden />
-          </button>
-          <span
-            className="min-w-8 text-center text-2xl text-foreground"
-            style={{ fontFamily: 'var(--font-display)' }}
-            aria-live="polite"
-          >
-            {guests}
-          </span>
-          <button
-            type="button"
-            onClick={() => setGuests((g) => Math.min(maxGuests, g + 1))}
-            disabled={guests >= maxGuests}
-            aria-label={t('increase')}
-            className="flex size-10 items-center justify-center rounded-full border border-hairline text-foreground transition-colors hover:border-gold/40 disabled:opacity-40 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
-          >
-            <Plus className="size-4" aria-hidden />
-          </button>
-        </div>
-      </div>
+      {/* Quién va */}
+      <fieldset>
+        <legend className="mb-2 block text-xs tracking-widest text-mist uppercase">
+          {t('who')}
+        </legend>
+        {travelers.length === 0 ? (
+          <p className="text-sm text-mist">{t('noTravelers')}</p>
+        ) : (
+          <div className="space-y-2">
+            {travelers.map((traveler) => {
+              const checked = selected.includes(traveler.id)
+              return (
+                <label
+                  key={traveler.id}
+                  className={`flex cursor-pointer items-center gap-3 rounded-xl border px-4 py-3 transition-colors ${
+                    checked ? 'border-gold/50 bg-gold/10' : 'border-hairline hover:border-gold/30'
+                  } ${!checked && atCapacity ? 'cursor-not-allowed opacity-40' : ''}`}
+                >
+                  <input
+                    type="checkbox"
+                    checked={checked}
+                    disabled={!checked && atCapacity}
+                    onChange={() => toggle(traveler.id)}
+                    className="size-4 accent-gold"
+                  />
+                  <span className="text-sm text-foreground">
+                    {traveler.first_name} {traveler.last_name}
+                  </span>
+                </label>
+              )
+            })}
+          </div>
+        )}
+        {peopleError && (
+          <p className="mt-1.5 text-xs text-destructive">{t('whoRequired')}</p>
+        )}
+        {atCapacity && (
+          <p className="mt-1.5 text-xs text-mist/80">{t('capacityReached', { count: capacity! })}</p>
+        )}
+      </fieldset>
 
       {/* Date */}
       <div>
@@ -154,7 +182,7 @@ export function ReservationForm({ kind, bookingId, targetId, maxGuests = 12 }: P
 
       <button
         type="submit"
-        disabled={isPending}
+        disabled={isPending || travelers.length === 0}
         className="flex w-full items-center justify-center gap-2 rounded-xl bg-gold px-4 py-3.5 text-sm font-medium tracking-wide text-accent-foreground transition-opacity hover:opacity-90 disabled:opacity-60 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/60 focus-visible:ring-offset-2 focus-visible:ring-offset-night"
       >
         {isPending && <Loader2 className="size-4 animate-spin" aria-hidden />}

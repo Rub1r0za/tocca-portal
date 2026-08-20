@@ -39,7 +39,7 @@ export async function toggleActivity(input: z.infer<typeof toggleSchema>) {
 const requestActivitySchema = z.object({
   bookingId: z.string().uuid(),
   activityId: z.string().uuid(),
-  numGuests: z.number().int().min(1).max(50),
+  travelerIds: z.array(z.string().uuid()).min(1).max(50),
   requestedDate: z.string().min(1),
   notes: z.string().nullable().optional(),
 })
@@ -52,10 +52,21 @@ export async function requestActivity(
   const data = parsed.data
 
   const supabase = await createClient()
+
+  // Los ids llegan del navegador: se aceptan solo los que de verdad son
+  // viajeros de esta reserva, para que nadie apunte a gente de otro grupo.
+  const { data: own } = await supabase
+    .from('travelers')
+    .select('id')
+    .eq('booking_id', data.bookingId)
+    .in('id', data.travelerIds)
+  const travelerIds = (own ?? []).map((t) => t.id)
+  if (travelerIds.length === 0) return { ok: false, error: 'invalid_travelers' }
   const { error } = await supabase.from('activity_requests').insert({
     booking_id: data.bookingId,
     activity_id: data.activityId,
-    num_guests: data.numGuests,
+    traveler_ids: travelerIds,
+    num_guests: travelerIds.length,
     requested_date: data.requestedDate,
     notes: data.notes ?? null,
   })

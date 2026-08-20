@@ -153,9 +153,10 @@
     "included": "Included"
   },
   "reservation": {
-    "guests": "Guests",
-    "decrease": "Decrease guests",
-    "increase": "Increase guests",
+    "who": "Who is going",
+    "whoRequired": "Pick at least one person.",
+    "noTravelers": "There are no travellers on your booking yet.",
+    "capacityReached": "Capacity reached: {count} people maximum.",
     "date": "Preferred date",
     "dateRequired": "Please choose a date.",
     "notes": "Notes (optional)",
