@@ -1,5 +1,6 @@
 import { getTranslations } from 'next-intl/server'
 import { redirect } from 'next/navigation'
+import { MEALS_ENABLED } from '@/lib/features'
 import { getMyBooking } from '@/lib/booking'
 import { createClient } from '@/lib/supabase/server'
 import type { Booking, Meal } from '@/lib/types'
@@ -20,6 +21,10 @@ export default async function MealsPage({
   params: Promise<{ locale: string }>
 }) {
   const { locale } = await params
+
+  // Comidas está apagado hasta que estén los menús definitivos (src/lib/features.ts).
+  if (!MEALS_ENABLED) redirect(`/${locale}/dashboard`)
+
   const tSections = await getTranslations('sections')
 
   const booking = (await getMyBooking()) as Booking | null

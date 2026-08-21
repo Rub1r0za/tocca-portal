@@ -1,14 +1,16 @@
 import { getTranslations, getLocale } from 'next-intl/server'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Route, Sparkles, Compass, UtensilsCrossed, Flower2, ChevronRight, Users, CalendarDays, Hourglass, ClipboardList, AlertTriangle } from 'lucide-react'
+import { Route, Sparkles, Compass, UtensilsCrossed, Flower2, ChevronRight, Users, CalendarDays, Hourglass, ClipboardList, AlertTriangle, Luggage, Languages } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { getMyBooking } from '@/lib/booking'
 import { createClient } from '@/lib/supabase/server'
 import type { Booking } from '@/lib/types'
 import { pick, formatDate } from '@/lib/format'
 import { mealPending, type SummaryDay } from '@/lib/meals-summary'
+import { MEALS_ENABLED, TIMELINE_ENABLED } from '@/lib/features'
 import { StatusPill } from '@/components/primitives'
+import { AvatarPicker } from '@/components/avatar-picker'
 
 async function WaitingState() {
   const t = await getTranslations('dashboard')
@@ -78,32 +80,58 @@ export default async function DashboardPage({
   const travelers = booking.travelers?.length ?? 0
   const statusLabel = tStatus(booking.status)
 
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  const { data: profile } = user
+    ? await supabase.from('profiles').select('full_name, avatar_url').eq('id', user.id).maybeSingle()
+    : { data: null }
+
   // Nombre de pila para el saludo; la inicial hace de avatar mientras no haya foto.
-  const firstName = (booking.applicant_name || '').trim().split(/\s+/)[0] || 'viaggiatore'
+  const fullName = (booking.applicant_name || profile?.full_name || '').trim()
+  const firstName = fullName.split(/\s+/)[0] || 'viaggiatore'
   const initial = firstName.charAt(0).toUpperCase()
+
+  // Antes de salir mandan la maleta y las frases; ya en la costa, el día a día.
+  const today = new Date().toISOString().slice(0, 10)
+  const tripStarted = booking.start_date != null && booking.start_date <= today
 
   // Mismo cálculo que ve el admin: si al viajero le faltan platos, se lo decimos
   // aquí en vez de esperar a que entre a "Comidas" por su cuenta.
-  const supabase = await createClient()
-  const [{ data: dayRows }, { data: selectionRows }] = await Promise.all([
-    supabase
-      .from('journey_days')
-      .select('id, day_number, title, meals (id, course, name)')
-      .eq('booking_id', booking.id),
-    supabase.from('meal_selections').select('meal_id, traveler_id').eq('booking_id', booking.id),
-  ])
-  const pendingMeals = mealPending(
-    (dayRows ?? []) as SummaryDay[],
-    booking.travelers ?? [],
-    selectionRows ?? [],
-  )
+  let pendingMealSlots = 0
+  if (MEALS_ENABLED) {
+    const [{ data: dayRows }, { data: selectionRows }] = await Promise.all([
+      supabase
+        .from('journey_days')
+        .select('id, day_number, title, meals (id, course, name)')
+        .eq('booking_id', booking.id),
+      supabase.from('meal_selections').select('meal_id, traveler_id').eq('booking_id', booking.id),
+    ])
+    pendingMealSlots = mealPending(
+      (dayRows ?? []) as SummaryDay[],
+      booking.travelers ?? [],
+      selectionRows ?? [],
+    ).pendingSlots
+  }
 
-  const tiles: { href: string; Icon: LucideIcon; title: string; subtitle: string }[] = [
-    { href: `/${locale}/timeline`, Icon: Route, title: tSections('timeline.title'), subtitle: tSections('timeline.subtitle') },
+  type Tile = { href: string; Icon: LucideIcon; title: string; subtitle: string }
+
+  const tripTiles: Tile[] = [
     { href: `/${locale}/activities`, Icon: Compass, title: tSections('activities.title'), subtitle: tSections('activities.subtitle') },
-    { href: `/${locale}/meals`, Icon: UtensilsCrossed, title: tSections('meals.title'), subtitle: tSections('meals.subtitle') },
     { href: `/${locale}/wellness`, Icon: Flower2, title: tSections('wellness.title'), subtitle: tSections('wellness.subtitle') },
+    ...(MEALS_ENABLED
+      ? [{ href: `/${locale}/meals`, Icon: UtensilsCrossed, title: tSections('meals.title'), subtitle: tSections('meals.subtitle') }]
+      : []),
+    ...(TIMELINE_ENABLED
+      ? [{ href: `/${locale}/timeline`, Icon: Route, title: tSections('timeline.title'), subtitle: tSections('timeline.subtitle') }]
+      : []),
   ]
+
+  const prepTiles: Tile[] = [
+    { href: `/${locale}/before-you-go`, Icon: Luggage, title: tSections('beforeYouGo.title'), subtitle: tSections('beforeYouGo.subtitle') },
+    { href: `/${locale}/phrases`, Icon: Languages, title: tSections('phrases.title'), subtitle: tSections('phrases.subtitle') },
+  ]
+
+  const tiles: Tile[] = tripStarted ? [...tripTiles, ...prepTiles] : [...prepTiles, ...tripTiles]
 
   return (
     <div>
@@ -129,13 +157,7 @@ export default async function DashboardPage({
 
         {/* Saludo personal */}
         <div className="relative flex items-center gap-3">
-          <span
-            className="flex size-11 shrink-0 items-center justify-center rounded-full border border-white/30 bg-white/15 text-lg text-white backdrop-blur-sm"
-            style={{ fontFamily: 'var(--font-display)', fontWeight: 500 }}
-            aria-hidden
-          >
-            {initial}
-          </span>
+          <AvatarPicker initial={initial} avatarUrl={profile?.avatar_url ?? null} />
           <div className="min-w-0">
             <p
               className="truncate text-lg text-white"
@@ -143,7 +165,9 @@ export default async function DashboardPage({
             >
               {t('ciao', { name: firstName })} 👋
             </p>
-            <p className="truncate text-xs text-white/70">{t('tagline')}</p>
+            <p className="truncate text-xs text-white/70">
+              {tripStarted ? t('tagline') : t('taglineSoon')}
+            </p>
           </div>
         </div>
 
@@ -172,7 +196,7 @@ export default async function DashboardPage({
       </section>
 
       {/* Recordatorio de comidas sin elegir */}
-      {pendingMeals.pendingSlots > 0 && (
+      {pendingMealSlots > 0 && (
         <Link
           href={`/${locale}/meals`}
           className="mx-4 mt-5 flex items-start gap-3 rounded-2xl border border-gold/40 bg-gold/10 p-4 transition-colors hover:bg-gold/15 sm:mx-5 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
@@ -181,7 +205,7 @@ export default async function DashboardPage({
           <div className="min-w-0 flex-1">
             <p className="text-sm font-medium text-foreground">{t('mealsPendingTitle')}</p>
             <p className="mt-0.5 text-xs leading-relaxed text-mist">
-              {t('mealsPendingText', { count: pendingMeals.pendingSlots })}
+              {t('mealsPendingText', { count: pendingMealSlots })}
             </p>
           </div>
           <ChevronRight className="mt-0.5 size-4 shrink-0 text-mist/60" aria-hidden />

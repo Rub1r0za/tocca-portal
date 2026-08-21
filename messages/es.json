@@ -3,10 +3,12 @@
     "label": "Navegación principal",
     "guestView": "Inicio",
     "timeline": "Cronograma",
-    "journey": "Viaje",
-    "activities": "Día libre",
+    "journey": "Mi Viaje",
+    "activities": "Día Libre",
     "meals": "Comidas",
-    "wellness": "Experiencias"
+    "wellness": "Bienestar",
+    "beforeYouGo": "Antes de viajar",
+    "phrases": "Palabras útiles"
   },
   "menu": {
     "title": "Menú",
@@ -34,7 +36,7 @@
       "empty": "Tu itinerario se está preparando."
     },
     "activities": {
-      "title": "Opciones para tu día libre",
+      "title": "Día Libre",
       "subtitle": "Experiencias pensadas específicamente para aprovechar el día libre.",
       "empty": "Aún no hay actividades disponibles."
     },
@@ -44,13 +46,22 @@
       "empty": "Aún no hay comidas para elegir."
     },
     "wellness": {
-      "title": "Experiencias para cualquier día",
+      "title": "Bienestar",
       "subtitle": "Extras que pueden incorporarse en distintos momentos del viaje según disponibilidad: sesión de fotos, masaje, wellness, experiencias privadas, etc.",
       "empty": "Aún no hay experiencias disponibles."
     },
     "payments": {
       "title": "Pagos",
       "subtitle": "Balance y comprobantes"
+    },
+    "beforeYouGo": {
+      "title": "Antes de viajar",
+      "subtitle": "Tu maleta y lo que conviene saber",
+      "intro": "Algunas cosas importantes a tener en cuenta antes de tu viaje por la Costa Amalfitana 😊"
+    },
+    "phrases": {
+      "title": "Palabras útiles",
+      "subtitle": "Italiano para el día a día"
     }
   },
   "login": {
@@ -106,7 +117,8 @@
     "registerCta": "Completar mi registro",
     "paymentsCta": "Ver / registrar pagos",
     "mealsPendingTitle": "Te faltan platos por elegir",
-    "mealsPendingText": "Quedan {count, plural, =1 {# selección} other {# selecciones}} de comida sin hacer. Toca para completarlas."
+    "mealsPendingText": "Quedan {count, plural, =1 {# selección} other {# selecciones}} de comida sin hacer. Toca para completarlas.",
+    "taglineSoon": "Manca poco al tuo viaggio in Costiera"
   },
   "status": {
     "approved": "Aprobado",
@@ -194,14 +206,14 @@
     "subtitle": "Cuéntanos quiénes viajan para que Jess prepare tu viaje. Tu reserva será revisada y aprobada personalmente.",
     "fullName": "Nombre completo",
     "phone": "Teléfono",
-    "travelWith": "¿Viajas solo o acompañado?",
-    "solo": "Viajo solo",
-    "accompanied": "Acompañado",
+    "travelWith": "¿Viajas con menores a tu cargo?",
+    "solo": "Sin menores",
+    "accompanied": "Con menores",
     "bookingType": "Tipo de reserva",
     "individual": "Individual",
     "group": "Grupal",
     "bookingTypeHint": "Las reservas grupales comparten una sola reserva para todos los acompañantes.",
-    "companions": "Acompañantes",
+    "companions": "Menores que viajan contigo",
     "firstName": "Nombre",
     "lastName": "Apellido",
     "adult": "Adulto",
@@ -215,10 +227,11 @@
     "submit": "Enviar registro",
     "submitting": "Enviando…",
     "errorBasics": "Escribe tu nombre completo y tu teléfono.",
-    "errorCompanions": "Completa el nombre de cada acompañante.",
+    "errorCompanions": "Completa el nombre y el apellido de cada menor.",
     "errorTerms": "Debes aceptar los Términos y Condiciones para continuar.",
     "errorExists": "Ya tienes una reserva. Revisa tu portal.",
-    "errorGeneric": "Algo salió mal. Inténtalo de nuevo."
+    "errorGeneric": "Algo salió mal. Inténtalo de nuevo.",
+    "minorsHint": "Cada adulto se registra por separado con su propia cuenta. Aquí solo se añaden los menores de edad."
   },
   "payments": {
     "title": "Pagos",
@@ -260,5 +273,15 @@
     "cardReturnCancelled": "Cancelaste el pago con tarjeta. No se cobró nada.",
     "errorCard": "No se pudo iniciar el pago con tarjeta. Inténtalo de nuevo.",
     "methodCard": "Tarjeta"
+  },
+  "phrases": {
+    "intro": "Con estas frases te vas a mover por la costa como en casa.",
+    "switchLabel": "Idioma de la traducción"
+  },
+  "avatar": {
+    "change": "Cambiar mi foto",
+    "errorTooBig": "La foto pesa más de 5 MB. Elige otra o redúcela.",
+    "errorBadType": "Formato no admitido. Usa JPG, PNG o WebP.",
+    "errorGeneric": "No se pudo guardar la foto. Inténtalo de nuevo."
   }
 }

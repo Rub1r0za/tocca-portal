@@ -1,5 +1,6 @@
 import { getTranslations } from 'next-intl/server'
 import { redirect } from 'next/navigation'
+import { TIMELINE_ENABLED } from '@/lib/features'
 import { getMyBooking } from '@/lib/booking'
 import { createClient } from '@/lib/supabase/server'
 import type { Booking, JourneyDay, TimelineEvent } from '@/lib/types'
@@ -15,6 +16,10 @@ export default async function TimelinePage({
   params: Promise<{ locale: string }>
 }) {
   const { locale } = await params
+
+  // El cronograma está apagado para el lanzamiento (src/lib/features.ts).
+  if (!TIMELINE_ENABLED) redirect(`/${locale}/dashboard`)
+
   const tSections = await getTranslations('sections')
   const tCommon = await getTranslations('common')
 

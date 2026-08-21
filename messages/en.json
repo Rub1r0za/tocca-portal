@@ -3,10 +3,12 @@
     "label": "Main navigation",
     "guestView": "Home",
     "timeline": "Timeline",
-    "journey": "Journey",
+    "journey": "My Journey",
     "activities": "Free Day",
     "meals": "Meals",
-    "wellness": "Experiences"
+    "wellness": "Wellness",
+    "beforeYouGo": "Before you go",
+    "phrases": "Useful words"
   },
   "menu": {
     "title": "Menu",
@@ -34,7 +36,7 @@
       "empty": "Your itinerary is being prepared."
     },
     "activities": {
-      "title": "Free Day Options",
+      "title": "Free Day",
       "subtitle": "Experiences designed specifically to make the most of your free day.",
       "empty": "No activities available yet."
     },
@@ -44,13 +46,22 @@
       "empty": "No meals to select yet."
     },
     "wellness": {
-      "title": "Any-Day Experiences",
+      "title": "Wellness",
       "subtitle": "Extras that can be added at different points in your trip, subject to availability: photo sessions, massages, wellness, private experiences, and more.",
       "empty": "No experiences available yet."
     },
     "payments": {
       "title": "Payments",
       "subtitle": "Balance & receipts"
+    },
+    "beforeYouGo": {
+      "title": "Before you go",
+      "subtitle": "Your suitcase and the useful details",
+      "intro": "A few important things to keep in mind before your Amalfi Coast journey 😊"
+    },
+    "phrases": {
+      "title": "Useful words",
+      "subtitle": "Everyday Italian"
     }
   },
   "login": {
@@ -106,7 +117,8 @@
     "registerCta": "Complete my registration",
     "paymentsCta": "View / register payments",
     "mealsPendingTitle": "You still have dishes to choose",
-    "mealsPendingText": "{count, plural, =1 {# meal selection is} other {# meal selections are}} still missing. Tap to finish."
+    "mealsPendingText": "{count, plural, =1 {# meal selection is} other {# meal selections are}} still missing. Tap to finish.",
+    "taglineSoon": "Manca poco al tuo viaggio in Costiera"
   },
   "status": {
     "approved": "Approved",
@@ -194,14 +206,14 @@
     "subtitle": "Tell us who is traveling so Jess can prepare your journey. Your booking will be reviewed and approved personally.",
     "fullName": "Full name",
     "phone": "Phone",
-    "travelWith": "Are you traveling alone or accompanied?",
-    "solo": "Traveling alone",
-    "accompanied": "Accompanied",
+    "travelWith": "Are you travelling with minors?",
+    "solo": "No minors",
+    "accompanied": "With minors",
     "bookingType": "Type of booking",
     "individual": "Individual",
     "group": "Group",
     "bookingTypeHint": "Group bookings share one reservation for all companions.",
-    "companions": "Companions",
+    "companions": "Minors travelling with you",
     "firstName": "First name",
     "lastName": "Last name",
     "adult": "Adult",
@@ -215,10 +227,11 @@
     "submit": "Submit registration",
     "submitting": "Submitting…",
     "errorBasics": "Please enter your full name and phone number.",
-    "errorCompanions": "Please complete the name of every companion.",
+    "errorCompanions": "Please complete the first and last name of every minor.",
     "errorTerms": "You must accept the Terms & Conditions to continue.",
     "errorExists": "You already have a booking. Check your dashboard.",
-    "errorGeneric": "Something went wrong. Please try again."
+    "errorGeneric": "Something went wrong. Please try again.",
+    "minorsHint": "Every adult registers separately with their own account. Only minors are added here."
   },
   "payments": {
     "title": "Payments",
@@ -260,5 +273,15 @@
     "cardReturnCancelled": "You cancelled the card payment. Nothing was charged.",
     "errorCard": "We could not start the card payment. Please try again.",
     "methodCard": "Card"
+  },
+  "phrases": {
+    "intro": "A handful of phrases that will carry you along the coast like a local.",
+    "switchLabel": "Translation language"
+  },
+  "avatar": {
+    "change": "Change my photo",
+    "errorTooBig": "That photo is over 5 MB. Pick another one or resize it.",
+    "errorBadType": "Format not supported. Use JPG, PNG or WebP.",
+    "errorGeneric": "We could not save the photo. Please try again."
   }
 }

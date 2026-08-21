@@ -7,7 +7,7 @@ import { useEffect, useRef } from 'react'
 import { X, LogOut } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
-import { navItems } from './nav-items'
+import { menuItems } from './nav-items'
 import { LocaleSwitch } from './locale-switch'
 
 export function MenuDrawer({
@@ -102,7 +102,7 @@ export function MenuDrawer({
           {/* Nav */}
           <nav aria-label={t('label')} className="flex-1 overflow-y-auto px-3 py-4">
             <ul className="space-y-0.5">
-              {navItems.map(({ key, path, Icon }) => {
+              {menuItems.map(({ key, path, Icon }) => {
                 const href = `/${locale}${path}`
                 const active = pathname === href || pathname.startsWith(`${href}/`)
                 return (
