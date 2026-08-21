@@ -74,7 +74,14 @@ export async function submitRegistration(
   const [first, ...rest] = data.full_name.trim().split(/\s+/)
   const travelers = [
     { booking_id: booking.id, first_name: first, last_name: rest.join(' ') || '—', type: 'adult' as const },
-    ...data.companions.map((c) => ({ booking_id: booking.id, ...c })),
+    // Solo menores. El formulario ya no ofrece otra cosa, pero esto es una
+    // Server Action —un endpoint público— y el tipo se fija aquí.
+    ...data.companions.map((c) => ({
+      booking_id: booking.id,
+      first_name: c.first_name,
+      last_name: c.last_name,
+      type: 'child' as const,
+    })),
   ]
   const { error: travErr } = await admin.from('travelers').insert(travelers)
   if (travErr) return { error: travErr.message }
@@ -84,7 +91,7 @@ export async function submitRegistration(
     emailLayout(
       'Nueva reserva por aprobar',
       `<p><strong>${data.full_name}</strong> (${user.email}, tel. ${data.phone}) completó su registro.</p>
-       <p>Tipo: ${data.booking_type === 'group' ? 'Grupal' : 'Individual'} · Viajeros: ${travelers.length} · Términos aceptados ✓</p>
+       <p>Viajeros: ${travelers.length} (1 adulto${data.companions.length ? ` + ${data.companions.length} menor(es)` : ''}) · Términos aceptados ✓</p>
        <p><a href="https://tocca-portal.vercel.app/es/admin/bookings/${booking.id}" style="color:#4A9A92;">Revisar y aprobar en el panel →</a></p>`,
     ),
   )

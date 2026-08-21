@@ -10,15 +10,19 @@ const inputClass =
   'w-full rounded-xl border border-input bg-panel-2 px-4 py-3 text-sm text-foreground placeholder:text-mist/60 focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/30'
 const labelClass = 'mb-2 block text-xs tracking-widest text-mist uppercase'
 
-type Companion = { first_name: string; last_name: string; type: 'adult' | 'child' }
+/**
+ * Solo menores. Cada adulto se registra por su cuenta —así tiene su propio
+ * portal y sus propias selecciones—, y aquí únicamente se añaden los niños que
+ * viajan a cargo de quien rellena el formulario.
+ */
+type Companion = { first_name: string; last_name: string }
 
 export function RegisterForm() {
   const t = useTranslations('register')
   const locale = useLocale()
   const [fullName, setFullName] = useState('')
   const [phone, setPhone] = useState('')
-  const [accompanied, setAccompanied] = useState<boolean>(false)
-  const [bookingType, setBookingType] = useState<'individual' | 'group'>('individual')
+  const [withMinors, setWithMinors] = useState<boolean>(false)
   const [companions, setCompanions] = useState<Companion[]>([])
   const [notes, setNotes] = useState('')
   const [accepted, setAccepted] = useState(false)
@@ -36,7 +40,7 @@ export function RegisterForm() {
       setError(t('errorBasics'))
       return
     }
-    if (accompanied && companions.some((c) => !c.first_name.trim() || !c.last_name.trim())) {
+    if (withMinors && companions.some((c) => !c.first_name.trim() || !c.last_name.trim())) {
       setError(t('errorCompanions'))
       return
     }
@@ -48,8 +52,10 @@ export function RegisterForm() {
       const result = await submitRegistration(locale, {
         full_name: fullName.trim(),
         phone: phone.trim(),
-        booking_type: accompanied ? bookingType : 'individual',
-        companions: accompanied ? companions : [],
+        booking_type: 'individual',
+        companions: withMinors
+          ? companions.map((c) => ({ ...c, type: 'child' as const }))
+          : [],
         accepted_terms: true,
         notes: notes.trim() || undefined,
       })
@@ -79,95 +85,66 @@ export function RegisterForm() {
         </div>
       </div>
 
-      {/* ¿Solo o acompañado? */}
+      {/* ¿Viaja con menores a su cargo? */}
       <div>
         <p className={labelClass}>{t('travelWith')} *</p>
         <div className="flex gap-3">
-          <button type="button" onClick={() => setAccompanied(false)} className={radioCard(!accompanied)}>
+          <button type="button" onClick={() => setWithMinors(false)} className={radioCard(!withMinors)}>
             {t('solo')}
           </button>
-          <button type="button" onClick={() => { setAccompanied(true); if (companions.length === 0) setCompanions([{ first_name: '', last_name: '', type: 'adult' }]) }} className={radioCard(accompanied)}>
+          <button
+            type="button"
+            onClick={() => {
+              setWithMinors(true)
+              if (companions.length === 0) setCompanions([{ first_name: '', last_name: '' }])
+            }}
+            className={radioCard(withMinors)}
+          >
             {t('accompanied')}
           </button>
         </div>
+        <p className="mt-1.5 text-xs text-mist/80">{t('minorsHint')}</p>
       </div>
 
-      {accompanied && (
-        <>
-          {/* Individual o grupal */}
-          <div>
-            <p className={labelClass}>{t('bookingType')} *</p>
-            <div className="flex gap-3">
-              <button type="button" onClick={() => setBookingType('individual')} className={radioCard(bookingType === 'individual')}>
-                {t('individual')}
-              </button>
-              <button type="button" onClick={() => setBookingType('group')} className={radioCard(bookingType === 'group')}>
-                {t('group')}
-              </button>
-            </div>
-            <p className="mt-1.5 text-xs text-mist/80">{t('bookingTypeHint')}</p>
+      {withMinors && (
+        <div>
+          <p className={labelClass}>{t('companions')}</p>
+          <div className="space-y-3">
+            {companions.map((c, i) => (
+              <div key={i} className="flex flex-wrap items-center gap-2 rounded-xl border border-hairline bg-panel/50 p-3">
+                <input
+                  type="text"
+                  placeholder={t('firstName')}
+                  value={c.first_name}
+                  onChange={(e) => updateCompanion(i, { first_name: e.target.value })}
+                  className={`${inputClass} min-w-28 flex-1`}
+                />
+                <input
+                  type="text"
+                  placeholder={t('lastName')}
+                  value={c.last_name}
+                  onChange={(e) => updateCompanion(i, { last_name: e.target.value })}
+                  className={`${inputClass} min-w-28 flex-1`}
+                />
+                <button
+                  type="button"
+                  onClick={() => setCompanions((list) => list.filter((_, idx) => idx !== i))}
+                  aria-label={t('remove')}
+                  className="rounded-lg p-1.5 text-mist transition-colors hover:bg-destructive/10 hover:text-destructive"
+                >
+                  <Trash2 className="size-4" />
+                </button>
+              </div>
+            ))}
           </div>
-
-          {/* Acompañantes */}
-          <div>
-            <p className={labelClass}>{t('companions')}</p>
-            <div className="space-y-3">
-              {companions.map((c, i) => (
-                <div key={i} className="rounded-xl border border-hairline bg-panel/50 p-3">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <input
-                      type="text"
-                      placeholder={t('firstName')}
-                      value={c.first_name}
-                      onChange={(e) => updateCompanion(i, { first_name: e.target.value })}
-                      className={`${inputClass} min-w-28 flex-1`}
-                    />
-                    <input
-                      type="text"
-                      placeholder={t('lastName')}
-                      value={c.last_name}
-                      onChange={(e) => updateCompanion(i, { last_name: e.target.value })}
-                      className={`${inputClass} min-w-28 flex-1`}
-                    />
-                  </div>
-                  <div className="mt-2 flex items-center justify-between gap-2">
-                    <div className="flex gap-2">
-                      {(['adult', 'child'] as const).map((type) => (
-                        <button
-                          key={type}
-                          type="button"
-                          onClick={() => updateCompanion(i, { type })}
-                          className={`rounded-full border px-3 py-1 text-xs transition-colors ${
-                            c.type === type
-                              ? 'border-azure/50 bg-azure/10 text-azure'
-                              : 'border-hairline text-mist hover:border-azure/30'
-                          }`}
-                        >
-                          {t(type)}
-                        </button>
-                      ))}
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => setCompanions((list) => list.filter((_, idx) => idx !== i))}
-                      aria-label={t('remove')}
-                      className="rounded-lg p-1.5 text-mist transition-colors hover:bg-destructive/10 hover:text-destructive"
-                    >
-                      <Trash2 className="size-4" />
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <button
-              type="button"
-              onClick={() => setCompanions((list) => [...list, { first_name: '', last_name: '', type: 'adult' }])}
-              className="mt-3 inline-flex items-center gap-1.5 text-sm text-azure hover:underline"
-            >
-              <Plus className="size-4" /> {t('addCompanion')}
-            </button>
-          </div>
-        </>
+          <button
+            type="button"
+            onClick={() => setCompanions((list) => [...list, { first_name: '', last_name: '' }])}
+            className="mt-3 inline-flex items-center gap-1.5 text-sm text-azure hover:underline"
+          >
+            <Plus className="size-4" /> {t('addCompanion')}
+          </button>
+        </div>
       )}
 
       {/* Notas */}
