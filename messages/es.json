@@ -157,7 +157,7 @@
   "reservation": {
     "who": "Quién va",
     "whoRequired": "Elige al menos una persona.",
-    "noTravelers": "Aún no hay viajeros en tu reserva.",
+    "noTravelers": "Tu reserva aún no tiene viajeros registrados. Escríbenos y lo resolvemos en un momento.",
     "capacityReached": "Aforo completo: {count} personas como máximo.",
     "date": "Fecha preferida",
     "dateRequired": "Por favor elige una fecha.",

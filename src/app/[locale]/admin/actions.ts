@@ -51,6 +51,13 @@ export async function createBooking(
   // Upsert profile (in case trigger didn't fire)
   await admin.from('profiles').upsert({ id: authUser.id }, { onConflict: 'id', ignoreDuplicates: true })
 
+  const { data: profile } = await admin
+    .from('profiles')
+    .select('full_name')
+    .eq('id', authUser.id)
+    .maybeSingle()
+  const fullName = (profile?.full_name || '').trim() || authUser.email || 'Cliente'
+
   const { data: booking, error } = await admin
     .from('bookings')
     .insert({
@@ -60,11 +67,24 @@ export async function createBooking(
       end_date: end_date || null,
       notes: notes || null,
       status: 'pending',
+      applicant_name: fullName,
+      applicant_email: authUser.email,
     })
     .select('id')
     .single()
 
   if (error) return { error: error.message }
+
+  // El solicitante entra como primer viajero, igual que en el registro público.
+  // Sin al menos un viajero el cliente no puede elegir comidas ni pedir
+  // actividades: los formularios no tienen a quién asignárselas.
+  const [first, ...rest] = fullName.split(/\s+/)
+  await admin.from('travelers').insert({
+    booking_id: booking.id,
+    first_name: first,
+    last_name: rest.join(' ') || '—',
+    type: 'adult',
+  })
 
   revalidatePath(`/${locale}/admin`)
   redirect(`/${locale}/admin/bookings/${booking.id}`)

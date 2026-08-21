@@ -86,6 +86,22 @@ export default async function BookingDetailPage({
         </span>
       </div>
 
+      {/* Sin viajeros no hay a quién asignar nada: el cliente se encuentra los
+          formularios de comidas y actividades bloqueados y no sabe por qué. */}
+      {(booking.travelers ?? []).length === 0 && (
+        <div className="mb-6 flex items-start gap-2 rounded-2xl border border-red-200 bg-red-50 p-4">
+          <AlertTriangle className="mt-0.5 size-4 shrink-0 text-red-600" />
+          <div>
+            <p className="text-sm font-medium text-red-800">Esta reserva no tiene viajeros</p>
+            <p className="mt-0.5 text-xs text-red-700">
+              Sin al menos un viajero el cliente no puede elegir comidas ni solicitar
+              actividades o experiencias: los formularios le salen bloqueados. Añádelos
+              abajo, en Viajeros.
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* Alerta de comidas pendientes */}
       {pendingMeals.pendingSlots > 0 && (
         <Link

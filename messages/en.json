@@ -157,7 +157,7 @@
   "reservation": {
     "who": "Who is going",
     "whoRequired": "Pick at least one person.",
-    "noTravelers": "There are no travellers on your booking yet.",
+    "noTravelers": "Your booking has no travellers registered yet. Contact us and we will sort it out right away.",
     "capacityReached": "Capacity reached: {count} people maximum.",
     "date": "Preferred date",
     "dateRequired": "Please choose a date.",
