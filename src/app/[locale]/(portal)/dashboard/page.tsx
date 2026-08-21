@@ -1,5 +1,6 @@
 import { getTranslations, getLocale } from 'next-intl/server'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Route, Sparkles, Compass, UtensilsCrossed, Flower2, ChevronRight, Users, CalendarDays, Hourglass, ClipboardList, AlertTriangle } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { getMyBooking } from '@/lib/booking'
@@ -77,6 +78,10 @@ export default async function DashboardPage({
   const travelers = booking.travelers?.length ?? 0
   const statusLabel = tStatus(booking.status)
 
+  // Nombre de pila para el saludo; la inicial hace de avatar mientras no haya foto.
+  const firstName = (booking.applicant_name || '').trim().split(/\s+/)[0] || 'viaggiatore'
+  const initial = firstName.charAt(0).toUpperCase()
+
   // Mismo cálculo que ve el admin: si al viajero le faltan platos, se lo decimos
   // aquí en vez de esperar a que entre a "Comidas" por su cuenta.
   const supabase = await createClient()
@@ -102,38 +107,67 @@ export default async function DashboardPage({
 
   return (
     <div>
-      {/* Hero — dark navy matching Tocca card style */}
-      <section
-        className="relative overflow-hidden px-5 pt-10 pb-8"
-        style={{ background: 'linear-gradient(135deg, #23374D 0%, #1a2d3f 100%)' }}
-      >
-        {/* Decorative wave */}
-        <div
-          className="pointer-events-none absolute inset-0 opacity-10"
-          style={{
-            backgroundImage:
-              'radial-gradient(ellipse 80% 50% at 50% 120%, #4A9A92 0%, transparent 70%)',
-          }}
+      {/* Hero — la costa de fondo en vez del bloque azul plano */}
+      <section className="relative overflow-hidden px-5 pt-6 pb-8">
+        <Image
+          src="/hero-positano.jpg"
+          alt=""
+          fill
+          priority
+          sizes="(max-width: 480px) 100vw, 430px"
+          className="object-cover"
         />
-        <p className="relative text-[0.6rem] tracking-[0.35em] text-white/50 uppercase">
-          {t('greeting')}
-        </p>
-        <h1
-          className="relative mt-1.5 text-[2rem] leading-tight text-white sm:text-[2.4rem]"
-          style={{ fontFamily: 'var(--font-display)', fontWeight: 400, fontStyle: 'italic' }}
-        >
-          {title}
-        </h1>
-        <div className="relative mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-white/75">
-          <span className="inline-flex items-center gap-1.5">
-            <CalendarDays className="size-4" aria-hidden />
-            {dateRange}
+        {/* El degradado sostiene el texto blanco pase lo que pase con la foto. */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'linear-gradient(180deg, rgba(18,32,44,0.72) 0%, rgba(18,32,44,0.35) 40%, rgba(18,32,44,0.88) 100%)',
+          }}
+          aria-hidden
+        />
+
+        {/* Saludo personal */}
+        <div className="relative flex items-center gap-3">
+          <span
+            className="flex size-11 shrink-0 items-center justify-center rounded-full border border-white/30 bg-white/15 text-lg text-white backdrop-blur-sm"
+            style={{ fontFamily: 'var(--font-display)', fontWeight: 500 }}
+            aria-hidden
+          >
+            {initial}
           </span>
-          <span className="inline-flex items-center gap-1.5">
-            <Users className="size-4" aria-hidden />
-            {travelers} {t('travelersLabel').toLowerCase()}
-          </span>
-          <StatusPill status={booking.status} label={statusLabel} />
+          <div className="min-w-0">
+            <p
+              className="truncate text-lg text-white"
+              style={{ fontFamily: 'var(--font-display)', fontWeight: 500 }}
+            >
+              {t('ciao', { name: firstName })} 👋
+            </p>
+            <p className="truncate text-xs text-white/70">{t('tagline')}</p>
+          </div>
+        </div>
+
+        <div className="relative mt-9">
+          <p className="text-[0.6rem] tracking-[0.35em] text-white/60 uppercase">
+            {t('greeting')}
+          </p>
+          <h1
+            className="mt-1.5 text-[2rem] leading-tight text-white sm:text-[2.4rem]"
+            style={{ fontFamily: 'var(--font-display)', fontWeight: 400, fontStyle: 'italic' }}
+          >
+            {title}
+          </h1>
+          <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-white/80">
+            <span className="inline-flex items-center gap-1.5">
+              <CalendarDays className="size-4" aria-hidden />
+              {dateRange}
+            </span>
+            <span className="inline-flex items-center gap-1.5">
+              <Users className="size-4" aria-hidden />
+              {travelers} {t('travelersLabel').toLowerCase()}
+            </span>
+            <StatusPill status={booking.status} label={statusLabel} />
+          </div>
         </div>
       </section>
 

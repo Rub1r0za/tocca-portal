@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { Menu, ChevronLeft } from 'lucide-react'
@@ -58,10 +59,16 @@ export function AppHeader({
               <p className="truncate text-xs tracking-wide text-white/65">{subtitle}</p>
             )}
           </div>
-          {/* Tocca wordmark */}
-          <span className="shrink-0 text-[0.55rem] tracking-[0.35em] text-white/40 uppercase select-none">
-            Tocca
-          </span>
+          {/* Isotipo Tocca. El limón y las olas ya contrastan sobre el azul;
+              el logotipo completo no, porque su texto es marrón oscuro. */}
+          <Image
+            src="/tocca-mark.png"
+            alt="Tocca Amalfi Coast"
+            width={349}
+            height={347}
+            priority
+            className="size-9 shrink-0 object-contain select-none"
+          />
         </div>
       </header>
 

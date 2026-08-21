@@ -25,10 +25,18 @@ const COURSE_ES: Record<string, string> = { starter: 'entrada', main: 'principal
 
 /** Render the template meals back into "curso | nombre EN | nombre ES" lines. */
 function mealLines(
-  items: Array<{ course: string; name: Record<string, string> }> | null | undefined,
+  items: Array<{ course: string; name: Record<string, string>; description?: Record<string, string> }> | null | undefined,
 ) {
   return (items ?? [])
-    .map((m) => `${COURSE_ES[m.course] ?? m.course} | ${m.name?.en ?? ''} | ${m.name?.es ?? ''}`)
+    .map((m) => {
+      const parts = [COURSE_ES[m.course] ?? m.course, m.name?.en ?? '', m.name?.es ?? '']
+      const descEn = m.description?.en ?? ''
+      const descEs = m.description?.es ?? ''
+      // Solo se escriben si existen: así una plantilla sin descripción no se
+      // llena de separadores sueltos al reabrir el formulario.
+      if (descEn || descEs) parts.push(descEn, descEs)
+      return parts.join(' | ')
+    })
     .join('\n')
 }
 
@@ -139,7 +147,7 @@ export function DayTemplateForm({
       <ImageField defaultValue={template?.image_url} />
 
       <div>
-        <label className={labelClass}>Menú del día (uno por línea: curso | nombre EN | nombre ES)</label>
+        <label className={labelClass}>Menú del día (uno por línea: curso | nombre EN | nombre ES | descripción EN | descripción ES)</label>
         <textarea
           name="meals"
           rows={4}
@@ -149,7 +157,7 @@ export function DayTemplateForm({
           style={{ resize: 'vertical' }}
         />
         <p className="mt-1 text-xs text-[#7A7168]">
-          Curso: <strong>entrada</strong>, <strong>principal</strong> o <strong>postre</strong>. Estos platos se copian
+          Curso: <strong>entrada</strong>, <strong>principal</strong> o <strong>postre</strong>. Las descripciones son opcionales pero es lo que el viajero lee para saber qué va a comer. Estos platos se copian
           a cada reserva donde uses este día — cárgalos una sola vez aquí.
         </p>
       </div>

@@ -636,8 +636,12 @@ const dayTemplateSchema = z.object({
 })
 
 /**
- * Parse the plantilla's meals textarea (one dish per line:
- * "curso | nombre EN | nombre ES") into the TemplateMeal[] jsonb shape.
+ * Parse the plantilla's meals textarea into the TemplateMeal[] jsonb shape.
+ * Una línea por plato:
+ *   "curso | nombre EN | nombre ES | descripción EN | descripción ES"
+ * Las dos descripciones son opcionales — las líneas de tres partes, que son
+ * las que ya existían, siguen valiendo. Sin descripción el viajero solo lee
+ * "Pescado" o "Vegetariano", que era la queja: hay que poder saber qué se come.
  * The course accepts English or Spanish; anything unknown falls back to 'main'.
  */
 function parseTemplateMeals(raw?: string) {
@@ -652,11 +656,11 @@ function parseTemplateMeals(raw?: string) {
     .map((l) => l.trim())
     .filter(Boolean)
     .map((l) => {
-      const [course, nameEn, nameEs] = l.split('|').map((p) => p.trim())
+      const [course, nameEn, nameEs, descEn, descEs] = l.split('|').map((p) => p.trim())
       return {
         course: courseOf(course || 'main'),
         name: { en: nameEn || nameEs || '', es: nameEs || nameEn || '' },
-        description: { en: '', es: '' },
+        description: { en: descEn || descEs || '', es: descEs || descEn || '' },
       }
     })
     .filter((m) => m.name.en || m.name.es)

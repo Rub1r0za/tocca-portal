@@ -89,6 +89,8 @@
     "invalidEmail": "Ese correo no parece válido."
   },
   "dashboard": {
+    "ciao": "Ciao, {name}",
+    "tagline": "La tua avventura in Costiera è iniziata",
     "greeting": "Bienvenido de vuelta",
     "datesLabel": "Fechas",
     "travelersLabel": "Viajeros",

@@ -89,6 +89,8 @@
     "invalidEmail": "That email address does not look valid."
   },
   "dashboard": {
+    "ciao": "Ciao, {name}",
+    "tagline": "La tua avventura in Costiera è iniziata",
     "greeting": "Welcome back",
     "datesLabel": "Dates",
     "travelersLabel": "Travelers",
