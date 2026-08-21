@@ -27,6 +27,9 @@ export function ReservationForm({ kind, bookingId, targetId, travelers, capacity
   const [date, setDate] = useState('')
   const [notes, setNotes] = useState('')
   const [status, setStatus] = useState<'idle' | 'sent' | 'error'>('idle')
+  // Motivo técnico del rechazo. Se enseña en pequeño: sin esto un fallo de
+  // servidor es indistinguible de uno de red y no hay nada que reportar.
+  const [reason, setReason] = useState('')
   const [dateError, setDateError] = useState(false)
   const [peopleError, setPeopleError] = useState(false)
   const [isPending, startTransition] = useTransition()
@@ -71,8 +74,10 @@ export function ReservationForm({ kind, bookingId, targetId, travelers, capacity
                 notes: notes.trim() || null,
               })
         setStatus(result.ok ? 'sent' : 'error')
-      } catch {
+        if (!result.ok) setReason(result.error ?? '')
+      } catch (err) {
         setStatus('error')
+        setReason(err instanceof Error ? err.message : '')
       }
     })
   }
@@ -178,7 +183,12 @@ export function ReservationForm({ kind, bookingId, targetId, travelers, capacity
         />
       </div>
 
-      {status === 'error' && <p className="text-xs text-destructive">{t('errorTitle')}</p>}
+      {status === 'error' && (
+        <div>
+          <p className="text-xs text-destructive">{t('errorTitle')}</p>
+          {reason && <p className="mt-1 text-[0.65rem] text-mist/70">{reason}</p>}
+        </div>
+      )}
 
       <button
         type="submit"
