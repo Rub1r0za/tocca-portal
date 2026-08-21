@@ -10,7 +10,8 @@ export async function GET(request: Request) {
   const host = forwardedHost ? `https://${forwardedHost}` : requestUrl.origin
 
   // Resolve `next` to a safe, same-origin path (guards against open redirects).
-  let next = '/en/dashboard'
+  // Sin locale: que el idioma lo decida el navegador del viajero.
+  let next = '/dashboard'
   const rawNext = requestUrl.searchParams.get('next')
   if (rawNext) {
     try {
@@ -61,6 +62,6 @@ export async function GET(request: Request) {
     return response
   }
 
-  const locale = next.match(/^\/(en|es)(\/|$)/)?.[1] ?? 'en'
-  return NextResponse.redirect(`${host}/${locale}/login?error=auth`)
+  const locale = next.match(/^\/(en|es)(\/|$)/)?.[1]
+  return NextResponse.redirect(`${host}${locale ? `/${locale}` : ''}/login?error=auth`)
 }

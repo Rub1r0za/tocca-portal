@@ -123,7 +123,7 @@ export async function updateBookingStatus(
         'Benvenuti in Costiera Amalfitana ✨',
         `<p>Hola ${updated.applicant_name || ''},</p>
          <p>Tu reserva fue <strong>aprobada</strong>. Ya tienes acceso completo al portal de tu viaje: itinerario día a día, selección de comidas, experiencias opcionales y wellness.</p>
-         <p style="margin-top:20px;"><a href="https://tocca-portal.vercel.app/es/login" style="background:#23374D;color:#ffffff;padding:12px 24px;border-radius:10px;text-decoration:none;">Entrar a mi portal →</a></p>`,
+         <p style="margin-top:20px;"><a href="https://tocca-portal.vercel.app/login" style="background:#23374D;color:#ffffff;padding:12px 24px;border-radius:10px;text-decoration:none;">Entrar a mi portal →</a></p>`,
       ),
     })
     emailError = sent.error
@@ -953,7 +953,7 @@ export async function reviewPayment(
           'Pago confirmado',
           `<p>Hola ${bookingInfo.applicant_name || ''},</p>
            <p>Tu pago de <strong>USD $${Number(payment.amount).toFixed(2)}</strong> fue revisado y aprobado. ¡Gracias!</p>
-           <p><a href="https://tocca-portal.vercel.app/es/payments" style="color:#4A9A92;">Ver mis pagos →</a></p>`,
+           <p><a href="https://tocca-portal.vercel.app/payments" style="color:#4A9A92;">Ver mis pagos →</a></p>`,
         ),
       })
     }
