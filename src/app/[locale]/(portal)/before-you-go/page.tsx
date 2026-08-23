@@ -40,8 +40,8 @@ export default async function BeforeYouGoPage({
           {tSections('beforeYouGo.intro')}
         </p>
 
-        <ol className="space-y-3">
-          {BEFORE_YOU_GO.map((tip, i) => {
+        <ul className="space-y-3">
+          {BEFORE_YOU_GO.map((tip) => {
             const Icon = ICONS[tip.icon]
             return (
               <li
@@ -56,7 +56,6 @@ export default async function BeforeYouGoPage({
                     className="text-base leading-snug text-foreground"
                     style={{ fontFamily: 'var(--font-display)', fontWeight: 500 }}
                   >
-                    <span className="mr-1.5 text-gold">{i + 1}.</span>
                     {pick(tip.title, locale)}
                   </h2>
                   <p className="mt-1 text-sm leading-relaxed text-mist">{pick(tip.body, locale)}</p>
@@ -64,7 +63,7 @@ export default async function BeforeYouGoPage({
               </li>
             )
           })}
-        </ol>
+        </ul>
       </div>
     </div>
   )

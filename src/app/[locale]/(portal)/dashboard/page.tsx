@@ -1,7 +1,7 @@
 import { getTranslations, getLocale } from 'next-intl/server'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Route, Sparkles, Compass, UtensilsCrossed, Flower2, ChevronRight, Users, CalendarDays, Hourglass, ClipboardList, AlertTriangle, Luggage, Languages } from 'lucide-react'
+import { Route, Sparkles, UtensilsCrossed, ChevronRight, Users, CalendarDays, Hourglass, ClipboardList, AlertTriangle, Luggage, Languages } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { getMyBooking } from '@/lib/booking'
 import { createClient } from '@/lib/supabase/server'
@@ -115,9 +115,9 @@ export default async function DashboardPage({
 
   type Tile = { href: string; Icon: LucideIcon; title: string; subtitle: string }
 
+  // "Día Libre" y "Bienestar" siguen en la barra de abajo; en la home
+  // estorbaban al lado de lo que se mira antes de salir.
   const tripTiles: Tile[] = [
-    { href: `/${locale}/activities`, Icon: Compass, title: tSections('activities.title'), subtitle: tSections('activities.subtitle') },
-    { href: `/${locale}/wellness`, Icon: Flower2, title: tSections('wellness.title'), subtitle: tSections('wellness.subtitle') },
     ...(MEALS_ENABLED
       ? [{ href: `/${locale}/meals`, Icon: UtensilsCrossed, title: tSections('meals.title'), subtitle: tSections('meals.subtitle') }]
       : []),
