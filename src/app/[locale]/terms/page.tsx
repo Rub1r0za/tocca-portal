@@ -13,7 +13,7 @@ const CONTENT: Record<string, { heading: string; intro: string; back: string; se
       {
         title: '1. Booking & Payment Terms',
         items: [
-          'To secure a spot, a non-refundable and non-transferable deposit of USD $500 per person is required.',
+          'To secure a spot, a non-refundable and non-transferable deposit per person is required. The amount is confirmed at the time of booking.',
           'After the initial deposit, a second non-refundable and non-transferable payment of 30% of the total trip cost is required to confirm participation.',
           'The remaining 70% balance must be paid no later than forty-five (45) days prior to the official trip start date. Failure to complete payment on time may result in cancellation of the reservation without refund of amounts already paid.',
         ],
@@ -21,7 +21,7 @@ const CONTENT: Record<string, { heading: string; intro: string; back: string; se
       {
         title: '2. Cancellation & Refund Policy',
         items: [
-          'The $500 deposit and 30% confirmation payment are strictly non-refundable and non-transferable under any circumstances.',
+          'The initial deposit and the 30% confirmation payment are strictly non-refundable and non-transferable under any circumstances.',
           'The 70% final payment is refundable only if cancellation is made at least thirty-five (35) days prior to the trip start date.',
           'Cancellations made within 35 days of the departure date are not eligible for any refund, regardless of reason.',
           'No refunds will be issued for: late arrivals or early departures; missed flights or travel disruptions; illness or medical conditions; personal decisions or changes of plans; weather conditions; government restrictions or travel bans; force majeure events or circumstances beyond the company’s control.',
@@ -88,7 +88,7 @@ const CONTENT: Record<string, { heading: string; intro: string; back: string; se
       {
         title: '1. Reserva y condiciones de pago',
         items: [
-          'Para asegurar un lugar se requiere un depósito no reembolsable y no transferible de USD $500 por persona.',
+          'Para asegurar un lugar se requiere un depósito no reembolsable y no transferible por persona. El monto se confirma al momento de reservar.',
           'Tras el depósito inicial, se requiere un segundo pago no reembolsable y no transferible del 30% del costo total del viaje para confirmar la participación.',
           'El saldo restante del 70% debe pagarse a más tardar cuarenta y cinco (45) días antes de la fecha oficial de inicio del viaje. No completar el pago a tiempo puede resultar en la cancelación de la reserva sin reembolso de los montos ya pagados.',
         ],
@@ -96,7 +96,7 @@ const CONTENT: Record<string, { heading: string; intro: string; back: string; se
       {
         title: '2. Política de cancelación y reembolsos',
         items: [
-          'El depósito de $500 y el pago de confirmación del 30% son estrictamente no reembolsables y no transferibles bajo ninguna circunstancia.',
+          'El depósito inicial y el pago de confirmación del 30% son estrictamente no reembolsables y no transferibles bajo ninguna circunstancia.',
           'El pago final del 70% es reembolsable solo si la cancelación se realiza al menos treinta y cinco (35) días antes de la fecha de inicio del viaje.',
           'Las cancelaciones realizadas dentro de los 35 días previos a la salida no son elegibles para ningún reembolso, sin importar el motivo.',
           'No se emitirán reembolsos por: llegadas tardías o salidas anticipadas; vuelos perdidos o interrupciones de viaje; enfermedad o condiciones médicas; decisiones personales o cambios de planes; condiciones climáticas; restricciones gubernamentales o prohibiciones de viaje; eventos de fuerza mayor o circunstancias fuera del control de la empresa.',
