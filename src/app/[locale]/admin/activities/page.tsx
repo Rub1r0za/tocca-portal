@@ -10,10 +10,12 @@ export default async function ActivitiesAdminPage({
   const { locale } = await params
   const admin = createAdminClient()
 
+  // Mismo orden que el portal: lo que Jess ve aquí es lo que ve el viajero.
   const { data } = await admin
     .from('activities')
     .select('*')
-    .order('created_at', { ascending: false })
+    .order('sort_order', { ascending: true })
+    .order('created_at', { ascending: true })
 
   const activities = (data ?? []) as Activity[]
   const activeCount = activities.filter((a) => a.active).length
@@ -36,8 +38,14 @@ export default async function ActivitiesAdminPage({
 
       <div className="mb-6 space-y-4">
         {activities.length > 0 ? (
-          activities.map((activity) => (
-            <ActivityCard key={activity.id} activity={activity} locale={locale} />
+          activities.map((activity, index) => (
+            <ActivityCard
+              key={activity.id}
+              activity={activity}
+              locale={locale}
+              index={index}
+              total={activities.length}
+            />
           ))
         ) : (
           <div className="rounded-2xl border border-dashed border-[rgba(62,45,35,0.2)] bg-white p-8 text-center">

@@ -1,18 +1,31 @@
 'use client'
 
 import { useState } from 'react'
-import { Pencil, Trash2, ChevronUp, Eye, EyeOff, Euro, Users } from 'lucide-react'
+import { Pencil, Trash2, ChevronUp, Eye, EyeOff, Euro, Users, ArrowUp, ArrowDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { deleteActivity, toggleActivityActive } from '../actions'
+import { deleteActivity, toggleActivityActive, moveActivity } from '../actions'
 import { ActivityForm, type Activity } from './activity-form'
 
-export function ActivityCard({ activity, locale }: { activity: Activity; locale: string }) {
+export function ActivityCard({
+  activity,
+  locale,
+  index,
+  total,
+}: {
+  activity: Activity
+  locale: string
+  /** Posición en la lista; manda el orden que ve el viajero. */
+  index: number
+  total: number
+}) {
   const [editing, setEditing] = useState(false)
 
   const nameEn = activity.name?.en || activity.name?.es || 'Sin nombre'
   const nameEs = activity.name?.es || ''
   const deleteAction = deleteActivity.bind(null, activity.id, locale)
   const toggleAction = toggleActivityActive.bind(null, activity.id, !activity.active, locale)
+  const upAction = moveActivity.bind(null, activity.id, 'up', locale)
+  const downAction = moveActivity.bind(null, activity.id, 'down', locale)
 
   return (
     <div
@@ -22,6 +35,30 @@ export function ActivityCard({ activity, locale }: { activity: Activity; locale:
       )}
     >
       <div className="flex items-start gap-3">
+        {/* Subir y bajar: el portal enseña las actividades en este mismo orden */}
+        <div className="flex shrink-0 flex-col">
+          <form action={upAction}>
+            <button
+              type="submit"
+              disabled={index === 0}
+              title="Subir"
+              className="rounded-lg p-1 text-[#7A7168] transition-colors hover:bg-[#F4F1EB] hover:text-[#3E2D23] disabled:pointer-events-none disabled:opacity-25"
+            >
+              <ArrowUp className="size-4" />
+            </button>
+          </form>
+          <form action={downAction}>
+            <button
+              type="submit"
+              disabled={index === total - 1}
+              title="Bajar"
+              className="rounded-lg p-1 text-[#7A7168] transition-colors hover:bg-[#F4F1EB] hover:text-[#3E2D23] disabled:pointer-events-none disabled:opacity-25"
+            >
+              <ArrowDown className="size-4" />
+            </button>
+          </form>
+        </div>
+
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
             <p className="text-base font-medium text-[#3E2D23]" style={{ fontFamily: 'var(--font-display)' }}>

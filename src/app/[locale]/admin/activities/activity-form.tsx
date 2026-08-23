@@ -11,6 +11,7 @@ const labelClass = 'mb-1.5 block text-[0.7rem] font-semibold tracking-[0.18em] t
 
 export type Activity = {
   id: string
+  sort_order: number
   name: Record<string, string>
   description: Record<string, string>
   overview: Record<string, string>

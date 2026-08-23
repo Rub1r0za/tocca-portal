@@ -149,6 +149,8 @@ export type Meal = {
 
 export type Activity = {
   id: string
+  /** Orden en el catálogo; lo mueve Jess con las flechas del panel. */
+  sort_order: number
   name: Localized | null
   description: Localized | null
   price: number

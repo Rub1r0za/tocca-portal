@@ -419,13 +419,56 @@ export async function saveActivity(
   }
 
   const admin = await adminDb()
-  const { error } = activityId
-    ? await admin.from('activities').update(row).eq('id', activityId)
-    : await admin.from('activities').insert(row)
+  let error
+  if (activityId) {
+    ;({ error } = await admin.from('activities').update(row).eq('id', activityId))
+  } else {
+    // Las nuevas entran al final de la lista, no encima de todo.
+    const { data: last } = await admin
+      .from('activities')
+      .select('sort_order')
+      .order('sort_order', { ascending: false })
+      .limit(1)
+      .maybeSingle()
+    ;({ error } = await admin
+      .from('activities')
+      .insert({ ...row, sort_order: (last?.sort_order ?? 0) + 1 }))
+  }
 
   if (error) return { error: error.message }
   revalidatePath(`/${locale}/admin/activities`)
+  revalidatePath('/es/activities')
+  revalidatePath('/en/activities')
   return {}
+}
+
+/**
+ * Sube o baja una actividad en el catálogo. Renumera la lista entera en vez de
+ * intercambiar dos filas: así da igual que vengan empatadas o con huecos.
+ */
+export async function moveActivity(activityId: string, direction: 'up' | 'down', locale: string) {
+  const admin = await adminDb()
+  const { data } = await admin
+    .from('activities')
+    .select('id')
+    .order('sort_order', { ascending: true })
+    .order('created_at', { ascending: true })
+
+  const list = (data ?? []) as { id: string }[]
+  const from = list.findIndex((a) => a.id === activityId)
+  const to = direction === 'up' ? from - 1 : from + 1
+  if (from === -1 || to < 0 || to >= list.length) return
+
+  const [moved] = list.splice(from, 1)
+  list.splice(to, 0, moved)
+
+  for (const [index, activity] of list.entries()) {
+    await admin.from('activities').update({ sort_order: index + 1 }).eq('id', activity.id)
+  }
+
+  revalidatePath(`/${locale}/admin/activities`)
+  revalidatePath('/es/activities')
+  revalidatePath('/en/activities')
 }
 
 export async function toggleActivityActive(activityId: string, active: boolean, locale: string) {
