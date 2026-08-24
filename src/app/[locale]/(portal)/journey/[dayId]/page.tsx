@@ -65,7 +65,7 @@ export default async function JourneyDayPage({
             </p>
           )}
           {description && (
-            <p className="mt-2 text-sm leading-relaxed text-mist">{description}</p>
+            <p className="mt-2 text-sm leading-relaxed whitespace-pre-line text-mist">{description}</p>
           )}
         </div>
 
@@ -130,7 +130,7 @@ export default async function JourneyDayPage({
             <SectionHeading eyebrow={t('meetingPoint')} className="mb-2" />
             <p className="flex items-start gap-2 text-sm text-mist">
               <MapPin className="mt-0.5 size-4 shrink-0 text-gold" aria-hidden />
-              {meetingPoint}
+              <span className="whitespace-pre-line">{meetingPoint}</span>
             </p>
           </section>
         )}
@@ -166,7 +166,7 @@ export default async function JourneyDayPage({
         {notes && (
           <section>
             <SectionHeading eyebrow={t('notes')} className="mb-2" />
-            <p className="rounded-xl border border-hairline bg-panel/60 px-4 py-3 text-sm leading-relaxed text-mist">
+            <p className="rounded-xl border border-hairline bg-panel/60 px-4 py-3 text-sm leading-relaxed whitespace-pre-line text-mist">
               {notes}
             </p>
           </section>

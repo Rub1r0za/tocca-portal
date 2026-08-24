@@ -79,7 +79,7 @@ export default async function ActivityDetailPage({
         {overview && (
           <section>
             <SectionHeading eyebrow={t('overview')} className="mb-2" />
-            <p className="text-sm leading-relaxed text-mist">{overview}</p>
+            <p className="text-sm leading-relaxed whitespace-pre-line text-mist">{overview}</p>
           </section>
         )}
 
@@ -114,7 +114,7 @@ export default async function ActivityDetailPage({
         {cancellation && (
           <section>
             <SectionHeading eyebrow={t('cancellationPolicy')} className="mb-2" />
-            <p className="text-sm leading-relaxed text-mist">{cancellation}</p>
+            <p className="text-sm leading-relaxed whitespace-pre-line text-mist">{cancellation}</p>
           </section>
         )}
 

@@ -8,7 +8,9 @@ const intlLocale = (locale: string) => (locale === 'es' ? 'es-ES' : 'en-GB')
 /** Pick a localized string with a graceful fallback chain. */
 export function pick(value: Localized | null | undefined, locale: string): string {
   if (!value) return ''
-  return value[locale] ?? value['en'] ?? Object.values(value)[0] ?? ''
+  // Recortamos los extremos: los textos se pintan respetando los saltos de
+  // línea, y un Enter suelto al final dejaría un hueco en blanco visible.
+  return (value[locale] ?? value['en'] ?? Object.values(value)[0] ?? '').trim()
 }
 
 /** Format an ISO date string (yyyy-mm-dd) for display. Returns '' when null. */

@@ -67,7 +67,7 @@ export default async function WellnessDetailPage({
 
         {description && (
           <section>
-            <p className="text-sm leading-relaxed text-mist">{description}</p>
+            <p className="text-sm leading-relaxed whitespace-pre-line text-mist">{description}</p>
           </section>
         )}
 
