@@ -1,7 +1,8 @@
 import Link from 'next/link'
 import { createAdminClient } from '@/lib/supabase/admin'
-import { CalendarDays, Users, PlusCircle, ChevronRight } from 'lucide-react'
+import { CalendarDays, Users, PlusCircle, ChevronRight, MessageCircle } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { waLink } from '@/lib/format'
 
 const STATUS_LABEL: Record<string, string> = {
   pending: 'Pendiente',
@@ -25,7 +26,7 @@ export default async function AdminPage({
 
   const { data: bookings } = await admin
     .from('bookings')
-    .select('id, title, status, start_date, end_date, applicant_email, applicant_name, created_at, travelers(id)')
+    .select('id, title, status, start_date, end_date, applicant_email, applicant_name, applicant_phone, created_at, travelers(id)')
     .order('created_at', { ascending: false })
 
   const total = bookings?.length ?? 0
@@ -96,12 +97,15 @@ export default async function AdminPage({
               const travelersCount = Array.isArray(booking.travelers)
                 ? booking.travelers.length
                 : 0
+              // El botón de WhatsApp va fuera del Link: un enlace dentro de otro
+              // no es HTML válido y el navegador se come el de dentro.
+              const wa = waLink(booking.applicant_phone)
 
               return (
-                <li key={booking.id}>
+                <li key={booking.id} className="flex items-center gap-2 pr-3 transition-colors hover:bg-[#FAFAF8]">
                   <Link
                     href={`/${locale}/admin/bookings/${booking.id}`}
-                    className="flex items-center gap-4 px-5 py-4 transition-colors hover:bg-[#FAFAF8] focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#4A9A92]/40"
+                    className="flex min-w-0 flex-1 items-center gap-4 px-5 py-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#4A9A92]/40"
                   >
                     <div className="min-w-0 flex-1">
                       <div className="flex flex-wrap items-center gap-2">
@@ -124,6 +128,9 @@ export default async function AdminPage({
                         {booking.applicant_email && (
                           <span>{booking.applicant_email}</span>
                         )}
+                        {booking.applicant_phone && (
+                          <span>{booking.applicant_phone}</span>
+                        )}
                         {(booking.start_date || booking.end_date) && (
                           <span className="inline-flex items-center gap-1">
                             <CalendarDays className="size-3" />
@@ -140,6 +147,18 @@ export default async function AdminPage({
                     </div>
                     <ChevronRight className="size-4 shrink-0 text-[#7A7168]/60" />
                   </Link>
+                  {wa && (
+                    <a
+                      href={wa}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title={`Escribir a ${booking.applicant_name ?? 'el cliente'} por WhatsApp`}
+                      className="inline-flex shrink-0 items-center gap-1.5 rounded-xl border border-[#25D366]/40 px-3 py-2 text-xs font-medium text-[#1FA855] transition-colors hover:bg-[#25D366]/10"
+                    >
+                      <MessageCircle className="size-4" />
+                      <span className="hidden sm:inline">WhatsApp</span>
+                    </a>
+                  )}
                 </li>
               )
             })}

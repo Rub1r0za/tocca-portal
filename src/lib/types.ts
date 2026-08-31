@@ -51,6 +51,7 @@ export type Booking = {
   end_date: string | null
   applicant_name: string | null
   applicant_email: string | null
+  applicant_phone: string | null
   notes: string | null
   total_price: number | null
   terms_accepted_at: string | null

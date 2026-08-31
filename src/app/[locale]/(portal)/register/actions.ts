@@ -47,8 +47,9 @@ export async function submitRegistration(
     .maybeSingle()
   if (existing) return { error: 'exists' }
 
+  // El teléfono queda también en la ficha del cliente, no solo en la reserva.
   await admin.from('profiles').upsert(
-    { id: user.id, full_name: data.full_name },
+    { id: user.id, full_name: data.full_name, phone: data.phone },
     { onConflict: 'id' },
   )
 

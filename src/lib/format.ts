@@ -13,6 +13,17 @@ export function pick(value: Localized | null | undefined, locale: string): strin
   return (value[locale] ?? value['en'] ?? Object.values(value)[0] ?? '').trim()
 }
 
+/**
+ * Enlace de WhatsApp a partir de un teléfono escrito a mano. Aguanta espacios,
+ * guiones y paréntesis; el 00 de marcación internacional pasa a nada, que wa.me
+ * lo quiere sin prefijo. Devuelve '' si no queda un número creíble.
+ */
+export function waLink(phone: string | null | undefined): string {
+  if (!phone) return ''
+  const digits = phone.replace(/D/g, '').replace(/^00/, '')
+  return digits.length >= 7 ? `https://wa.me/${digits}` : ''
+}
+
 /** Format an ISO date string (yyyy-mm-dd) for display. Returns '' when null. */
 export function formatDate(
   date: string | null | undefined,

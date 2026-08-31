@@ -6,6 +6,7 @@ import { mealPending, type SummaryDay, type SummaryTraveler, type MealSelection 
 import { BookingStatusForm } from './booking-status-form'
 import { BookingDatesForm } from './booking-dates-form'
 import { BookingNotesForm } from './booking-notes-form'
+import { BookingContactForm } from './booking-contact-form'
 import { TravelersSection } from './travelers-section'
 import { DeleteBookingButton } from './delete-booking-button'
 import { ThankYouButton } from './thank-you-button'
@@ -144,6 +145,18 @@ export default async function BookingDetailPage({
         <div className="rounded-2xl border border-[rgba(62,45,35,0.12)] bg-white p-5 shadow-[0_1px_4px_rgba(62,45,35,0.06)]">
           <h2 className="mb-4 text-base font-medium text-[#3E2D23]">Estado de la reserva</h2>
           <BookingStatusForm bookingId={id} locale={locale} currentStatus={booking.status} />
+        </div>
+
+        {/* Contacto — por aquí se les escribe */}
+        <div className="rounded-2xl border border-[rgba(62,45,35,0.12)] bg-white p-5 shadow-[0_1px_4px_rgba(62,45,35,0.06)]">
+          <h2 className="mb-4 text-base font-medium text-[#3E2D23]">Contacto</h2>
+          <BookingContactForm
+            bookingId={id}
+            locale={locale}
+            name={booking.applicant_name ?? ''}
+            email={booking.applicant_email ?? ''}
+            phone={booking.applicant_phone ?? ''}
+          />
         </div>
 
         {/* Dates */}

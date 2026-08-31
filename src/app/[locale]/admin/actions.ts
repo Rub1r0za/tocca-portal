@@ -22,6 +22,7 @@ async function adminDb() {
 
 const createBookingSchema = z.object({
   email: z.string().email(),
+  phone: z.string().optional(),
   title_en: z.string().min(1),
   title_es: z.string().optional(),
   start_date: z.string().optional(),
@@ -38,7 +39,7 @@ export async function createBooking(
   const parsed = createBookingSchema.safeParse(raw)
   if (!parsed.success) return { error: 'Datos inválidos' }
 
-  const { email, title_en, title_es, start_date, end_date, notes } = parsed.data
+  const { email, phone, title_en, title_es, start_date, end_date, notes } = parsed.data
   const admin = await adminDb()
 
   // Find user by email
@@ -53,10 +54,12 @@ export async function createBooking(
 
   const { data: profile } = await admin
     .from('profiles')
-    .select('full_name')
+    .select('full_name, phone')
     .eq('id', authUser.id)
     .maybeSingle()
   const fullName = (profile?.full_name || '').trim() || authUser.email || 'Cliente'
+  // Si Jess no lo escribe, tiramos del que dejó el cliente al registrarse.
+  const applicantPhone = (phone || '').trim() || profile?.phone || null
 
   const { data: booking, error } = await admin
     .from('bookings')
@@ -69,6 +72,7 @@ export async function createBooking(
       status: 'pending',
       applicant_name: fullName,
       applicant_email: authUser.email,
+      applicant_phone: applicantPhone,
     })
     .select('id')
     .single()
@@ -172,6 +176,28 @@ export async function updateBookingNotes(
 
   revalidatePath(`/${locale}/admin/bookings/${bookingId}`)
   return {}
+}
+
+/** El teléfono del titular: es por donde Jess les escribe por WhatsApp. */
+export async function updateBookingPhone(
+  bookingId: string,
+  locale: string,
+  _prev: unknown,
+  formData: FormData,
+): Promise<{ error?: string; ok?: boolean }> {
+  const phone = ((formData.get('applicant_phone') as string) || '').trim()
+
+  const admin = await adminDb()
+  const { error } = await admin
+    .from('bookings')
+    .update({ applicant_phone: phone || null, updated_at: new Date().toISOString() })
+    .eq('id', bookingId)
+
+  if (error) return { error: error.message }
+
+  revalidatePath(`/${locale}/admin/bookings/${bookingId}`)
+  revalidatePath(`/${locale}/admin`)
+  return { ok: true }
 }
 
 export async function deleteBooking(bookingId: string, locale: string) {

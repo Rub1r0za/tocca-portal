@@ -85,6 +85,19 @@ function NewBookingForm() {
               El cliente debe haber creado su cuenta en el portal primero.
             </p>
           </div>
+          <div className="mt-4">
+            <label htmlFor="phone" className={labelClass}>Teléfono / WhatsApp</label>
+            <input
+              id="phone"
+              name="phone"
+              type="tel"
+              placeholder="+1 809 000 0000"
+              className={inputClass}
+            />
+            <p className="mt-1.5 text-xs text-[#7A7168]">
+              Con el código del país. Si lo dejas vacío se usa el que dio al registrarse.
+            </p>
+          </div>
         </div>
 
         {/* Trip info */}
