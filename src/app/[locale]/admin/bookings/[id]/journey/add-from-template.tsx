@@ -13,6 +13,7 @@ type TemplateOption = {
   title: Record<string, string>
   is_free_day: boolean
   mealsCount: number
+  trip_number: 1 | 2
 }
 
 export function AddFromTemplate({
@@ -56,7 +57,7 @@ export function AddFromTemplate({
           </option>
           {templates.map((t) => (
             <option key={t.id} value={t.id}>
-              {t.sort_order}. {t.title?.es || t.title?.en || 'Sin título'}
+              Viaje {t.trip_number === 2 ? 'dos' : 'uno'} · {t.sort_order}. {t.title?.es || t.title?.en || 'Sin título'}
               {t.is_free_day ? ' · día libre' : ''}
               {t.mealsCount > 0 ? ' · menú' : ''}
             </option>
@@ -72,17 +73,21 @@ export function AddFromTemplate({
         </button>
       </form>
 
-      <form action={allAction} className="mt-3">
+      <form action={allAction} className="mt-3 flex flex-wrap items-center gap-2">
+        <select name="trip_number" className={`${inputClass} max-w-xs`} defaultValue="1">
+          <option value="1">Viaje uno · Signature</option>
+          <option value="2">Viaje dos · Yoga Retreat</option>
+        </select>
         <button
           type="submit"
           disabled={allPending}
           onClick={(e) => {
-            if (!confirm(`¿Añadir los ${templates.length} días del Signature Journey a esta reserva?`)) e.preventDefault()
+            if (!confirm('¿Añadir todos los días de este viaje a la reserva?')) e.preventDefault()
           }}
           className="flex items-center gap-1.5 rounded-xl border border-[#4A9A92]/40 bg-white px-4 py-2.5 text-sm font-medium text-[#4A9A92] transition-colors hover:bg-[#4A9A92]/10 disabled:opacity-60"
         >
           {allPending && <Loader2 className="size-4 animate-spin" />}
-          Añadir Signature Journey completo ({templates.length} días)
+          Añadir viaje completo
         </button>
       </form>
     </div>

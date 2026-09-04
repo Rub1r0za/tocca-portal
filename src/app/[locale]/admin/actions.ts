@@ -215,6 +215,7 @@ const travelerSchema = z.object({
   last_name: z.string().min(1),
   type: z.enum(['adult', 'child']).default('adult'),
   dietary_restrictions: z.string().optional(),
+  trip_number: z.coerce.number().int().min(1).max(2).default(1),
 })
 
 export async function addTraveler(
@@ -246,9 +247,24 @@ export async function deleteTraveler(travelerId: string, locale: string, booking
   revalidatePath(`/${locale}/admin/bookings/${bookingId}`)
 }
 
+export async function updateTravelerTrip(
+  travelerId: string,
+  bookingId: string,
+  locale: string,
+  formData: FormData,
+) {
+  const tripNumber = Number(formData.get('trip_number'))
+  if (tripNumber !== 1 && tripNumber !== 2) return
+  const admin = await adminDb()
+  await admin.from('travelers').update({ trip_number: tripNumber }).eq('id', travelerId).eq('booking_id', bookingId)
+  revalidatePath(`/${locale}/admin/bookings/${bookingId}`)
+  revalidatePath(`/${locale}/admin/summary`)
+}
+
 // ── Journey days ────────────────────────────────────────────────────────────
 
 const daySchema = z.object({
+  trip_number: z.coerce.number().int().min(1).max(2).default(1),
   day_number: z.coerce.number().int().min(1),
   title_en: z.string().min(1),
   title_es: z.string().optional(),
@@ -268,6 +284,7 @@ const daySchema = z.object({
 
 function dayPayload(d: z.infer<typeof daySchema>) {
   return {
+    trip_number: d.trip_number,
     day_number: d.day_number,
     title: i18n(d.title_en, d.title_es),
     description: i18n(d.description_en, d.description_es),
@@ -397,6 +414,7 @@ function zipLines(en?: string, es?: string) {
 // ── Activities (global catalog) ─────────────────────────────────────────────
 
 const activitySchema = z.object({
+  trip_number: z.coerce.number().int().min(1).max(2).default(1),
   name_en: z.string().min(1),
   name_es: z.string().optional(),
   description_en: z.string().optional(),
@@ -430,6 +448,7 @@ export async function saveActivity(
   const d = parsed.data
 
   const row = {
+    trip_number: d.trip_number,
     name: i18n(d.name_en, d.name_es),
     description: i18n(d.description_en, d.description_es),
     overview: i18n(d.overview_en, d.overview_es),
@@ -512,6 +531,7 @@ export async function deleteActivity(activityId: string, locale: string) {
 // ── Wellness options (global catalog) ───────────────────────────────────────
 
 const wellnessSchema = z.object({
+  trip_number: z.coerce.number().int().min(1).max(2).default(1),
   name_en: z.string().min(1),
   name_es: z.string().optional(),
   description_en: z.string().optional(),
@@ -534,6 +554,7 @@ export async function saveWellnessOption(
   const d = parsed.data
 
   const row = {
+    trip_number: d.trip_number,
     name: i18n(d.name_en, d.name_es),
     description: i18n(d.description_en, d.description_es),
     duration: i18n(d.duration_en, d.duration_es),
@@ -705,6 +726,7 @@ export async function deleteMeal(mealId: string, bookingId: string, locale: stri
 // ── Day templates (Signature Journey library) ───────────────────────────────
 
 const dayTemplateSchema = z.object({
+  trip_number: z.coerce.number().int().min(1).max(2).default(1),
   sort_order: z.coerce.number().int().min(0).default(0),
   title_en: z.string().min(1),
   title_es: z.string().optional(),
@@ -791,6 +813,7 @@ export async function saveDayTemplate(
 
   const d = parsed.data
   const payload = {
+    trip_number: d.trip_number,
     sort_order: d.sort_order,
     title: i18n(d.title_en, d.title_es),
     description: i18n(d.description_en, d.description_es),
@@ -840,6 +863,7 @@ async function instantiateTemplate(
     .from('journey_days')
     .insert({
       booking_id: bookingId,
+      trip_number: template.trip_number ?? 1,
       day_number: dayNumber,
       title: template.title,
       description: template.description,
@@ -910,13 +934,16 @@ export async function addFullJourneyToBooking(
   bookingId: string,
   locale: string,
   _prev: { error?: string } | null,
-  _formData: FormData,
+  formData: FormData,
 ): Promise<{ error?: string }> {
   const admin = await adminDb()
+  const tripNumber = Number(formData.get('trip_number'))
+  if (tripNumber !== 1 && tripNumber !== 2) return { error: 'Elige Viaje uno o Viaje dos.' }
   const { data: templates } = await admin
     .from('day_templates')
     .select('*')
     .eq('active', true)
+    .eq('trip_number', tripNumber)
     .order('sort_order', { ascending: true })
 
   if (!templates || templates.length === 0) return { error: 'No hay plantillas de día activas.' }

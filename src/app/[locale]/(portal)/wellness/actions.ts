@@ -23,12 +23,18 @@ export async function requestWellness(
 
   // Los ids llegan del navegador: se aceptan solo los que de verdad son
   // viajeros de esta reserva, para que nadie apunte a gente de otro grupo.
-  const { data: own } = await supabase
+  const [{ data: option }, { data: own }] = await Promise.all([
+    supabase.from('wellness_options').select('trip_number').eq('id', data.wellnessOptionId).eq('active', true).maybeSingle(),
+    supabase
     .from('travelers')
-    .select('id')
+    .select('id, trip_number')
     .eq('booking_id', data.bookingId)
-    .in('id', data.travelerIds)
-  const travelerIds = (own ?? []).map((t) => t.id)
+    .in('id', data.travelerIds),
+  ])
+  if (!option) return { ok: false, error: 'invalid_wellness' }
+  const travelerIds = (own ?? [])
+    .filter((traveler) => (traveler.trip_number ?? 1) === (option.trip_number ?? 1))
+    .map((traveler) => traveler.id)
   if (travelerIds.length === 0) return { ok: false, error: 'invalid_travelers' }
   const { error } = await supabase.from('wellness_requests').insert({
     booking_id: data.bookingId,

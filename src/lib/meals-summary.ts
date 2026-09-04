@@ -16,13 +16,18 @@ export type SummaryDay = {
   day_number: number
   title: Record<string, string> | null
   meals: SummaryMeal[] | null
+  trip_number?: 1 | 2
 }
 
 export type SummaryTraveler = {
   id: string
   first_name: string
   last_name: string
+  trip_number?: 1 | 2
 }
+
+const travelersForDay = (day: SummaryDay, travelers: SummaryTraveler[]) =>
+  travelers.filter((traveler) => (traveler.trip_number ?? 1) === (day.trip_number ?? 1))
 
 export type MealSelection = { meal_id: string; traveler_id: string }
 
@@ -60,7 +65,7 @@ export function mealPending(
       mealsByCourse.set(m.course, arr)
     }
 
-    for (const traveler of travelers) {
+    for (const traveler of travelersForDay(day, travelers)) {
       const chosen = selectedByTraveler.get(traveler.id) ?? new Set<string>()
       for (const [, mealIds] of mealsByCourse) {
         expectedSlots += 1
@@ -166,7 +171,7 @@ export function mealByTraveler(
         ...[...mealsByCourse.keys()].filter((c) => !COURSE_ORDER.includes(c)),
       ]
 
-      const rows = travelers.map((traveler) => {
+      const rows = travelersForDay(day, travelers).map((traveler) => {
         const picked = selectedByTraveler.get(traveler.id) ?? new Set<string>()
         const chosen: { course: string; meal: SummaryMeal }[] = []
         const missingCourses: string[] = []

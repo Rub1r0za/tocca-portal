@@ -11,6 +11,7 @@ export type Person = {
   bookingId: string
   /** Nombre de la reserva a la que pertenece, para desempatar homónimos. */
   bookingName: string
+  tripNumber: 1 | 2
 }
 
 export type DayMealRow = {
@@ -20,6 +21,7 @@ export type DayMealRow = {
 }
 
 export type MealDaySummary = {
+  tripNumber: 1 | 2
   dayNumber: number
   title: string
   /** Fecha si todas las reservas coinciden; vacío si difieren o no hay. */
@@ -36,6 +38,7 @@ type DayRow = {
   day_date: string | null
   title: Record<string, string> | null
   meals: { id: string; course: string; name: Record<string, string> | null }[] | null
+  trip_number: 1 | 2
 }
 
 const label = (v: Record<string, string> | null | undefined) => v?.es || v?.en || ''
@@ -55,15 +58,18 @@ export function mealsByDay(
 
   // Los viajeros de una reserva solo pueden elegir platos de SUS días, así que
   // el agrupado por número de día tiene que recordar de qué reserva viene cada uno.
-  const byNumber = new Map<number, DayRow[]>()
+  const byNumber = new Map<string, DayRow[]>()
   for (const day of days) {
     if ((day.meals ?? []).length === 0) continue
-    byNumber.set(day.day_number, [...(byNumber.get(day.day_number) ?? []), day])
+    const key = `${day.trip_number ?? 1}:${day.day_number}`
+    byNumber.set(key, [...(byNumber.get(key) ?? []), day])
   }
 
   return [...byNumber.entries()]
-    .sort(([a], [b]) => a - b)
-    .map(([dayNumber, dayRows]) => {
+    .sort(([a], [b]) => a.localeCompare(b, undefined, { numeric: true }))
+    .map(([, dayRows]) => {
+      const dayNumber = dayRows[0].day_number
+      const tripNumber = dayRows[0].trip_number ?? 1
       const dates = [...new Set(dayRows.map((d) => d.day_date).filter(Boolean))]
       const rows: DayMealRow[] = []
       const tallyMap = new Map<string, { course: string; dish: string; count: number; names: string[] }>()
@@ -80,6 +86,7 @@ export function mealsByDay(
         for (const person of people.values()) {
           // Cada persona solo aparece en el día de su propia reserva.
           if (person.bookingId !== day.booking_id) continue
+          if (person.tripNumber !== tripNumber) continue
           const picked = pickedByPerson.get(person.id) ?? new Set<string>()
           const chosen: { course: string; dish: string }[] = []
           const missingCourses: string[] = []
@@ -108,6 +115,7 @@ export function mealsByDay(
       )
 
       return {
+        tripNumber,
         dayNumber,
         title: label(dayRows[0].title),
         date: dates.length === 1 ? (dates[0] as string) : '',
@@ -135,9 +143,11 @@ export type RequestRow = {
   travelerIds: string[]
   numGuests: number
   bookingName: string
+  tripNumber: 1 | 2
 }
 
 export type RequestDaySummary = {
+  tripNumber: 1 | 2
   date: string
   items: {
     request: RequestRow
@@ -155,7 +165,7 @@ export function requestsByDay(
 
   for (const request of requests) {
     if (request.status !== 'pending' && request.status !== 'confirmed') continue
-    const key = request.requestedDate ?? ''
+    const key = `${request.tripNumber}:${request.requestedDate ?? ''}`
     const resolved = request.travelerIds
       .map((id) => people.get(id))
       .filter((p): p is Person => Boolean(p))
@@ -165,5 +175,8 @@ export function requestsByDay(
   return [...byDate.entries()]
     // Sin fecha al final: '' ordena antes que cualquier fecha real.
     .sort(([a], [b]) => (a === '' ? 1 : b === '' ? -1 : a.localeCompare(b)))
-    .map(([date, items]) => ({ date, items }))
+    .map(([key, items]) => {
+      const [trip, ...dateParts] = key.split(':')
+      return { tripNumber: Number(trip) as 1 | 2, date: dateParts.join(':'), items }
+    })
 }

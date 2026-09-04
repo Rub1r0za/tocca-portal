@@ -37,6 +37,13 @@ export function AddDayForm({
 
       <div className="grid gap-4 sm:grid-cols-3">
         <div>
+          <label className={labelClass}>Viaje *</label>
+          <select name="trip_number" defaultValue="1" className={inputClass}>
+            <option value="1">Viaje uno · Signature</option>
+            <option value="2">Viaje dos · Yoga Retreat</option>
+          </select>
+        </div>
+        <div>
           <label className={labelClass}>Número de día *</label>
           <input
             name="day_number"

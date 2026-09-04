@@ -12,6 +12,7 @@ type DayWithMeals = {
   day_number: number
   title: Record<string, string>
   meals: Meal[]
+  trip_number: 1 | 2
 }
 
 export default async function MealsAdminPage({
@@ -26,7 +27,7 @@ export default async function MealsAdminPage({
     admin.from('bookings').select('id, title').eq('id', id).single(),
     admin
       .from('journey_days')
-      .select('id, day_number, title, meals (*)')
+      .select('id, day_number, title, trip_number, meals (*)')
       .eq('booking_id', id)
       .order('day_number', { ascending: true }),
     admin.from('travelers').select('*').eq('booking_id', id),
@@ -217,7 +218,7 @@ export default async function MealsAdminPage({
               bookingId={id}
               locale={locale}
               travelersByMeal={Object.fromEntries(travelersByMeal)}
-              totalTravelers={travelerList.length}
+              totalTravelers={travelerList.filter((traveler) => (traveler.trip_number ?? 1) === (day.trip_number ?? 1)).length}
             />
           ))}
         </div>

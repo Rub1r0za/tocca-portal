@@ -29,10 +29,12 @@ export default async function WellnessPage({
   if (!booking) redirect(`/${locale}/dashboard`)
 
   const supabase = await createClient()
+  const tripNumbers = [...new Set((booking.travelers ?? []).map((traveler) => traveler.trip_number ?? 1))]
   const { data } = await supabase
     .from('wellness_options')
     .select('*')
     .eq('active', true)
+    .in('trip_number', tripNumbers)
     .order('created_at', { ascending: true })
 
   const options = (data ?? []) as WellnessOption[]

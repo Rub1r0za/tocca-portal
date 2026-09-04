@@ -2,7 +2,7 @@
 
 import { useActionState } from 'react'
 import { Loader2, Trash2, UserPlus } from 'lucide-react'
-import { addTraveler, deleteTraveler } from '../../actions'
+import { addTraveler, deleteTraveler, updateTravelerTrip } from '../../actions'
 import type { Traveler } from '@/lib/types'
 
 const inputClass =
@@ -20,6 +20,13 @@ function AddTravelerForm({ bookingId, locale }: { bookingId: string; locale: str
         Añadir viajero
       </p>
       <div className="grid gap-3 sm:grid-cols-2">
+        <div>
+          <label className={labelClass}>Viaje *</label>
+          <select name="trip_number" className={inputClass} defaultValue="1">
+            <option value="1">Viaje uno · Signature</option>
+            <option value="2">Viaje dos · Yoga Retreat</option>
+          </select>
+        </div>
         <div>
           <label className={labelClass}>Nombre *</label>
           <input name="first_name" type="text" required placeholder="María" className={inputClass} />
@@ -116,6 +123,18 @@ export function TravelersSection({
                   {t.dietary_restrictions ? ` · ${t.dietary_restrictions}` : ''}
                 </p>
               </div>
+              <form action={updateTravelerTrip.bind(null, t.id, bookingId, locale)}>
+                <select
+                  name="trip_number"
+                  defaultValue={String(t.trip_number ?? 1)}
+                  aria-label={`Viaje de ${t.first_name}`}
+                  onChange={(event) => event.currentTarget.form?.requestSubmit()}
+                  className="rounded-lg border border-[rgba(62,45,35,0.14)] bg-[#FAFAF8] px-2 py-1.5 text-xs text-[#3E2D23]"
+                >
+                  <option value="1">Viaje uno</option>
+                  <option value="2">Viaje dos</option>
+                </select>
+              </form>
               <DeleteTravelerButton travelerId={t.id} bookingId={bookingId} locale={locale} />
             </li>
           ))}

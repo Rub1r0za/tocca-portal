@@ -23,7 +23,7 @@ export default async function JourneyAdminPage({
       .order('day_number', { ascending: true }),
     admin
       .from('day_templates')
-      .select('id, sort_order, title, is_free_day, meals')
+      .select('id, sort_order, title, is_free_day, meals, trip_number')
       .eq('active', true)
       .order('sort_order', { ascending: true }),
   ])
@@ -61,8 +61,17 @@ export default async function JourneyAdminPage({
       {/* Existing days */}
       <div className="mb-6 space-y-4">
         {days && days.length > 0 ? (
-          days.map((day) => (
-            <DayCard key={day.id} day={day} bookingId={id} locale={locale} startDate={booking.start_date} />
+          [1, 2].map((trip) => (
+            <section key={trip}>
+              <h2 className="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-[#4A9A92]">
+                Viaje {trip === 1 ? 'uno · Signature' : 'dos · Yoga Retreat'}
+              </h2>
+              <div className="space-y-4">
+                {days.filter((day) => (day.trip_number ?? 1) === trip).map((day) => (
+                  <DayCard key={day.id} day={day} bookingId={id} locale={locale} startDate={booking.start_date} />
+                ))}
+              </div>
+            </section>
           ))
         ) : (
           <div className="rounded-2xl border border-dashed border-[rgba(62,45,35,0.2)] bg-white p-8 text-center">
@@ -82,6 +91,7 @@ export default async function JourneyAdminPage({
             title: (t.title ?? {}) as Record<string, string>,
             is_free_day: t.is_free_day,
             mealsCount: Array.isArray(t.meals) ? t.meals.length : 0,
+            trip_number: (t.trip_number ?? 1) as 1 | 2,
           }))}
         />
       </div>

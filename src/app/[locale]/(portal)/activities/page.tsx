@@ -23,12 +23,14 @@ export default async function ActivitiesPage({
   if (!booking) redirect(`/${locale}/dashboard`)
 
   const supabase = await createClient()
+  const tripNumbers = [...new Set((booking.travelers ?? []).map((traveler) => traveler.trip_number ?? 1))]
   // El orden lo fija el panel (columna sort_order). Antes iba por precio y
   // la cena, la más barata, se colaba la primera.
   const { data } = await supabase
     .from('activities')
     .select('*')
     .eq('active', true)
+    .in('trip_number', tripNumbers)
     .order('sort_order', { ascending: true })
     .order('created_at', { ascending: true })
 

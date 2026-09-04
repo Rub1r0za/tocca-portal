@@ -17,6 +17,7 @@ export type WellnessOption = {
   price: number | null
   active: boolean
   image_url: string | null
+  trip_number: 1 | 2
 }
 
 export function WellnessForm({
@@ -34,6 +35,13 @@ export function WellnessForm({
   return (
     <form action={action} className="space-y-4">
       {state?.error && <p className="text-xs text-red-600">{state.error}</p>}
+      <div>
+        <label className={labelClass}>Disponible en *</label>
+        <select name="trip_number" defaultValue={String(option?.trip_number ?? 1)} className={`${inputClass} max-w-sm`}>
+          <option value="1">Viaje uno · Signature</option>
+          <option value="2">Viaje dos · Yoga Retreat</option>
+        </select>
+      </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div>

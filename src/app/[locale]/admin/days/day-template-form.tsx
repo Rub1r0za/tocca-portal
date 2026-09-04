@@ -58,6 +58,13 @@ export function DayTemplateForm({
 
       <div className="grid gap-4 sm:grid-cols-3">
         <div>
+          <label className={labelClass}>Viaje *</label>
+          <select name="trip_number" defaultValue={String(template?.trip_number ?? 1)} className={inputClass}>
+            <option value="1">Viaje uno · Signature</option>
+            <option value="2">Viaje dos · Yoga Retreat</option>
+          </select>
+        </div>
+        <div>
           <label className={labelClass}>Orden *</label>
           <input name="sort_order" type="number" min="0" required defaultValue={template?.sort_order ?? 0} className={inputClass} />
         </div>

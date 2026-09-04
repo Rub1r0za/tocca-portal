@@ -31,22 +31,21 @@ export default async function ActivitiesAdminPage({
             Actividades
           </h1>
           <p className="mt-0.5 text-sm text-[#7A7168]">
-            Catálogo global: {activeCount} visible{activeCount !== 1 ? 's' : ''} de {activities.length}
+            Catálogo por viaje: {activeCount} visible{activeCount !== 1 ? 's' : ''} de {activities.length}
           </p>
         </div>
       </div>
 
       <div className="mb-6 space-y-4">
         {activities.length > 0 ? (
-          activities.map((activity, index) => (
-            <ActivityCard
-              key={activity.id}
-              activity={activity}
-              locale={locale}
-              index={index}
-              total={activities.length}
-            />
-          ))
+          [1, 2].flatMap((trip) => activities
+            .filter((activity) => (activity.trip_number ?? 1) === trip)
+            .map((activity, index, group) => (
+              <div key={activity.id}>
+                {index === 0 && <h2 className="mb-3 mt-6 text-sm font-semibold uppercase tracking-[0.14em] text-[#4A9A92]">Viaje {trip === 1 ? 'uno · Signature' : 'dos · Yoga Retreat'}</h2>}
+                <ActivityCard activity={activity} locale={locale} index={index} total={group.length} />
+              </div>
+            )))
         ) : (
           <div className="rounded-2xl border border-dashed border-[rgba(62,45,35,0.2)] bg-white p-8 text-center">
             <p className="text-sm text-[#7A7168]">No hay actividades aún. Crea la primera.</p>

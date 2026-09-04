@@ -28,6 +28,7 @@ export default async function ActivityDetailPage({
     .select('*')
     .eq('id', activityId)
     .eq('active', true)
+    .in('trip_number', [...new Set((booking.travelers ?? []).map((traveler) => traveler.trip_number ?? 1))])
     .maybeSingle()
 
   if (!data) notFound()
@@ -41,7 +42,7 @@ export default async function ActivityDetailPage({
   const requirements = activity.requirements ?? []
   const cancellation = pick(activity.cancellation_policy, locale)
   const priceText = activity.price > 0 ? formatMoney(activity.price, locale) : tCommon('onRequest')
-  const travelers = booking.travelers ?? []
+  const travelers = (booking.travelers ?? []).filter((traveler) => (traveler.trip_number ?? 1) === activity.trip_number)
 
   return (
     <div>

@@ -46,19 +46,19 @@ export default async function SummaryAdminPage() {
     { data: actRows },
     { data: wellRows },
   ] = await Promise.all([
-    admin.from('travelers').select('id, booking_id, first_name, last_name').in('booking_id', bookingIds),
+    admin.from('travelers').select('id, booking_id, first_name, last_name, trip_number').in('booking_id', bookingIds),
     admin
       .from('journey_days')
-      .select('id, booking_id, day_number, day_date, title, meals (id, course, name)')
+      .select('id, booking_id, day_number, day_date, title, trip_number, meals (id, course, name)')
       .in('booking_id', bookingIds),
     admin.from('meal_selections').select('meal_id, traveler_id').in('booking_id', bookingIds),
     admin
       .from('activity_requests')
-      .select('id, booking_id, num_guests, traveler_ids, requested_date, status, activities(name)')
+      .select('id, booking_id, num_guests, traveler_ids, requested_date, status, activities(name, trip_number)')
       .in('booking_id', bookingIds),
     admin
       .from('wellness_requests')
-      .select('id, booking_id, num_guests, traveler_ids, requested_date, status, wellness_options(name)')
+      .select('id, booking_id, num_guests, traveler_ids, requested_date, status, wellness_options(name, trip_number)')
       .in('booking_id', bookingIds),
   ])
 
@@ -70,12 +70,13 @@ export default async function SummaryAdminPage() {
         name: `${t.first_name} ${t.last_name}`.trim(),
         bookingId: t.booking_id,
         bookingName: bookingName.get(t.booking_id) ?? 'Reserva',
+        tripNumber: (t.trip_number ?? 1) as 1 | 2,
       },
     ]),
   )
 
   /* eslint-disable @typescript-eslint/no-explicit-any */
-  const toRequest = (r: any, kind: 'activity' | 'wellness', itemName: string): RequestRow => ({
+  const toRequest = (r: any, kind: 'activity' | 'wellness', itemName: string, tripNumber: number): RequestRow => ({
     id: r.id,
     kind,
     itemName,
@@ -84,13 +85,14 @@ export default async function SummaryAdminPage() {
     travelerIds: r.traveler_ids ?? [],
     numGuests: r.num_guests,
     bookingName: bookingName.get(r.booking_id) ?? 'Reserva',
+    tripNumber: (tripNumber ?? 1) as 1 | 2,
   })
   const activityDays = requestsByDay(
-    (actRows ?? []).map((r: any) => toRequest(r, 'activity', name(r.activities?.name))),
+    (actRows ?? []).map((r: any) => toRequest(r, 'activity', name(r.activities?.name), r.activities?.trip_number)),
     people,
   )
   const wellnessDays = requestsByDay(
-    (wellRows ?? []).map((r: any) => toRequest(r, 'wellness', name(r.wellness_options?.name))),
+    (wellRows ?? []).map((r: any) => toRequest(r, 'wellness', name(r.wellness_options?.name), r.wellness_options?.trip_number)),
     people,
   )
   /* eslint-enable @typescript-eslint/no-explicit-any */
@@ -108,9 +110,12 @@ export default async function SummaryAdminPage() {
         ) : (
           <div className="space-y-6">
             {meals.map((day) => (
-              <div key={day.dayNumber} className="rounded-2xl border border-[rgba(62,45,35,0.12)] bg-white p-5 shadow-[0_1px_4px_rgba(62,45,35,0.06)]">
+              <div key={`${day.tripNumber}-${day.dayNumber}`} className="rounded-2xl border border-[rgba(62,45,35,0.12)] bg-white p-5 shadow-[0_1px_4px_rgba(62,45,35,0.06)]">
+                <p className="mb-1 text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-[#4A9A92]">
+                  Viaje {day.tripNumber === 1 ? 'uno · Signature' : 'dos · Yoga Retreat'}
+                </p>
                 <p className="text-sm font-semibold text-[#3E2D23]">
-                  Día {day.dayNumber}
+                  Viaje {day.tripNumber === 1 ? 'uno' : 'dos'} · Día {day.dayNumber}
                   {day.title ? ` · ${day.title}` : ''}
                   {day.date && <span className="ml-2 text-xs font-normal text-[#7A7168]">{day.date}</span>}
                 </p>
@@ -227,8 +232,11 @@ function RequestList({
   return (
     <div className="space-y-4">
       {days.map((day) => (
-        <div key={day.date || 'sin-fecha'} className="rounded-2xl border border-[rgba(62,45,35,0.12)] bg-white p-5 shadow-[0_1px_4px_rgba(62,45,35,0.06)]">
-          <p className="text-sm font-semibold text-[#3E2D23]">{day.date || 'Sin fecha pedida'}</p>
+        <div key={`${day.tripNumber}-${day.date || 'sin-fecha'}`} className="rounded-2xl border border-[rgba(62,45,35,0.12)] bg-white p-5 shadow-[0_1px_4px_rgba(62,45,35,0.06)]">
+          <p className="mb-1 text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-[#4A9A92]">
+            Viaje {day.tripNumber === 1 ? 'uno · Signature' : 'dos · Yoga Retreat'}
+          </p>
+          <p className="text-sm font-semibold text-[#3E2D23]">Viaje {day.tripNumber === 1 ? 'uno' : 'dos'} · {day.date || 'Sin fecha pedida'}</p>
           <ul className="mt-2 space-y-1.5">
             {day.items.map(({ request, people }) => (
               <li key={`${request.kind}-${request.id}`} className="text-sm text-[#3E2D23]">

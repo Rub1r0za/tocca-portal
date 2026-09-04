@@ -13,6 +13,7 @@ type DayWithMeals = {
   day_number: number
   title: Record<string, string>
   meals: Meal[]
+  trip_number: 1 | 2
 }
 
 export default async function MealsPage({
@@ -59,7 +60,7 @@ export default async function MealsPage({
             <MealDay
               key={day.id}
               day={day}
-              travelers={travelers}
+              travelers={travelers.filter((traveler) => (traveler.trip_number ?? 1) === (day.trip_number ?? 1))}
               selections={selections}
               bookingId={booking.id}
               locale={locale}

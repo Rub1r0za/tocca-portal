@@ -41,7 +41,7 @@ export default async function BookingDetailPage({
 
   // Estado de las comidas para la alerta del panel
   const [{ data: mealDays }, { data: mealSelections }] = await Promise.all([
-    admin.from('journey_days').select('id, day_number, title, meals (id, course, name)').eq('booking_id', id).order('day_number', { ascending: true }),
+    admin.from('journey_days').select('id, day_number, title, trip_number, meals (id, course, name)').eq('booking_id', id).order('day_number', { ascending: true }),
     admin.from('meal_selections').select('meal_id, traveler_id').eq('booking_id', id),
   ])
   const pendingMeals = mealPending(

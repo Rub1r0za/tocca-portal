@@ -28,6 +28,7 @@ export default async function WellnessDetailPage({
     .select('*')
     .eq('id', wellnessId)
     .eq('active', true)
+    .in('trip_number', [...new Set((booking.travelers ?? []).map((traveler) => traveler.trip_number ?? 1))])
     .maybeSingle()
 
   if (!data) notFound()
@@ -42,7 +43,7 @@ export default async function WellnessDetailPage({
       : option.price === 0
         ? t('included')
         : formatMoney(option.price, locale)
-  const travelers = booking.travelers ?? []
+  const travelers = (booking.travelers ?? []).filter((traveler) => (traveler.trip_number ?? 1) === option.trip_number)
 
   return (
     <div>

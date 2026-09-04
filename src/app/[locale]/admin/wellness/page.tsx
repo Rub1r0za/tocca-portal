@@ -28,15 +28,20 @@ export default async function WellnessAdminPage({
           Wellness
         </h1>
         <p className="mt-0.5 text-sm text-[#7A7168]">
-          Catálogo global: {activeCount} visible{activeCount !== 1 ? 's' : ''} de {options.length}
+          Catálogo por viaje: {activeCount} visible{activeCount !== 1 ? 's' : ''} de {options.length}
         </p>
       </div>
 
       <div className="mb-6 space-y-4">
         {options.length > 0 ? (
-          options.map((option) => (
-            <WellnessCard key={option.id} option={option} locale={locale} />
-          ))
+          [1, 2].flatMap((trip) => options
+            .filter((option) => (option.trip_number ?? 1) === trip)
+            .map((option, index) => (
+              <div key={option.id}>
+                {index === 0 && <h2 className="mb-3 mt-6 text-sm font-semibold uppercase tracking-[0.14em] text-[#4A9A92]">Viaje {trip === 1 ? 'uno · Signature' : 'dos · Yoga Retreat'}</h2>}
+                <WellnessCard option={option} locale={locale} />
+              </div>
+            )))
         ) : (
           <div className="rounded-2xl border border-dashed border-[rgba(62,45,35,0.2)] bg-white p-8 text-center">
             <p className="text-sm text-[#7A7168]">No hay opciones de wellness aún. Crea la primera.</p>
