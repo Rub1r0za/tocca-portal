@@ -38,7 +38,7 @@ export type Traveler = {
   last_name: string
   dietary_restrictions: string | null
   notes: string | null
-  trip_number: 1 | 2
+  trip_number: 1 | 2 | 3
 }
 
 export type Booking = {
@@ -102,6 +102,7 @@ export type JourneyDay = {
   description: Localized | null
   location: string | null
   image_url: string | null
+  menu_image_url: string | null
   day_date: string | null
   schedule: ScheduleItem[] | null
   included: Localized[] | null
@@ -112,7 +113,7 @@ export type JourneyDay = {
   good_to_know: Localized[] | null
   day_vibe: Localized | null
   is_free_day: boolean
-  trip_number: 1 | 2
+  trip_number: 1 | 2 | 3
 }
 
 export type TemplateMeal = {
@@ -128,6 +129,7 @@ export type DayTemplate = {
   description: Localized | null
   location: string | null
   image_url: string | null
+  menu_image_url: string | null
   schedule: ScheduleItem[] | null
   included: Localized[] | null
   meeting_point: Localized | null
@@ -138,7 +140,7 @@ export type DayTemplate = {
   is_free_day: boolean
   meals: TemplateMeal[] | null
   active: boolean
-  trip_number: 1 | 2
+  trip_number: 1 | 2 | 3
 }
 
 export type Meal = {
@@ -167,18 +169,19 @@ export type Activity = {
   included: Localized[] | null
   requirements: Localized[] | null
   cancellation_policy: Localized | null
-  trip_number: 1 | 2
+  trip_number: 1 | 2 | 3
 }
 
 export type WellnessOption = {
   id: string
+  sort_order: number
   name: Localized | null
   description: Localized | null
   active: boolean
   image_url: string | null
   duration: Localized | null
   price: number | null
-  trip_number: 1 | 2
+  trip_number: 1 | 2 | 3
 }
 
 export type TimelineEvent = {

@@ -12,7 +12,7 @@ type DayWithMeals = {
   day_number: number
   title: Record<string, string>
   meals: Meal[]
-  trip_number: 1 | 2
+  trip_number: 1 | 2 | 3
 }
 
 export default async function MealsAdminPage({

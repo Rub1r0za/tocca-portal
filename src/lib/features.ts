@@ -7,5 +7,5 @@
  * panel de admin siguen intactos: para devolverlos al portal basta con poner
  * `true` aquí otra vez.
  */
-export const MEALS_ENABLED = false
+export const MEALS_ENABLED = true
 export const TIMELINE_ENABLED = false

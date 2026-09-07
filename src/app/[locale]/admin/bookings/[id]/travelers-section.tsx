@@ -25,6 +25,7 @@ function AddTravelerForm({ bookingId, locale }: { bookingId: string; locale: str
           <select name="trip_number" className={inputClass} defaultValue="1">
             <option value="1">Viaje uno · Signature</option>
             <option value="2">Viaje dos · Yoga Retreat</option>
+            <option value="3">Reservas individuales</option>
           </select>
         </div>
         <div>
@@ -133,6 +134,7 @@ export function TravelersSection({
                 >
                   <option value="1">Viaje uno</option>
                   <option value="2">Viaje dos</option>
+                  <option value="3">Reservas individuales</option>
                 </select>
               </form>
               <DeleteTravelerButton travelerId={t.id} bookingId={bookingId} locale={locale} />

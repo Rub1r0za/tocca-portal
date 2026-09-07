@@ -11,7 +11,7 @@ export type Person = {
   bookingId: string
   /** Nombre de la reserva a la que pertenece, para desempatar homónimos. */
   bookingName: string
-  tripNumber: 1 | 2
+  tripNumber: 1 | 2 | 3
 }
 
 export type DayMealRow = {
@@ -21,7 +21,7 @@ export type DayMealRow = {
 }
 
 export type MealDaySummary = {
-  tripNumber: 1 | 2
+  tripNumber: 1 | 2 | 3
   dayNumber: number
   title: string
   /** Fecha si todas las reservas coinciden; vacío si difieren o no hay. */
@@ -38,7 +38,7 @@ type DayRow = {
   day_date: string | null
   title: Record<string, string> | null
   meals: { id: string; course: string; name: Record<string, string> | null }[] | null
-  trip_number: 1 | 2
+  trip_number: 1 | 2 | 3
 }
 
 const label = (v: Record<string, string> | null | undefined) => v?.es || v?.en || ''
@@ -143,11 +143,11 @@ export type RequestRow = {
   travelerIds: string[]
   numGuests: number
   bookingName: string
-  tripNumber: 1 | 2
+  tripNumber: 1 | 2 | 3
 }
 
 export type RequestDaySummary = {
-  tripNumber: 1 | 2
+  tripNumber: 1 | 2 | 3
   date: string
   items: {
     request: RequestRow
@@ -177,6 +177,6 @@ export function requestsByDay(
     .sort(([a], [b]) => (a === '' ? 1 : b === '' ? -1 : a.localeCompare(b)))
     .map(([key, items]) => {
       const [trip, ...dateParts] = key.split(':')
-      return { tripNumber: Number(trip) as 1 | 2, date: dateParts.join(':'), items }
+      return { tripNumber: Number(trip) as 1 | 2 | 3, date: dateParts.join(':'), items }
     })
 }

@@ -41,6 +41,7 @@ export function AddDayForm({
           <select name="trip_number" defaultValue="1" className={inputClass}>
             <option value="1">Viaje uno · Signature</option>
             <option value="2">Viaje dos · Yoga Retreat</option>
+            <option value="3">Reservas individuales</option>
           </select>
         </div>
         <div>
@@ -65,6 +66,7 @@ export function AddDayForm({
       </div>
 
       <ImageField />
+      <ImageField name="menu_image_url" label="Foto del menú completo" />
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div>

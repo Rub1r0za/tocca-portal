@@ -16,14 +16,14 @@ export type SummaryDay = {
   day_number: number
   title: Record<string, string> | null
   meals: SummaryMeal[] | null
-  trip_number?: 1 | 2
+  trip_number?: 1 | 2 | 3
 }
 
 export type SummaryTraveler = {
   id: string
   first_name: string
   last_name: string
-  trip_number?: 1 | 2
+  trip_number?: 1 | 2 | 3
 }
 
 const travelersForDay = (day: SummaryDay, travelers: SummaryTraveler[]) =>

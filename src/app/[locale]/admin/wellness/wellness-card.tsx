@@ -1,18 +1,20 @@
 'use client'
 
 import { useState } from 'react'
-import { Pencil, Trash2, ChevronUp, Eye, EyeOff, Euro, Clock } from 'lucide-react'
+import { Pencil, Trash2, ChevronUp, Eye, EyeOff, Euro, Clock, ArrowUp, ArrowDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { deleteWellnessOption, toggleWellnessActive } from '../actions'
+import { deleteWellnessOption, toggleWellnessActive, moveWellnessOption } from '../actions'
 import { WellnessForm, type WellnessOption } from './wellness-form'
 
-export function WellnessCard({ option, locale }: { option: WellnessOption; locale: string }) {
+export function WellnessCard({ option, locale, index, total }: { option: WellnessOption; locale: string; index: number; total: number }) {
   const [editing, setEditing] = useState(false)
 
   const nameEn = option.name?.en || option.name?.es || 'Sin nombre'
   const nameEs = option.name?.es || ''
   const deleteAction = deleteWellnessOption.bind(null, option.id, locale)
   const toggleAction = toggleWellnessActive.bind(null, option.id, !option.active, locale)
+  const moveUpAction = moveWellnessOption.bind(null, option.id, 'up', locale)
+  const moveDownAction = moveWellnessOption.bind(null, option.id, 'down', locale)
 
   return (
     <div
@@ -49,6 +51,16 @@ export function WellnessCard({ option, locale }: { option: WellnessOption; local
         </div>
 
         <div className="flex shrink-0 items-center gap-1">
+          <form action={moveUpAction}>
+            <button type="submit" disabled={index === 0} title="Subir" className="rounded-lg p-1.5 text-[#7A7168] transition-colors hover:bg-[#F4F1EB] hover:text-[#3E2D23] disabled:cursor-not-allowed disabled:opacity-30">
+              <ArrowUp className="size-4" />
+            </button>
+          </form>
+          <form action={moveDownAction}>
+            <button type="submit" disabled={index === total - 1} title="Bajar" className="rounded-lg p-1.5 text-[#7A7168] transition-colors hover:bg-[#F4F1EB] hover:text-[#3E2D23] disabled:cursor-not-allowed disabled:opacity-30">
+              <ArrowDown className="size-4" />
+            </button>
+          </form>
           <form action={toggleAction}>
             <button
               type="submit"

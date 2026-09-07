@@ -13,7 +13,7 @@ type TemplateOption = {
   title: Record<string, string>
   is_free_day: boolean
   mealsCount: number
-  trip_number: 1 | 2
+  trip_number: 1 | 2 | 3
 }
 
 export function AddFromTemplate({
@@ -57,7 +57,7 @@ export function AddFromTemplate({
           </option>
           {templates.map((t) => (
             <option key={t.id} value={t.id}>
-              Viaje {t.trip_number === 2 ? 'dos' : 'uno'} · {t.sort_order}. {t.title?.es || t.title?.en || 'Sin título'}
+              {t.trip_number === 3 ? 'Reservas individuales' : `Viaje ${t.trip_number === 2 ? 'dos' : 'uno'}`} · {t.sort_order}. {t.title?.es || t.title?.en || 'Sin título'}
               {t.is_free_day ? ' · día libre' : ''}
               {t.mealsCount > 0 ? ' · menú' : ''}
             </option>
@@ -77,6 +77,7 @@ export function AddFromTemplate({
         <select name="trip_number" className={`${inputClass} max-w-xs`} defaultValue="1">
           <option value="1">Viaje uno · Signature</option>
           <option value="2">Viaje dos · Yoga Retreat</option>
+          <option value="3">Reservas individuales</option>
         </select>
         <button
           type="submit"

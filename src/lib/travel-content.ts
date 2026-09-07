@@ -8,7 +8,7 @@ import type { Localized } from './types'
  */
 
 export type TipIcon =
-  | 'shoes' | 'clothes' | 'water-shoes' | 'suitcase' | 'plug' | 'phone' | 'bottle' | 'sun' | 'lemon'
+  | 'shoes' | 'clothes' | 'water-shoes' | 'suitcase' | 'plug' | 'phone' | 'bottle' | 'sun' | 'lemon' | 'card' | 'tips'
 
 export type TravelTip = {
   icon: TipIcon
@@ -104,6 +104,28 @@ export const BEFORE_YOU_GO: TravelTip[] = [
     body: {
       es: "Trae protector solar, gafas de sol y un sombrero. El sol en la costa puede ser fuerte, especialmente en los días de barco y durante las largas tardes al aire libre.",
       en: "Bring sunscreen, sunglasses, and a hat. The coastal sun can be strong, especially on boat days and during long afternoons outdoors.",
+    },
+  },
+  {
+    icon: 'card',
+    title: {
+      es: 'Tarjetas y efectivo',
+      en: 'Cards & cash',
+    },
+    body: {
+      es: 'Puedes usar tus tarjetas internacionales en la mayoría de los establecimientos de la Costa Amalfitana. Si necesitas efectivo, puedes retirar euros fácilmente en los cajeros automáticos (ATM) durante tu viaje. También puedes traer euros contigo si prefieres llegar preparado.',
+      en: 'You can use your international credit or debit cards at most places along the Amalfi Coast. If you need cash, you can easily withdraw euros from ATMs during your trip. You can also bring some euros with you if you prefer to arrive prepared.',
+    },
+  },
+  {
+    icon: 'tips',
+    title: {
+      es: 'Lleva algo de efectivo para las propinas',
+      en: 'Keep some cash for tips',
+    },
+    body: {
+      es: 'Aunque podrás pagar con tarjeta en muchos lugares, siempre es buena idea tener algunos euros en efectivo para propinas y pequeños gastos durante el viaje.',
+      en: 'Although you can pay by card in many places, it is always a good idea to keep some euros in cash for tips and small expenses during your trip.',
     },
   },
   {

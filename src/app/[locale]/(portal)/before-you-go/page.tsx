@@ -1,6 +1,6 @@
 import { getTranslations } from 'next-intl/server'
 import {
-  Footprints, Shirt, Waves, Luggage, Plug, Smartphone, GlassWater, Sun, Citrus,
+  Footprints, Shirt, Waves, Luggage, Plug, Smartphone, GlassWater, Sun, Citrus, CreditCard, HandCoins,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { BEFORE_YOU_GO, type TipIcon } from '@/lib/travel-content'
@@ -17,6 +17,8 @@ const ICONS: Record<TipIcon, LucideIcon> = {
   bottle: GlassWater,
   sun: Sun,
   lemon: Citrus,
+  card: CreditCard,
+  tips: HandCoins,
 }
 
 export default async function BeforeYouGoPage({

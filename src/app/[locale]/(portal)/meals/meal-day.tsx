@@ -28,7 +28,7 @@ export function MealDay({
   bookingId,
   locale,
 }: {
-  day: { id: string; day_number: number; title: Record<string, string>; meals: Meal[] }
+  day: { id: string; day_number: number; title: Record<string, string>; meals: Meal[]; menu_image_url: string | null }
   travelers: Traveler[]
   selections: Selection[]
   bookingId: string
@@ -84,6 +84,14 @@ export function MealDay({
           {title}
         </h2>
       </div>
+
+      {day.menu_image_url && (
+        <a href={day.menu_image_url} target="_blank" rel="noreferrer" className="block overflow-hidden rounded-2xl border border-hairline bg-white p-2" aria-label={locale === 'es' ? 'Abrir menú completo' : 'Open full menu'}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={day.menu_image_url} alt={locale === 'es' ? `Menú completo: ${title}` : `Full menu: ${title}`} className="h-auto w-full object-contain" />
+          <p className="px-2 pb-1 pt-2 text-center text-xs text-gold underline">{locale === 'es' ? 'Toca la imagen para verla completa' : 'Tap the image to view it in full'}</p>
+        </a>
+      )}
 
       {!hasMeals && <p className="text-sm text-mist">{t('noMeals')}</p>}
 

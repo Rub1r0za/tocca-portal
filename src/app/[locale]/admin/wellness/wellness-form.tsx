@@ -11,13 +11,14 @@ const labelClass = 'mb-1.5 block text-[0.7rem] font-semibold tracking-[0.18em] t
 
 export type WellnessOption = {
   id: string
+  sort_order: number
   name: Record<string, string>
   description: Record<string, string>
   duration: Record<string, string>
   price: number | null
   active: boolean
   image_url: string | null
-  trip_number: 1 | 2
+  trip_number: 1 | 2 | 3
 }
 
 export function WellnessForm({
@@ -40,6 +41,7 @@ export function WellnessForm({
         <select name="trip_number" defaultValue={String(option?.trip_number ?? 1)} className={`${inputClass} max-w-sm`}>
           <option value="1">Viaje uno · Signature</option>
           <option value="2">Viaje dos · Yoga Retreat</option>
+          <option value="3">Reservas individuales</option>
         </select>
       </div>
 

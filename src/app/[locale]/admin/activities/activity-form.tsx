@@ -24,7 +24,7 @@ export type Activity = {
   included: Array<Record<string, string>>
   requirements: Array<Record<string, string>>
   cancellation_policy: Record<string, string>
-  trip_number: 1 | 2
+  trip_number: 1 | 2 | 3
 }
 
 function linesOf(items: Array<Record<string, string>> | null | undefined, lang: string) {
@@ -51,6 +51,7 @@ export function ActivityForm({
         <select name="trip_number" defaultValue={String(activity?.trip_number ?? 1)} className={`${inputClass} max-w-sm`}>
           <option value="1">Viaje uno · Signature</option>
           <option value="2">Viaje dos · Yoga Retreat</option>
+          <option value="3">Reservas individuales</option>
         </select>
       </div>
 

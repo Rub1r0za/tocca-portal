@@ -35,6 +35,7 @@ export default async function WellnessPage({
     .select('*')
     .eq('active', true)
     .in('trip_number', tripNumbers)
+    .order('sort_order', { ascending: true })
     .order('created_at', { ascending: true })
 
   const options = (data ?? []) as WellnessOption[]

@@ -18,6 +18,7 @@ type Day = {
   location: string | null
   day_date: string | null
   image_url: string | null
+  menu_image_url: string | null
   day_vibe: Record<string, string> | null
   tocca_tips: Array<Record<string, string>> | null
   good_to_know: Array<Record<string, string>> | null
@@ -62,6 +63,7 @@ function EditDayForm({
         </div>
       </div>
       <ImageField defaultValue={day.image_url} />
+      <ImageField name="menu_image_url" defaultValue={day.menu_image_url} label="Foto del menú completo" />
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <label className={labelClass}>Título EN</label>

@@ -13,7 +13,8 @@ type DayWithMeals = {
   day_number: number
   title: Record<string, string>
   meals: Meal[]
-  trip_number: 1 | 2
+  trip_number: 1 | 2 | 3
+  menu_image_url: string | null
 }
 
 export default async function MealsPage({
@@ -47,7 +48,7 @@ export default async function MealsPage({
   const selections = (selectionData ?? []) as { meal_id: string; traveler_id: string }[]
   const travelers = booking.travelers ?? []
 
-  const daysWithMeals = days.filter((d) => d.meals && d.meals.length > 0)
+  const daysWithMeals = days.filter((d) => (d.meals && d.meals.length > 0) || d.menu_image_url)
 
   return (
     <div>

@@ -62,6 +62,7 @@ export function DayTemplateForm({
           <select name="trip_number" defaultValue={String(template?.trip_number ?? 1)} className={inputClass}>
             <option value="1">Viaje uno · Signature</option>
             <option value="2">Viaje dos · Yoga Retreat</option>
+            <option value="3">Reservas individuales</option>
           </select>
         </div>
         <div>
@@ -152,6 +153,8 @@ export function DayTemplateForm({
       </div>
 
       <ImageField defaultValue={template?.image_url} />
+
+      <ImageField name="menu_image_url" defaultValue={template?.menu_image_url} label="Foto del menú completo" />
 
       <div>
         <label className={labelClass}>Menú del día (uno por línea: curso | nombre EN | nombre ES | descripción EN | descripción ES)</label>

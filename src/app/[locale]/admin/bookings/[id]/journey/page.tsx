@@ -61,10 +61,10 @@ export default async function JourneyAdminPage({
       {/* Existing days */}
       <div className="mb-6 space-y-4">
         {days && days.length > 0 ? (
-          [1, 2].map((trip) => (
+          [1, 2, 3].map((trip) => (
             <section key={trip}>
               <h2 className="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-[#4A9A92]">
-                Viaje {trip === 1 ? 'uno · Signature' : 'dos · Yoga Retreat'}
+                {trip === 3 ? 'Reservas individuales' : trip === 1 ? 'Viaje uno · Signature' : 'Viaje dos · Yoga Retreat'}
               </h2>
               <div className="space-y-4">
                 {days.filter((day) => (day.trip_number ?? 1) === trip).map((day) => (
@@ -91,7 +91,7 @@ export default async function JourneyAdminPage({
             title: (t.title ?? {}) as Record<string, string>,
             is_free_day: t.is_free_day,
             mealsCount: Array.isArray(t.meals) ? t.meals.length : 0,
-            trip_number: (t.trip_number ?? 1) as 1 | 2,
+            trip_number: (t.trip_number ?? 1) as 1 | 2 | 3,
           }))}
         />
       </div>

@@ -13,7 +13,8 @@ export default async function WellnessAdminPage({
   const { data } = await admin
     .from('wellness_options')
     .select('*')
-    .order('created_at', { ascending: false })
+    .order('sort_order', { ascending: true })
+    .order('created_at', { ascending: true })
 
   const options = (data ?? []) as WellnessOption[]
   const activeCount = options.filter((o) => o.active).length
@@ -34,12 +35,12 @@ export default async function WellnessAdminPage({
 
       <div className="mb-6 space-y-4">
         {options.length > 0 ? (
-          [1, 2].flatMap((trip) => options
+          [1, 2, 3].flatMap((trip) => options
             .filter((option) => (option.trip_number ?? 1) === trip)
-            .map((option, index) => (
+            .map((option, index, group) => (
               <div key={option.id}>
-                {index === 0 && <h2 className="mb-3 mt-6 text-sm font-semibold uppercase tracking-[0.14em] text-[#4A9A92]">Viaje {trip === 1 ? 'uno · Signature' : 'dos · Yoga Retreat'}</h2>}
-                <WellnessCard option={option} locale={locale} />
+                {index === 0 && <h2 className="mb-3 mt-6 text-sm font-semibold uppercase tracking-[0.14em] text-[#4A9A92]">{trip === 3 ? 'Reservas individuales' : trip === 1 ? 'Viaje uno · Signature' : 'Viaje dos · Yoga Retreat'}</h2>}
+                <WellnessCard option={option} locale={locale} index={index} total={group.length} />
               </div>
             )))
         ) : (

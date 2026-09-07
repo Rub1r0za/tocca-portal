@@ -70,7 +70,7 @@ export default async function SummaryAdminPage() {
         name: `${t.first_name} ${t.last_name}`.trim(),
         bookingId: t.booking_id,
         bookingName: bookingName.get(t.booking_id) ?? 'Reserva',
-        tripNumber: (t.trip_number ?? 1) as 1 | 2,
+        tripNumber: (t.trip_number ?? 1) as 1 | 2 | 3,
       },
     ]),
   )
@@ -85,7 +85,7 @@ export default async function SummaryAdminPage() {
     travelerIds: r.traveler_ids ?? [],
     numGuests: r.num_guests,
     bookingName: bookingName.get(r.booking_id) ?? 'Reserva',
-    tripNumber: (tripNumber ?? 1) as 1 | 2,
+    tripNumber: (tripNumber ?? 1) as 1 | 2 | 3,
   })
   const activityDays = requestsByDay(
     (actRows ?? []).map((r: any) => toRequest(r, 'activity', name(r.activities?.name), r.activities?.trip_number)),
@@ -112,10 +112,10 @@ export default async function SummaryAdminPage() {
             {meals.map((day) => (
               <div key={`${day.tripNumber}-${day.dayNumber}`} className="rounded-2xl border border-[rgba(62,45,35,0.12)] bg-white p-5 shadow-[0_1px_4px_rgba(62,45,35,0.06)]">
                 <p className="mb-1 text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-[#4A9A92]">
-                  Viaje {day.tripNumber === 1 ? 'uno · Signature' : 'dos · Yoga Retreat'}
+                  {day.tripNumber === 3 ? 'Reservas individuales' : day.tripNumber === 1 ? 'Viaje uno · Signature' : 'Viaje dos · Yoga Retreat'}
                 </p>
                 <p className="text-sm font-semibold text-[#3E2D23]">
-                  Viaje {day.tripNumber === 1 ? 'uno' : 'dos'} · Día {day.dayNumber}
+                  {day.tripNumber === 3 ? 'Reservas individuales' : `Viaje ${day.tripNumber === 1 ? 'uno' : 'dos'}`} · Día {day.dayNumber}
                   {day.title ? ` · ${day.title}` : ''}
                   {day.date && <span className="ml-2 text-xs font-normal text-[#7A7168]">{day.date}</span>}
                 </p>
@@ -234,9 +234,9 @@ function RequestList({
       {days.map((day) => (
         <div key={`${day.tripNumber}-${day.date || 'sin-fecha'}`} className="rounded-2xl border border-[rgba(62,45,35,0.12)] bg-white p-5 shadow-[0_1px_4px_rgba(62,45,35,0.06)]">
           <p className="mb-1 text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-[#4A9A92]">
-            Viaje {day.tripNumber === 1 ? 'uno · Signature' : 'dos · Yoga Retreat'}
+            {day.tripNumber === 3 ? 'Reservas individuales' : day.tripNumber === 1 ? 'Viaje uno · Signature' : 'Viaje dos · Yoga Retreat'}
           </p>
-          <p className="text-sm font-semibold text-[#3E2D23]">Viaje {day.tripNumber === 1 ? 'uno' : 'dos'} · {day.date || 'Sin fecha pedida'}</p>
+          <p className="text-sm font-semibold text-[#3E2D23]">{day.tripNumber === 3 ? 'Reservas individuales' : `Viaje ${day.tripNumber === 1 ? 'uno' : 'dos'}`} · {day.date || 'Sin fecha pedida'}</p>
           <ul className="mt-2 space-y-1.5">
             {day.items.map(({ request, people }) => (
               <li key={`${request.kind}-${request.id}`} className="text-sm text-[#3E2D23]">

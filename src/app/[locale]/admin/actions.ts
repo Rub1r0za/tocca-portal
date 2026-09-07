@@ -215,7 +215,7 @@ const travelerSchema = z.object({
   last_name: z.string().min(1),
   type: z.enum(['adult', 'child']).default('adult'),
   dietary_restrictions: z.string().optional(),
-  trip_number: z.coerce.number().int().min(1).max(2).default(1),
+  trip_number: z.coerce.number().int().min(1).max(3).default(1),
 })
 
 export async function addTraveler(
@@ -254,7 +254,7 @@ export async function updateTravelerTrip(
   formData: FormData,
 ) {
   const tripNumber = Number(formData.get('trip_number'))
-  if (tripNumber !== 1 && tripNumber !== 2) return
+  if (![1, 2, 3].includes(tripNumber)) return
   const admin = await adminDb()
   await admin.from('travelers').update({ trip_number: tripNumber }).eq('id', travelerId).eq('booking_id', bookingId)
   revalidatePath(`/${locale}/admin/bookings/${bookingId}`)
@@ -264,7 +264,7 @@ export async function updateTravelerTrip(
 // ── Journey days ────────────────────────────────────────────────────────────
 
 const daySchema = z.object({
-  trip_number: z.coerce.number().int().min(1).max(2).default(1),
+  trip_number: z.coerce.number().int().min(1).max(3).default(1),
   day_number: z.coerce.number().int().min(1),
   title_en: z.string().min(1),
   title_es: z.string().optional(),
@@ -273,6 +273,7 @@ const daySchema = z.object({
   location: z.string().optional(),
   day_date: z.string().optional(),
   image_url: z.string().optional(),
+  menu_image_url: z.string().optional(),
   day_vibe_en: z.string().optional(),
   day_vibe_es: z.string().optional(),
   tocca_tips_en: z.string().optional(),
@@ -291,6 +292,7 @@ function dayPayload(d: z.infer<typeof daySchema>) {
     location: d.location || null,
     day_date: d.day_date || null,
     image_url: d.image_url || null,
+    menu_image_url: d.menu_image_url || null,
     day_vibe: i18n(d.day_vibe_en, d.day_vibe_es),
     tocca_tips: zipLines(d.tocca_tips_en, d.tocca_tips_es),
     good_to_know: zipLines(d.good_to_know_en, d.good_to_know_es),
@@ -414,7 +416,7 @@ function zipLines(en?: string, es?: string) {
 // ── Activities (global catalog) ─────────────────────────────────────────────
 
 const activitySchema = z.object({
-  trip_number: z.coerce.number().int().min(1).max(2).default(1),
+  trip_number: z.coerce.number().int().min(1).max(3).default(1),
   name_en: z.string().min(1),
   name_es: z.string().optional(),
   description_en: z.string().optional(),
@@ -472,6 +474,7 @@ export async function saveActivity(
     const { data: last } = await admin
       .from('activities')
       .select('sort_order')
+      .eq('trip_number', d.trip_number)
       .order('sort_order', { ascending: false })
       .limit(1)
       .maybeSingle()
@@ -493,9 +496,12 @@ export async function saveActivity(
  */
 export async function moveActivity(activityId: string, direction: 'up' | 'down', locale: string) {
   const admin = await adminDb()
+  const { data: current } = await admin.from('activities').select('trip_number').eq('id', activityId).maybeSingle()
+  if (!current) return
   const { data } = await admin
     .from('activities')
     .select('id')
+    .eq('trip_number', current.trip_number ?? 1)
     .order('sort_order', { ascending: true })
     .order('created_at', { ascending: true })
 
@@ -531,7 +537,7 @@ export async function deleteActivity(activityId: string, locale: string) {
 // ── Wellness options (global catalog) ───────────────────────────────────────
 
 const wellnessSchema = z.object({
-  trip_number: z.coerce.number().int().min(1).max(2).default(1),
+  trip_number: z.coerce.number().int().min(1).max(3).default(1),
   name_en: z.string().min(1),
   name_es: z.string().optional(),
   description_en: z.string().optional(),
@@ -560,16 +566,53 @@ export async function saveWellnessOption(
     duration: i18n(d.duration_en, d.duration_es),
     price: d.price ? parseFloat(d.price) : null, // null = "a consultar"
     image_url: d.image_url || null,
+    updated_at: new Date().toISOString(),
   }
 
   const admin = await adminDb()
-  const { error } = optionId
-    ? await admin.from('wellness_options').update(row).eq('id', optionId)
-    : await admin.from('wellness_options').insert(row)
+  let error
+  if (optionId) {
+    ;({ error } = await admin.from('wellness_options').update(row).eq('id', optionId))
+  } else {
+    const { data: last } = await admin
+      .from('wellness_options')
+      .select('sort_order')
+      .eq('trip_number', d.trip_number)
+      .order('sort_order', { ascending: false })
+      .limit(1)
+      .maybeSingle()
+    ;({ error } = await admin.from('wellness_options').insert({ ...row, sort_order: (last?.sort_order ?? 0) + 1 }))
+  }
 
   if (error) return { error: error.message }
   revalidatePath(`/${locale}/admin/wellness`)
+  revalidatePath('/es/wellness')
+  revalidatePath('/en/wellness')
   return {}
+}
+
+export async function moveWellnessOption(optionId: string, direction: 'up' | 'down', locale: string) {
+  const admin = await adminDb()
+  const { data: current } = await admin.from('wellness_options').select('trip_number').eq('id', optionId).maybeSingle()
+  if (!current) return
+  const { data } = await admin
+    .from('wellness_options')
+    .select('id')
+    .eq('trip_number', current.trip_number ?? 1)
+    .order('sort_order', { ascending: true })
+    .order('created_at', { ascending: true })
+  const list = (data ?? []) as { id: string }[]
+  const from = list.findIndex((option) => option.id === optionId)
+  const to = direction === 'up' ? from - 1 : from + 1
+  if (from === -1 || to < 0 || to >= list.length) return
+  const [moved] = list.splice(from, 1)
+  list.splice(to, 0, moved)
+  for (const [index, option] of list.entries()) {
+    await admin.from('wellness_options').update({ sort_order: index + 1 }).eq('id', option.id)
+  }
+  revalidatePath(`/${locale}/admin/wellness`)
+  revalidatePath('/es/wellness')
+  revalidatePath('/en/wellness')
 }
 
 export async function toggleWellnessActive(optionId: string, active: boolean, locale: string) {
@@ -726,7 +769,7 @@ export async function deleteMeal(mealId: string, bookingId: string, locale: stri
 // ── Day templates (Signature Journey library) ───────────────────────────────
 
 const dayTemplateSchema = z.object({
-  trip_number: z.coerce.number().int().min(1).max(2).default(1),
+  trip_number: z.coerce.number().int().min(1).max(3).default(1),
   sort_order: z.coerce.number().int().min(0).default(0),
   title_en: z.string().min(1),
   title_es: z.string().optional(),
@@ -734,6 +777,7 @@ const dayTemplateSchema = z.object({
   description_es: z.string().optional(),
   location: z.string().optional(),
   image_url: z.string().optional(),
+  menu_image_url: z.string().optional(),
   day_vibe_en: z.string().optional(),
   day_vibe_es: z.string().optional(),
   tocca_tips_en: z.string().optional(),
@@ -819,6 +863,7 @@ export async function saveDayTemplate(
     description: i18n(d.description_en, d.description_es),
     location: d.location || null,
     image_url: d.image_url || null,
+    menu_image_url: d.menu_image_url || null,
     day_vibe: i18n(d.day_vibe_en, d.day_vibe_es),
     tocca_tips: zipLines(d.tocca_tips_en, d.tocca_tips_es),
     good_to_know: zipLines(d.good_to_know_en, d.good_to_know_es),
@@ -869,6 +914,7 @@ async function instantiateTemplate(
       description: template.description,
       location: template.location,
       image_url: template.image_url,
+      menu_image_url: template.menu_image_url,
       schedule: template.schedule,
       included: template.included,
       meeting_point: template.meeting_point,
@@ -938,7 +984,7 @@ export async function addFullJourneyToBooking(
 ): Promise<{ error?: string }> {
   const admin = await adminDb()
   const tripNumber = Number(formData.get('trip_number'))
-  if (tripNumber !== 1 && tripNumber !== 2) return { error: 'Elige Viaje uno o Viaje dos.' }
+  if (![1, 2, 3].includes(tripNumber)) return { error: 'Elige un grupo.' }
   const { data: templates } = await admin
     .from('day_templates')
     .select('*')

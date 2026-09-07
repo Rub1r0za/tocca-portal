@@ -38,11 +38,11 @@ export default async function ActivitiesAdminPage({
 
       <div className="mb-6 space-y-4">
         {activities.length > 0 ? (
-          [1, 2].flatMap((trip) => activities
+          [1, 2, 3].flatMap((trip) => activities
             .filter((activity) => (activity.trip_number ?? 1) === trip)
             .map((activity, index, group) => (
               <div key={activity.id}>
-                {index === 0 && <h2 className="mb-3 mt-6 text-sm font-semibold uppercase tracking-[0.14em] text-[#4A9A92]">Viaje {trip === 1 ? 'uno · Signature' : 'dos · Yoga Retreat'}</h2>}
+                {index === 0 && <h2 className="mb-3 mt-6 text-sm font-semibold uppercase tracking-[0.14em] text-[#4A9A92]">{trip === 3 ? 'Reservas individuales' : trip === 1 ? 'Viaje uno · Signature' : 'Viaje dos · Yoga Retreat'}</h2>}
                 <ActivityCard activity={activity} locale={locale} index={index} total={group.length} />
               </div>
             )))
