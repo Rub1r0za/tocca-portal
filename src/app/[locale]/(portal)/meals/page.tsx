@@ -6,7 +6,7 @@ import { createClient } from '@/lib/supabase/server'
 import type { Booking, Meal } from '@/lib/types'
 import { AppHeader } from '@/components/app-header'
 import { EmptyState } from '@/components/primitives'
-import { MealDay } from './meal-day'
+import { MealsList } from './meals-list'
 
 type DayWithMeals = {
   id: string
@@ -57,16 +57,15 @@ export default async function MealsPage({
         {daysWithMeals.length === 0 ? (
           <EmptyState title={tSections('meals.empty')} />
         ) : (
-          daysWithMeals.map((day) => (
-            <MealDay
-              key={day.id}
-              day={day}
-              travelers={travelers.filter((traveler) => (traveler.trip_number ?? 1) === (day.trip_number ?? 1))}
-              selections={selections}
-              bookingId={booking.id}
-              locale={locale}
-            />
-          ))
+          <MealsList
+            days={daysWithMeals.map((day) => ({
+              day,
+              travelers: travelers.filter((traveler) => (traveler.trip_number ?? 1) === (day.trip_number ?? 1)),
+            }))}
+            selections={selections}
+            bookingId={booking.id}
+            locale={locale}
+          />
         )}
       </div>
     </div>
