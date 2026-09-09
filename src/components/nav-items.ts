@@ -12,7 +12,7 @@ export type NavItem = { key: string; path: string; Icon: LucideIcon }
  */
 export const navItems: NavItem[] = [
   { key: 'guestView', path: '/dashboard', Icon: Home },
-  { key: 'beforeYouGo', path: '/before-you-go', Icon: Luggage },
+  { key: 'journey', path: '/journey', Icon: Sparkles },
   ...(MEALS_ENABLED ? [{ key: 'meals', path: '/meals', Icon: UtensilsCrossed }] : []),
   { key: 'activities', path: '/activities', Icon: Compass },
   { key: 'wellness', path: '/wellness', Icon: Flower2 },
@@ -22,6 +22,6 @@ export const navItems: NavItem[] = [
 export const menuItems: NavItem[] = [
   ...navItems,
   ...(TIMELINE_ENABLED ? [{ key: 'timeline', path: '/timeline', Icon: Route }] : []),
-  { key: 'journey', path: '/journey', Icon: Sparkles },
+  { key: 'beforeYouGo', path: '/before-you-go', Icon: Luggage },
   { key: 'phrases', path: '/phrases', Icon: Languages },
 ]
