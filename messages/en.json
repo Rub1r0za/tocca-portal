@@ -116,7 +116,7 @@
     "registerText": "Complete your registration to start your journey: who is traveling, and accept the terms.",
     "registerCta": "Complete my registration",
     "paymentsCta": "View / register payments",
-    "mealsPendingTitle": "You still have dishes to choose",
+    "mealsPendingTitle": "Dishes still need to be selected",
     "mealsPendingText": "{count, plural, =1 {# meal selection is} other {# meal selections are}} still missing. Tap to finish.",
     "taglineSoon": "Manca poco al tuo viaggio in Costiera"
   },

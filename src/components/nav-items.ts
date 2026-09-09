@@ -12,16 +12,16 @@ export type NavItem = { key: string; path: string; Icon: LucideIcon }
  */
 export const navItems: NavItem[] = [
   { key: 'guestView', path: '/dashboard', Icon: Home },
-  ...(TIMELINE_ENABLED ? [{ key: 'timeline', path: '/timeline', Icon: Route }] : []),
-  { key: 'journey', path: '/journey', Icon: Sparkles },
-  { key: 'activities', path: '/activities', Icon: Compass },
+  { key: 'beforeYouGo', path: '/before-you-go', Icon: Luggage },
   ...(MEALS_ENABLED ? [{ key: 'meals', path: '/meals', Icon: UtensilsCrossed }] : []),
+  { key: 'activities', path: '/activities', Icon: Compass },
   { key: 'wellness', path: '/wellness', Icon: Flower2 },
 ]
 
 /** La barra de abajo más lo que solo se consulta de vez en cuando. */
 export const menuItems: NavItem[] = [
   ...navItems,
-  { key: 'beforeYouGo', path: '/before-you-go', Icon: Luggage },
+  ...(TIMELINE_ENABLED ? [{ key: 'timeline', path: '/timeline', Icon: Route }] : []),
+  { key: 'journey', path: '/journey', Icon: Sparkles },
   { key: 'phrases', path: '/phrases', Icon: Languages },
 ]

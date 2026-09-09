@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { ArrowLeft, ChevronRight } from 'lucide-react'
+import { AlertTriangle, ArrowLeft, ChevronRight } from 'lucide-react'
 import { MealDay } from './meal-day'
 
 type Meal = {
@@ -25,6 +25,25 @@ type Day = {
 }
 
 type DayEntry = { day: Day; travelers: Traveler[] }
+
+function pendingSelectionsForDay(day: Day, travelers: Traveler[], selections: Selection[]) {
+  const mealIdsByCourse = new Map<string, string[]>()
+  for (const meal of day.meals) {
+    const ids = mealIdsByCourse.get(meal.course) ?? []
+    ids.push(meal.id)
+    mealIdsByCourse.set(meal.course, ids)
+  }
+
+  let pending = 0
+  for (const traveler of travelers) {
+    for (const mealIds of mealIdsByCourse.values()) {
+      if (!selections.some((selection) => selection.traveler_id === traveler.id && mealIds.includes(selection.meal_id))) {
+        pending += 1
+      }
+    }
+  }
+  return pending
+}
 
 export function MealsList({
   days,
@@ -65,8 +84,12 @@ export function MealsList({
 
   return (
     <div className="space-y-3">
-      {days.map(({ day }) => {
+      {days.map(({ day, travelers }) => {
         const title = day.title?.[locale] ?? day.title?.en ?? ''
+        const pendingSelections = pendingSelectionsForDay(day, travelers, selections)
+        const pendingLabel = locale === 'es'
+          ? `Faltan ${pendingSelections} plato${pendingSelections === 1 ? '' : 's'} por seleccionar`
+          : `${pendingSelections} dish${pendingSelections === 1 ? '' : 'es'} still need${pendingSelections === 1 ? 's' : ''} to be selected`
         return (
           <button
             key={day.id}
@@ -87,6 +110,12 @@ export function MealsList({
               {title && (
                 <span className="mt-0.5 block truncate text-lg text-foreground" style={{ fontFamily: 'var(--font-display)', fontWeight: 500 }}>
                   {title}
+                </span>
+              )}
+              {pendingSelections > 0 && (
+                <span className="mt-2 flex items-center gap-1.5 text-xs font-medium text-amber-700">
+                  <AlertTriangle className="size-3.5 shrink-0" aria-hidden />
+                  {pendingLabel}
                 </span>
               )}
             </span>

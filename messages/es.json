@@ -116,7 +116,7 @@
     "registerText": "Completa tu registro para comenzar tu viaje: quiénes viajan, y acepta los términos.",
     "registerCta": "Completar mi registro",
     "paymentsCta": "Ver / registrar pagos",
-    "mealsPendingTitle": "Te faltan platos por elegir",
+    "mealsPendingTitle": "Faltan platos por seleccionar",
     "mealsPendingText": "Quedan {count, plural, =1 {# selección} other {# selecciones}} de comida sin hacer. Toca para completarlas.",
     "taglineSoon": "Manca poco al tuo viaggio in Costiera"
   },
