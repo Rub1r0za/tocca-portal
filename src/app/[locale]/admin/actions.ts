@@ -357,7 +357,20 @@ export async function updateJourneyDay(
 
   const admin = await adminDb()
 
-  const { error } = await admin.from('journey_days').update(dayPayload(parsed.data)).eq('id', dayId)
+  // Editing a day must never silently move it to Signature (trip 1).
+  const { data: current } = await admin
+    .from('journey_days')
+    .select('trip_number')
+    .eq('id', dayId)
+    .eq('booking_id', bookingId)
+    .maybeSingle()
+  if (!current) return { error: 'Día no encontrado' }
+
+  const { error } = await admin
+    .from('journey_days')
+    .update({ ...dayPayload(parsed.data), trip_number: current.trip_number ?? 1 })
+    .eq('id', dayId)
+    .eq('booking_id', bookingId)
 
   if (error) return { error: error.message }
 
