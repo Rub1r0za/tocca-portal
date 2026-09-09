@@ -6,7 +6,7 @@ import { MealDay } from './meal-day'
 
 type Meal = {
   id: string
-  course: 'starter' | 'main' | 'dessert'
+  course: 'breakfast' | 'lunch' | 'dinner' | 'starter' | 'main' | 'dessert'
   name: Record<string, string> | null
   description: Record<string, string> | null
   allergens: string | null

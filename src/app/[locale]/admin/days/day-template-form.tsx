@@ -21,7 +21,7 @@ function scheduleLines(
   return (items ?? []).map((i) => `${i.time} | ${i.title?.[lang] ?? ''}`).join('\n')
 }
 
-const COURSE_ES: Record<string, string> = { starter: 'entrada', main: 'principal', dessert: 'postre' }
+const COURSE_ES: Record<string, string> = { breakfast: 'desayuno', lunch: 'almuerzo', dinner: 'cena', starter: 'entrada', main: 'principal', dessert: 'postre' }
 
 /** Render the template meals back into "curso | nombre EN | nombre ES" lines. */
 function mealLines(

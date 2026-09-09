@@ -9,7 +9,7 @@ import { cn } from '@/lib/utils'
 
 type Meal = {
   id: string
-  course: 'starter' | 'main' | 'dessert'
+  course: 'breakfast' | 'lunch' | 'dinner' | 'starter' | 'main' | 'dessert'
   name: Record<string, string> | null
   description: Record<string, string> | null
   allergens: string | null
@@ -19,7 +19,7 @@ type Meal = {
 type Traveler = { id: string; first_name: string; last_name: string }
 type Selection = { meal_id: string; traveler_id: string }
 
-const COURSES: Array<'starter' | 'main' | 'dessert'> = ['starter', 'main', 'dessert']
+const COURSES: Array<'breakfast' | 'lunch' | 'dinner' | 'starter' | 'main' | 'dessert'> = ['breakfast', 'lunch', 'dinner', 'starter', 'main', 'dessert']
 
 export function MealDay({
   day,

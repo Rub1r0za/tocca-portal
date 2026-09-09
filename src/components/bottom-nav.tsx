@@ -3,12 +3,29 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useTranslations } from 'next-intl'
+import { useEffect, useState } from 'react'
 import { cn } from '@/lib/utils'
 import { navItems } from './nav-items'
+import { createClient } from '@/lib/supabase/client'
 
 export function BottomNav({ locale }: { locale: string }) {
   const t = useTranslations('mobileNav')
   const pathname = usePathname()
+  const [mealsVisible, setMealsVisible] = useState(false)
+
+  useEffect(() => {
+    const supabase = createClient()
+    void supabase
+      .from('bookings')
+      .select('travelers(meals_enabled)')
+      .eq('status', 'approved')
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle()
+      .then(({ data }) => setMealsVisible(data?.travelers?.some((traveler) => traveler.meals_enabled) ?? false))
+  }, [])
+
+  const items = navItems.filter((item) => item.key !== 'meals' || mealsVisible)
 
   return (
     <nav
@@ -16,7 +33,7 @@ export function BottomNav({ locale }: { locale: string }) {
       className="fixed bottom-0 left-1/2 z-40 w-full max-w-[430px] -translate-x-1/2 border-t border-hairline bg-white/95 backdrop-blur-md"
     >
       <ul className="flex items-stretch pb-safe">
-        {navItems.map(({ key, path, Icon }) => {
+        {items.map(({ key, path, Icon }) => {
           const href = `/${locale}${path}`
           const active = pathname === href || pathname.startsWith(`${href}/`)
           return (

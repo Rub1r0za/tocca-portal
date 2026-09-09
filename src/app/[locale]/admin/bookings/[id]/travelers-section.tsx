@@ -1,8 +1,8 @@
 'use client'
 
 import { useActionState } from 'react'
-import { Loader2, Trash2, UserPlus } from 'lucide-react'
-import { addTraveler, deleteTraveler, updateTravelerTrip } from '../../actions'
+import { Eye, EyeOff, Loader2, Trash2, UserPlus } from 'lucide-react'
+import { addTraveler, deleteTraveler, updateTravelerMealsVisibility, updateTravelerTrip } from '../../actions'
 import type { Traveler } from '@/lib/types'
 
 const inputClass =
@@ -136,6 +136,15 @@ export function TravelersSection({
                   <option value="2">Viaje dos</option>
                   <option value="3">Reservas individuales</option>
                 </select>
+              </form>
+              <form action={updateTravelerMealsVisibility.bind(null, t.id, bookingId, locale, !t.meals_enabled)}>
+                <button
+                  type="submit"
+                  title={t.meals_enabled ? 'Ocultar comidas' : 'Mostrar comidas'}
+                  className="rounded-lg p-1.5 text-[#7A7168] transition-colors hover:bg-[#4A9A92]/10 hover:text-[#4A9A92] focus:outline-none"
+                >
+                  {t.meals_enabled ? <Eye className="size-4" /> : <EyeOff className="size-4" />}
+                </button>
               </form>
               <DeleteTravelerButton travelerId={t.id} bookingId={bookingId} locale={locale} />
             </li>

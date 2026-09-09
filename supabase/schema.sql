@@ -11,7 +11,7 @@ create type user_role as enum ('client', 'admin');
 create type booking_status as enum ('pending', 'approved', 'cancelled');
 create type booking_type as enum ('individual', 'group');
 create type traveler_type as enum ('adult', 'child');
-create type meal_course as enum ('starter', 'main', 'dessert');
+create type meal_course as enum ('breakfast', 'lunch', 'dinner', 'starter', 'main', 'dessert');
 create type payment_status as enum ('pending', 'partial', 'paid');
 create type document_type as enum ('passport', 'visa', 'insurance', 'other');
 create type notification_type as enum ('email', 'in_app');
@@ -53,6 +53,7 @@ create table travelers (
   last_name             text not null,
   dietary_restrictions  text,
   notes                 text,
+  meals_enabled         boolean not null default true,
   created_at            timestamptz not null default now()
 );
 

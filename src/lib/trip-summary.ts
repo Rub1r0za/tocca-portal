@@ -125,7 +125,7 @@ export function mealsByDay(
     })
 }
 
-const COURSE_RANK: Record<string, number> = { starter: 0, main: 1, dessert: 2 }
+const COURSE_RANK: Record<string, number> = { breakfast: 0, lunch: 1, dinner: 2, starter: 3, main: 4, dessert: 5 }
 function courseRank(course: string): number {
   return COURSE_RANK[course] ?? 99
 }

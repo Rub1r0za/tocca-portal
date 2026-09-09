@@ -232,6 +232,7 @@ export async function addTraveler(
   const { error } = await admin.from('travelers').insert({
     booking_id: bookingId,
     ...parsed.data,
+    meals_enabled: parsed.data.trip_number !== 1,
     dietary_restrictions: parsed.data.dietary_restrictions || null,
   })
 
@@ -256,7 +257,27 @@ export async function updateTravelerTrip(
   const tripNumber = Number(formData.get('trip_number'))
   if (![1, 2, 3].includes(tripNumber)) return
   const admin = await adminDb()
-  await admin.from('travelers').update({ trip_number: tripNumber }).eq('id', travelerId).eq('booking_id', bookingId)
+  await admin
+    .from('travelers')
+    .update({ trip_number: tripNumber, ...(tripNumber === 1 ? { meals_enabled: false } : {}) })
+    .eq('id', travelerId)
+    .eq('booking_id', bookingId)
+  revalidatePath(`/${locale}/admin/bookings/${bookingId}`)
+  revalidatePath(`/${locale}/admin/summary`)
+}
+
+export async function updateTravelerMealsVisibility(
+  travelerId: string,
+  bookingId: string,
+  locale: string,
+  mealsEnabled: boolean,
+) {
+  const admin = await adminDb()
+  await admin
+    .from('travelers')
+    .update({ meals_enabled: mealsEnabled })
+    .eq('id', travelerId)
+    .eq('booking_id', bookingId)
   revalidatePath(`/${locale}/admin/bookings/${bookingId}`)
   revalidatePath(`/${locale}/admin/summary`)
 }
@@ -701,7 +722,7 @@ export async function deleteTimelineEvent(eventId: string, bookingId: string, lo
 // ── Meals (per journey day) ─────────────────────────────────────────────────
 
 const mealSchema = z.object({
-  course: z.enum(['starter', 'main', 'dessert']),
+  course: z.enum(['breakfast', 'lunch', 'dinner', 'starter', 'main', 'dessert']),
   name_en: z.string().min(1),
   name_es: z.string().optional(),
   description_en: z.string().optional(),
@@ -800,8 +821,11 @@ const dayTemplateSchema = z.object({
  * The course accepts English or Spanish; anything unknown falls back to 'main'.
  */
 function parseTemplateMeals(raw?: string) {
-  const courseOf = (s: string): 'starter' | 'main' | 'dessert' => {
+  const courseOf = (s: string): 'breakfast' | 'lunch' | 'dinner' | 'starter' | 'main' | 'dessert' => {
     const k = s.trim().toLowerCase()
+    if (['breakfast', 'desayuno'].includes(k)) return 'breakfast'
+    if (['lunch', 'almuerzo', 'comida'].includes(k)) return 'lunch'
+    if (['dinner', 'cena'].includes(k)) return 'dinner'
     if (['starter', 'entrada', 'entrante', 'primero'].includes(k)) return 'starter'
     if (['dessert', 'postre'].includes(k)) return 'dessert'
     return 'main'

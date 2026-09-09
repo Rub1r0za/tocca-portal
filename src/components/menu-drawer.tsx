@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { X, LogOut } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
@@ -24,6 +24,21 @@ export function MenuDrawer({
   const pathname = usePathname()
   const router = useRouter()
   const panelRef = useRef<HTMLDivElement>(null)
+  const [mealsVisible, setMealsVisible] = useState(false)
+
+  useEffect(() => {
+    const supabase = createClient()
+    void supabase
+      .from('bookings')
+      .select('travelers(meals_enabled)')
+      .eq('status', 'approved')
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle()
+      .then(({ data }) => setMealsVisible(data?.travelers?.some((traveler) => traveler.meals_enabled) ?? false))
+  }, [])
+
+  const items = menuItems.filter((item) => item.key !== 'meals' || mealsVisible)
 
   useEffect(() => {
     if (!open) return
@@ -102,7 +117,7 @@ export function MenuDrawer({
           {/* Nav */}
           <nav aria-label={t('label')} className="flex-1 overflow-y-auto px-3 py-4">
             <ul className="space-y-0.5">
-              {menuItems.map(({ key, path, Icon }) => {
+              {items.map(({ key, path, Icon }) => {
                 const href = `/${locale}${path}`
                 const active = pathname === href || pathname.startsWith(`${href}/`)
                 return (

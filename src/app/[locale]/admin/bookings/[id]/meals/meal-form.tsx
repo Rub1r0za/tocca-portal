@@ -10,6 +10,9 @@ const inputClass =
 const labelClass = 'mb-1.5 block text-[0.7rem] font-semibold tracking-[0.18em] text-[#7A7168] uppercase'
 
 export const COURSES = [
+  { value: 'breakfast', label: 'Desayuno' },
+  { value: 'lunch', label: 'Almuerzo' },
+  { value: 'dinner', label: 'Cena' },
   { value: 'starter', label: 'Entrante' },
   { value: 'main', label: 'Principal' },
   { value: 'dessert', label: 'Postre' },

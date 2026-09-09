@@ -78,6 +78,7 @@ export default async function DashboardPage({
   const end = formatDate(booking.end_date, locale, { day: 'numeric', month: 'short', year: 'numeric' })
   const dateRange = start && end ? `${start} – ${end}` : start || end || '—'
   const travelers = booking.travelers?.length ?? 0
+  const mealTravelers = (booking.travelers ?? []).filter((traveler) => traveler.meals_enabled)
   const statusLabel = tStatus(booking.status)
 
   const supabase = await createClient()
@@ -98,7 +99,7 @@ export default async function DashboardPage({
   // Mismo cálculo que ve el admin: si al viajero le faltan platos, se lo decimos
   // aquí en vez de esperar a que entre a "Comidas" por su cuenta.
   let pendingMealSlots = 0
-  if (MEALS_ENABLED) {
+  if (MEALS_ENABLED && mealTravelers.length > 0) {
     const [{ data: dayRows }, { data: selectionRows }] = await Promise.all([
       supabase
         .from('journey_days')
@@ -108,7 +109,7 @@ export default async function DashboardPage({
     ])
     pendingMealSlots = mealPending(
       (dayRows ?? []) as SummaryDay[],
-      booking.travelers ?? [],
+      mealTravelers,
       selectionRows ?? [],
     ).pendingSlots
   }
@@ -118,7 +119,7 @@ export default async function DashboardPage({
   // "Día Libre" y "Bienestar" siguen en la barra de abajo; en la home
   // estorbaban al lado de lo que se mira antes de salir.
   const tripTiles: Tile[] = [
-    ...(MEALS_ENABLED
+    ...(MEALS_ENABLED && mealTravelers.length > 0
       ? [{ href: `/${locale}/meals`, Icon: UtensilsCrossed, title: tSections('meals.title'), subtitle: tSections('meals.subtitle') }]
       : []),
     ...(TIMELINE_ENABLED

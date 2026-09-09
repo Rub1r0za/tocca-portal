@@ -46,9 +46,14 @@ export default async function MealsPage({
 
   const days = (data ?? []) as DayWithMeals[]
   const selections = (selectionData ?? []) as { meal_id: string; traveler_id: string }[]
-  const travelers = booking.travelers ?? []
+  const travelers = (booking.travelers ?? []).filter((traveler) => traveler.meals_enabled)
+  if (travelers.length === 0) redirect(`/${locale}/dashboard`)
 
-  const daysWithMeals = days.filter((d) => (d.meals && d.meals.length > 0) || d.menu_image_url)
+  const daysWithMeals = days.filter(
+    (day) =>
+      ((day.meals && day.meals.length > 0) || day.menu_image_url) &&
+      travelers.some((traveler) => (traveler.trip_number ?? 1) === (day.trip_number ?? 1)),
+  )
 
   return (
     <div>

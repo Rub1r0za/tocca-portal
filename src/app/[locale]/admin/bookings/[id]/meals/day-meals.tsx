@@ -108,7 +108,7 @@ export function DayMeals({
   const [adding, setAdding] = useState(false)
 
   const titleEn = day.title?.en || day.title?.es || `Day ${day.day_number}`
-  const courseOrder: Record<string, number> = { starter: 0, main: 1, dessert: 2 }
+  const courseOrder: Record<string, number> = { breakfast: 0, lunch: 1, dinner: 2, starter: 3, main: 4, dessert: 5 }
   const meals = [...(day.meals ?? [])].sort(
     (a, b) => (courseOrder[a.course] ?? 9) - (courseOrder[b.course] ?? 9)
   )

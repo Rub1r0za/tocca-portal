@@ -31,7 +31,7 @@ const travelersForDay = (day: SummaryDay, travelers: SummaryTraveler[]) =>
 
 export type MealSelection = { meal_id: string; traveler_id: string }
 
-const COURSE_ORDER: string[] = ['starter', 'main', 'dessert']
+const COURSE_ORDER: string[] = ['breakfast', 'lunch', 'dinner', 'starter', 'main', 'dessert']
 
 /** Cuántas selecciones faltan y qué viajeros las tienen pendientes. */
 export function mealPending(
@@ -128,6 +128,9 @@ export function mealTally(
 }
 
 export const COURSE_LABEL: Record<string, string> = {
+  breakfast: 'Desayuno',
+  lunch: 'Almuerzo',
+  dinner: 'Cena',
   starter: 'Entrada',
   main: 'Principal',
   dessert: 'Postre',

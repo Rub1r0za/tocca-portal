@@ -5,7 +5,7 @@
 export type Localized = Record<string, string>
 
 export type BookingStatus = 'pending' | 'approved' | 'cancelled'
-export type MealCourse = 'starter' | 'main' | 'dessert'
+export type MealCourse = 'breakfast' | 'lunch' | 'dinner' | 'starter' | 'main' | 'dessert'
 export type RequestStatus = 'pending' | 'confirmed' | 'declined' | 'cancelled'
 export type LeadStatus = 'potential' | 'client' | 'past'
 
@@ -39,6 +39,7 @@ export type Traveler = {
   dietary_restrictions: string | null
   notes: string | null
   trip_number: 1 | 2 | 3
+  meals_enabled: boolean
 }
 
 export type Booking = {
