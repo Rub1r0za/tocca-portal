@@ -179,7 +179,10 @@
     "submitting": "Sending…",
     "successTitle": "Request received",
     "successBody": "Our concierge will confirm by email shortly.",
-    "errorTitle": "Could not send your request. Please try again."
+    "errorTitle": "We could not confirm your request.",
+    "sessionExpired": "Your session has expired. Sign in again to continue.",
+    "reviewRequest": "Check the date and travelers. This experience may no longer be available.",
+    "saveFailed": "Check your connection and try again. Retrying this request will not create a duplicate."
   },
   "meals": {
     "starter": "Starter",

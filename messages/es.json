@@ -179,7 +179,10 @@
     "submitting": "Enviando…",
     "successTitle": "Solicitud recibida",
     "successBody": "Nuestro concierge confirmará por correo en breve.",
-    "errorTitle": "No se pudo enviar tu solicitud. Inténtalo de nuevo."
+    "errorTitle": "No pudimos confirmar tu solicitud.",
+    "sessionExpired": "Tu sesión ha caducado. Inicia sesión de nuevo para continuar.",
+    "reviewRequest": "Revisa la fecha y los viajeros. Es posible que esta experiencia ya no esté disponible.",
+    "saveFailed": "Revisa tu conexión e inténtalo de nuevo. Reintentar esta solicitud no creará un duplicado."
   },
   "meals": {
     "starter": "Entrada",

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useState, useTransition, useRef } from 'react'
 import { useTranslations } from 'next-intl'
 import { Check, Loader2 } from 'lucide-react'
 import { requestActivity } from '@/app/[locale]/(portal)/activities/actions'
@@ -27,12 +27,13 @@ export function ReservationForm({ kind, bookingId, targetId, travelers, capacity
   const [date, setDate] = useState('')
   const [notes, setNotes] = useState('')
   const [status, setStatus] = useState<'idle' | 'sent' | 'error'>('idle')
-  // Motivo técnico del rechazo. Se enseña en pequeño: sin esto un fallo de
-  // servidor es indistinguible de uno de red y no hay nada que reportar.
+  // Translate safe error codes; backend details stay in server logs.
   const [reason, setReason] = useState('')
   const [dateError, setDateError] = useState(false)
   const [peopleError, setPeopleError] = useState(false)
   const [isPending, startTransition] = useTransition()
+  const submission = useRef<{ fingerprint: string; id: string } | null>(null)
+  const submitting = useRef(false)
 
   const atCapacity = capacity != null && selected.length >= capacity
 
@@ -49,17 +50,28 @@ export function ReservationForm({ kind, bookingId, targetId, travelers, capacity
 
   function submit(e: React.FormEvent) {
     e.preventDefault()
+    if (submitting.current) return
     const missingPeople = selected.length === 0
     const missingDate = !date
     setPeopleError(missingPeople)
     setDateError(missingDate)
     if (missingPeople || missingDate) return
 
+    const fingerprint = JSON.stringify([kind, bookingId, targetId, [...selected].sort(), date, notes.trim()])
+    if (submission.current?.fingerprint !== fingerprint) {
+      submission.current = { fingerprint, id: crypto.randomUUID() }
+    }
+    const requestId = submission.current.id
+    submitting.current = true
+    setStatus('idle')
+    setReason('')
+
     startTransition(async () => {
       try {
         const result =
           kind === 'activity'
             ? await requestActivity({
+                requestId,
                 bookingId,
                 activityId: targetId,
                 travelerIds: selected,
@@ -67,6 +79,7 @@ export function ReservationForm({ kind, bookingId, targetId, travelers, capacity
                 notes: notes.trim() || null,
               })
             : await requestWellness({
+                requestId,
                 bookingId,
                 wellnessOptionId: targetId,
                 travelerIds: selected,
@@ -75,9 +88,11 @@ export function ReservationForm({ kind, bookingId, targetId, travelers, capacity
               })
         setStatus(result.ok ? 'sent' : 'error')
         if (!result.ok) setReason(result.error ?? '')
-      } catch (err) {
+      } catch {
         setStatus('error')
-        setReason(err instanceof Error ? err.message : '')
+        setReason('save_failed')
+      } finally {
+        submitting.current = false
       }
     })
   }
@@ -102,7 +117,7 @@ export function ReservationForm({ kind, bookingId, targetId, travelers, capacity
   return (
     <form onSubmit={submit} className="space-y-5" noValidate>
       {/* Quién va */}
-      <fieldset>
+      <fieldset disabled={isPending}>
         <legend className="mb-2 block text-xs tracking-widest text-mist uppercase">
           {t('who')}
         </legend>
@@ -150,6 +165,7 @@ export function ReservationForm({ kind, bookingId, targetId, travelers, capacity
         <input
           id="res-date"
           type="date"
+          disabled={isPending}
           required
           min={today()}
           value={date}
@@ -176,6 +192,8 @@ export function ReservationForm({ kind, bookingId, targetId, travelers, capacity
         <textarea
           id="res-notes"
           rows={3}
+          maxLength={4000}
+          disabled={isPending}
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
           placeholder={t('notesPlaceholder')}
@@ -184,9 +202,9 @@ export function ReservationForm({ kind, bookingId, targetId, travelers, capacity
       </div>
 
       {status === 'error' && (
-        <div>
+        <div role="alert">
           <p className="text-xs text-destructive">{t('errorTitle')}</p>
-          {reason && <p className="mt-1 text-[0.65rem] text-mist/70">{reason}</p>}
+          {reason && <p className="mt-1 text-xs text-mist">{t(reason === 'unauthorized' ? 'sessionExpired' : reason === 'invalid_input' || reason === 'invalid_travelers' || reason === 'unavailable' ? 'reviewRequest' : 'saveFailed')}</p>}
         </div>
       )}
 

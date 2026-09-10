@@ -3,82 +3,39 @@
 import { z } from 'zod'
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
+import { reservationSchema, saveReservation } from '@/lib/reservation-request'
+import { mutationFailure } from '@/lib/portal-mutation'
 
-const toggleSchema = z.object({
-  activityId: z.string().uuid(),
-  travelerId: z.string().uuid(),
-  bookingId: z.string().uuid(),
-  selected: z.boolean(),
-})
-
-export async function toggleActivity(input: z.infer<typeof toggleSchema>) {
-  const data = toggleSchema.parse(input)
-  const supabase = await createClient()
-
-  if (data.selected) {
-    await supabase.from('activity_selections').upsert(
-      {
-        activity_id: data.activityId,
-        traveler_id: data.travelerId,
-        booking_id: data.bookingId,
-      },
-      { onConflict: 'activity_id,traveler_id', ignoreDuplicates: true }
-    )
-  } else {
-    await supabase
-      .from('activity_selections')
-      .delete()
-      .eq('activity_id', data.activityId)
-      .eq('traveler_id', data.travelerId)
-  }
-
-  revalidatePath('/[locale]/(portal)/activities', 'page')
+export async function requestActivity(input: Omit<z.infer<typeof reservationSchema>, 'targetId'> & { activityId: string }) {
+  const result = await saveReservation('activity', { ...input, targetId: input.activityId })
+  if (result.ok) revalidatePath('/[locale]/(portal)/activities', 'page')
+  return result
 }
 
-// ── Reservation requests (Free Day Activities booking flow) ──────────
-const requestActivitySchema = z.object({
-  bookingId: z.string().uuid(),
-  activityId: z.string().uuid(),
-  travelerIds: z.array(z.string().uuid()).min(1).max(50),
-  requestedDate: z.string().min(1),
-  notes: z.string().nullable().optional(),
-})
-
-export async function requestActivity(
-  input: z.infer<typeof requestActivitySchema>
-): Promise<{ ok: boolean; error?: string }> {
-  const parsed = requestActivitySchema.safeParse(input)
+export async function toggleActivity(input: { activityId: string; travelerId: string; bookingId: string; selected: boolean }) {
+  const parsed = z.object({ activityId: z.string().uuid(), travelerId: z.string().uuid(), bookingId: z.string().uuid(), selected: z.boolean() }).safeParse(input)
   if (!parsed.success) return { ok: false, error: 'invalid_input' }
-  const data = parsed.data
-
-  const supabase = await createClient()
-
-  // Los ids llegan del navegador: se aceptan solo los que de verdad son
-  // viajeros de esta reserva, para que nadie apunte a gente de otro grupo.
-  const [{ data: activity }, { data: own }] = await Promise.all([
-    supabase.from('activities').select('trip_number').eq('id', data.activityId).eq('active', true).maybeSingle(),
-    supabase
-    .from('travelers')
-    .select('id, trip_number')
-    .eq('booking_id', data.bookingId)
-    .in('id', data.travelerIds),
-  ])
-  if (!activity) return { ok: false, error: 'invalid_activity' }
-  const travelerIds = (own ?? [])
-    .filter((traveler) => (traveler.trip_number ?? 1) === (activity.trip_number ?? 1))
-    .map((traveler) => traveler.id)
-  if (travelerIds.length === 0) return { ok: false, error: 'invalid_travelers' }
-  const { error } = await supabase.from('activity_requests').insert({
-    booking_id: data.bookingId,
-    activity_id: data.activityId,
-    traveler_ids: travelerIds,
-    num_guests: travelerIds.length,
-    requested_date: data.requestedDate,
-    notes: data.notes ?? null,
-  })
-
-  if (error) return { ok: false, error: error.message }
-
+  try {
+    const data = parsed.data
+    const supabase = await createClient()
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    if (authError) return mutationFailure('activity.auth', authError)
+    if (!user) return { ok: false, error: 'unauthorized' }
+    const [booking, traveler, activity] = await Promise.all([
+      supabase.from('bookings').select('id').eq('id', data.bookingId).eq('user_id', user.id).eq('status', 'approved').maybeSingle(),
+      supabase.from('travelers').select('trip_number').eq('id', data.travelerId).eq('booking_id', data.bookingId).maybeSingle(),
+      supabase.from('activities').select('trip_number').eq('id', data.activityId).eq('active', true).maybeSingle(),
+    ])
+    const lookupError = booking.error ?? traveler.error ?? activity.error
+    if (lookupError) return mutationFailure('activity.lookup', lookupError)
+    if (!booking.data || !traveler.data || !activity.data || traveler.data.trip_number !== activity.data.trip_number) return { ok: false, error: 'unavailable' }
+    const { error } = data.selected
+      ? await supabase.from('activity_selections').upsert({ activity_id: data.activityId, traveler_id: data.travelerId, booking_id: data.bookingId }, { onConflict: 'activity_id,traveler_id', ignoreDuplicates: true })
+      : await supabase.from('activity_selections').delete().eq('activity_id', data.activityId).eq('traveler_id', data.travelerId).eq('booking_id', data.bookingId)
+    if (error) return mutationFailure('activity.toggle', error)
+  } catch (error) {
+    return mutationFailure('activity.toggle', error)
+  }
   revalidatePath('/[locale]/(portal)/activities', 'page')
   return { ok: true }
 }
