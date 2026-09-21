@@ -1,11 +1,12 @@
 import Link from 'next/link'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { notFound } from 'next/navigation'
-import { ArrowLeft, AlertTriangle, CheckCircle2 } from 'lucide-react'
+import { ArrowLeft, AlertTriangle, CheckCircle2, Lock, LockOpen } from 'lucide-react'
 import { DayMeals } from './day-meals'
 import type { Meal } from './meal-form'
 import type { Traveler } from '@/lib/types'
 import { mealPending, mealTally, mealByTraveler, COURSE_LABEL } from '@/lib/meals-summary'
+import { setMealsLocked } from '../../../actions'
 
 type DayWithMeals = {
   id: string
@@ -24,7 +25,7 @@ export default async function MealsAdminPage({
   const admin = createAdminClient()
 
   const [{ data: booking }, { data: days }, { data: travelers }, { data: selections }] = await Promise.all([
-    admin.from('bookings').select('id, title').eq('id', id).single(),
+    admin.from('bookings').select('id, title, meals_locked').eq('id', id).single(),
     admin
       .from('journey_days')
       .select('id, day_number, title, trip_number, meals (*)')
@@ -79,10 +80,32 @@ export default async function MealsAdminPage({
         >
           Comidas por día
         </h1>
-        <span className="rounded-full border border-[rgba(62,45,35,0.12)] bg-white px-3 py-1 text-xs text-[#7A7168]">
-          {totalMeals} plato{totalMeals !== 1 ? 's' : ''}
-        </span>
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="rounded-full border border-[rgba(62,45,35,0.12)] bg-white px-3 py-1 text-xs text-[#7A7168]">
+            {totalMeals} plato{totalMeals !== 1 ? 's' : ''}
+          </span>
+          <form action={setMealsLocked.bind(null, id, !booking.meals_locked, locale)}>
+            <button
+              type="submit"
+              className={`inline-flex items-center gap-1.5 rounded-xl border px-3 py-1.5 text-xs font-medium transition-colors ${
+                booking.meals_locked
+                  ? 'border-amber-300 bg-amber-50 text-amber-800 hover:bg-amber-100'
+                  : 'border-[#4A9A92]/30 bg-[#4A9A92]/10 text-[#36766f] hover:bg-[#4A9A92]/15'
+              }`}
+            >
+              {booking.meals_locked ? <LockOpen className="size-3.5" /> : <Lock className="size-3.5" />}
+              {booking.meals_locked ? 'Permitir cambios' : 'Cerrar selecciones'}
+            </button>
+          </form>
+        </div>
       </div>
+
+      {booking.meals_locked && (
+        <div className="mb-6 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
+          <p className="flex items-center gap-2 font-medium"><Lock className="size-4" /> Selecciones cerradas</p>
+          <p className="mt-1 text-xs">Los viajeros pueden ver lo que eligieron, pero no pueden hacer cambios.</p>
+        </div>
+      )}
 
       {/* Alerta de comidas pendientes */}
       {travelerList.length > 0 && pending.expectedSlots > 0 && (

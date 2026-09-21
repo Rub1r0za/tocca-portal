@@ -49,7 +49,7 @@ export default async function SummaryAdminPage() {
     admin.from('travelers').select('id, booking_id, first_name, last_name, trip_number').in('booking_id', bookingIds),
     admin
       .from('journey_days')
-      .select('id, booking_id, day_number, day_date, title, trip_number, meals (id, course, name)')
+      .select('id, booking_id, day_number, day_date, title, trip_number, meals (id, course, meal_period, name)')
       .in('booking_id', bookingIds),
     admin.from('meal_selections').select('meal_id, traveler_id').in('booking_id', bookingIds),
     admin

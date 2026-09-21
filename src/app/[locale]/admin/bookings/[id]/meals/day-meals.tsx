@@ -37,7 +37,7 @@ function MealRow({
     <li className="py-3">
       <div className="flex items-start gap-3">
         <span className="mt-0.5 inline-flex w-20 shrink-0 items-center justify-center rounded-full border border-[rgba(74,154,146,0.3)] bg-[#4A9A92]/10 px-2 py-0.5 text-[0.65rem] font-medium text-[#4A9A92]">
-          {courseLabel}
+          {meal.meal_period && `${COURSES.find((c) => c.value === meal.meal_period)?.label} · `}{courseLabel}
         </span>
         <div className="min-w-0 flex-1">
           <p className="text-sm font-medium text-[#3E2D23]">{nameEn}</p>
@@ -130,7 +130,7 @@ export function DayMeals({
           className="inline-flex items-center gap-1.5 text-sm text-[#4A9A92] hover:underline"
         >
           {adding ? <ChevronUp className="size-4" /> : <PlusCircle className="size-4" />}
-          {adding ? 'Cerrar' : 'Añadir plato'}
+          {adding ? 'Cerrar' : 'Añadir opción'}
         </button>
       </div>
 

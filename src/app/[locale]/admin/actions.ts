@@ -5,6 +5,7 @@ import { requireAdmin } from '@/lib/admin-auth'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { z } from 'zod'
+import { parseMenu } from '@/lib/template-menus'
 import { sendEmail, emailLayout } from '@/lib/email'
 
 /**
@@ -735,6 +736,7 @@ export async function deleteTimelineEvent(eventId: string, bookingId: string, lo
 // ── Meals (per journey day) ─────────────────────────────────────────────────
 
 const mealSchema = z.object({
+  meal_period: z.enum(['', 'breakfast', 'lunch', 'dinner']).optional(),
   course: z.enum(['breakfast', 'lunch', 'dinner', 'starter', 'main', 'dessert']),
   name_en: z.string().min(1),
   name_es: z.string().optional(),
@@ -778,6 +780,7 @@ export async function saveMeal(
   const row = {
     journey_day_id: journeyDayId,
     course: d.course,
+    meal_period: d.meal_period || null,
     name: i18n(d.name_en, d.name_es),
     description: i18n(d.description_en, d.description_es),
     allergens: d.allergens || null,
@@ -798,6 +801,22 @@ export async function deleteMeal(mealId: string, bookingId: string, locale: stri
   const admin = await adminDb()
   await admin.from('meals').delete().eq('id', mealId)
   revalidatePath(`/${locale}/admin/bookings/${bookingId}/meals`)
+}
+
+export async function setMealsLocked(
+  bookingId: string,
+  locked: boolean,
+  locale: string,
+) {
+  const admin = await adminDb()
+  const { error } = await admin
+    .from('bookings')
+    .update({ meals_locked: locked, updated_at: new Date().toISOString() })
+    .eq('id', bookingId)
+
+  if (error) throw new Error(error.message)
+  revalidatePath(`/${locale}/admin/bookings/${bookingId}/meals`)
+  revalidatePath(`/${locale}/meals`)
 }
 
 // ── Day templates (Signature Journey library) ───────────────────────────────
@@ -822,6 +841,12 @@ const dayTemplateSchema = z.object({
   schedule_es: z.string().optional(),
   is_free_day: z.string().optional(),
   meals: z.string().optional(),
+  meals_breakfast: z.string().optional(),
+  meals_lunch: z.string().optional(),
+  meals_dinner: z.string().optional(),
+  menu_image_breakfast: z.string().optional(),
+  menu_image_lunch: z.string().optional(),
+  menu_image_dinner: z.string().optional(),
 })
 
 /**
@@ -888,11 +913,20 @@ export async function saveDayTemplate(
   locale: string,
   _prev: { error?: string } | null,
   formData: FormData,
-): Promise<{ error?: string }> {
+): Promise<{ error?: string; success?: boolean }> {
   const parsed = dayTemplateSchema.safeParse(Object.fromEntries(formData))
   if (!parsed.success) return { error: 'Datos inválidos: revisa el título EN.' }
 
   const d = parsed.data
+  let meals
+  try {
+    meals = [
+      ...parseTemplateMeals(d.meals),
+      ...(['breakfast', 'lunch', 'dinner'] as const).flatMap((period) => parseMenu(d[`meals_${period}`], period)),
+    ]
+  } catch (error) {
+    return { error: error instanceof Error ? error.message : 'Revisa los platos del menu.' }
+  }
   const payload = {
     trip_number: d.trip_number,
     sort_order: d.sort_order,
@@ -906,7 +940,10 @@ export async function saveDayTemplate(
     good_to_know: zipLines(d.good_to_know_en, d.good_to_know_es),
     schedule: zipSchedule(d.schedule_en, d.schedule_es),
     is_free_day: d.is_free_day === 'on',
-    meals: parseTemplateMeals(d.meals),
+    meals,
+    menu_images: Object.fromEntries((['breakfast', 'lunch', 'dinner'] as const)
+      .filter((period) => d[`menu_image_${period}`]?.trim())
+      .map((period) => [period, d[`menu_image_${period}`]!.trim()])),
     updated_at: new Date().toISOString(),
   }
 
@@ -918,7 +955,9 @@ export async function saveDayTemplate(
   if (error) return { error: error.message }
 
   revalidatePath(`/${locale}/admin/days`)
-  return {}
+  revalidatePath('/[locale]/admin/bookings', 'layout')
+  revalidatePath('/[locale]/(portal)', 'layout')
+  return { success: true }
 }
 
 export async function deleteDayTemplate(templateId: string, locale: string) {
@@ -952,6 +991,8 @@ async function instantiateTemplate(
       location: template.location,
       image_url: template.image_url,
       menu_image_url: template.menu_image_url,
+      menu_images: template.menu_images ?? {},
+      template_id: template.id,
       schedule: template.schedule,
       included: template.included,
       meeting_point: template.meeting_point,
@@ -968,12 +1009,15 @@ async function instantiateTemplate(
 
   const meals = (template.meals ?? []) as Array<{
     course: string
+    meal_period?: string | null
     name: Record<string, string>
     description?: Record<string, string>
   }>
   if (meals.length > 0) {
     const { error: mealErr } = await admin.from('meals').insert(
-      meals.map((m) => ({
+      meals.map((m, index) => ({
+        template_meal_key: String(index),
+        meal_period: m.meal_period ?? null,
         journey_day_id: day.id,
         course: m.course,
         name: m.name,

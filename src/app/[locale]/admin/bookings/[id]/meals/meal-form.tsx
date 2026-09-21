@@ -19,6 +19,7 @@ export const COURSES = [
 ] as const
 
 export type Meal = {
+  meal_period?: string | null
   id: string
   journey_day_id: string
   course: string
@@ -48,9 +49,16 @@ export function MealForm({
     <form action={action} className="space-y-4">
       {state?.error && <p className="text-xs text-red-600">{state.error}</p>}
 
+      <div>
+        <label className={labelClass}>Menú</label>
+        <select name="meal_period" defaultValue={meal?.meal_period ?? ''} className={inputClass}>
+          <option value="">Sin asignar (anterior)</option>
+          <option value="breakfast">Desayuno</option><option value="lunch">Almuerzo</option><option value="dinner">Cena</option>
+        </select>
+      </div>
       <div className="grid gap-4 sm:grid-cols-3">
         <div>
-          <label className={labelClass}>Plato</label>
+          <label className={labelClass}>Selección</label>
           <select name="course" defaultValue={meal?.course ?? 'main'} className={inputClass}>
             {COURSES.map(({ value, label }) => (
               <option key={value} value={value}>{label}</option>
@@ -63,6 +71,13 @@ export function MealForm({
         </div>
         <ImageField defaultValue={meal?.image_url} label="Imagen del plato" />
       </div>
+
+      {!meal && (
+        <p className="text-xs leading-relaxed text-[#7A7168]">
+          Añade varias opciones con la misma selección. Por ejemplo, todas las opciones de
+          almuerzo formarán un bloque y todas las de cena formarán otro bloque independiente.
+        </p>
+      )}
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
@@ -93,7 +108,7 @@ export function MealForm({
           className="flex items-center gap-1.5 rounded-xl bg-[#4A9A92] px-4 py-2 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-60"
         >
           {pending && <Loader2 className="size-3.5 animate-spin" />}
-          {meal ? 'Guardar' : 'Añadir plato'}
+          {meal ? 'Guardar' : 'Añadir opción'}
         </button>
         {onClose && (
           <button

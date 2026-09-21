@@ -191,6 +191,7 @@
     "breakfast": "Breakfast",
     "lunch": "Lunch",
     "dinner": "Dinner",
+    "selectionTitle": "{course} selection",
     "noMeals": "No options for this day.",
     "or": "or",
     "chooseBelow": "Make your selection below",

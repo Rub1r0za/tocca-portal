@@ -6,6 +6,7 @@ import { MealDay } from './meal-day'
 
 type Meal = {
   id: string
+  meal_period?: 'breakfast' | 'lunch' | 'dinner' | null
   course: 'breakfast' | 'lunch' | 'dinner' | 'starter' | 'main' | 'dessert'
   name: Record<string, string> | null
   description: Record<string, string> | null
@@ -21,6 +22,7 @@ type Day = {
   day_number: number
   title: Record<string, string>
   meals: Meal[]
+  menu_images?: Partial<Record<'breakfast' | 'lunch' | 'dinner', string>>
   menu_image_url: string | null
 }
 
@@ -29,9 +31,10 @@ type DayEntry = { day: Day; travelers: Traveler[] }
 function pendingSelectionsForDay(day: Day, travelers: Traveler[], selections: Selection[]) {
   const mealIdsByCourse = new Map<string, string[]>()
   for (const meal of day.meals) {
-    const ids = mealIdsByCourse.get(meal.course) ?? []
+    const slot = meal.meal_period ? `${meal.meal_period}:${meal.course}` : meal.course
+    const ids = mealIdsByCourse.get(slot) ?? []
     ids.push(meal.id)
-    mealIdsByCourse.set(meal.course, ids)
+    mealIdsByCourse.set(slot, ids)
   }
 
   let pending = 0
@@ -50,11 +53,13 @@ export function MealsList({
   selections,
   bookingId,
   locale,
+  locked,
 }: {
   days: DayEntry[]
   selections: Selection[]
   bookingId: string
   locale: string
+  locked: boolean
 }) {
   const [selectedDayId, setSelectedDayId] = useState<string | null>(null)
   const selectedDay = days.find(({ day }) => day.id === selectedDayId)
@@ -77,6 +82,7 @@ export function MealsList({
           selections={selections}
           bookingId={bookingId}
           locale={locale}
+          locked={locked}
         />
       </div>
     )

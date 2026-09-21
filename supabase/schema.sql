@@ -40,6 +40,7 @@ create table bookings (
   applicant_email  text,
   applicant_phone  text,
   notes            text,
+  meals_locked     boolean not null default false,
   created_at       timestamptz not null default now(),
   updated_at       timestamptz not null default now()
 );

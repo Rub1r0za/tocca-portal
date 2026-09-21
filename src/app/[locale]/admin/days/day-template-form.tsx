@@ -54,7 +54,8 @@ export function DayTemplateForm({
 
   return (
     <form action={action} className="space-y-4">
-      {state?.error && <p className="text-xs text-red-600">{state.error}</p>}
+      {state?.error && <p role="alert" className="text-xs text-red-600">{state.error}</p>}
+      {state?.success && <p role="status" className="text-sm text-[#4A9A92]">Guardado. Los menús se actualizaron en las reservas vinculadas.</p>}
 
       <div className="grid gap-4 sm:grid-cols-3">
         <div>
@@ -154,23 +155,27 @@ export function DayTemplateForm({
 
       <ImageField defaultValue={template?.image_url} />
 
-      <ImageField name="menu_image_url" defaultValue={template?.menu_image_url} label="Foto del menú completo" />
-
-      <div>
-        <label className={labelClass}>Menú del día (uno por línea: curso | nombre EN | nombre ES | descripción EN | descripción ES)</label>
-        <textarea
-          name="meals"
-          rows={4}
-          defaultValue={mealLines(template?.meals)}
-          placeholder={'entrada | Caprese salad | Ensalada caprese\nprincipal | Grilled sea bass | Lubina a la parrilla\npostre | Lemon delight | Delicia de limón'}
-          className={inputClass}
-          style={{ resize: 'vertical' }}
-        />
-        <p className="mt-1 text-xs text-[#7A7168]">
-          Curso: <strong>entrada</strong>, <strong>principal</strong> o <strong>postre</strong>. Las descripciones son opcionales pero es lo que el viajero lee para saber qué va a comer. Estos platos se copian
-          a cada reserva donde uses este día — cárgalos una sola vez aquí.
-        </p>
-      </div>
+      <p className="text-sm text-[#7A7168]">Carga cada menú una sola vez. Al guardar se actualizan los días vinculados de las reservas. Cada bloque tiene su propia foto y sus platos.</p>
+      {(['breakfast', 'lunch', 'dinner'] as const).map((period) => (
+        <fieldset key={period} className="space-y-3 rounded-2xl border border-[#4A9A92]/25 p-4">
+          <legend className="px-2 font-semibold text-[#4A9A92]">{COURSE_ES[period].toUpperCase()}</legend>
+          <ImageField name={`menu_image_${period}`} defaultValue={template?.menu_images?.[period]} label={`Foto del menú de ${COURSE_ES[period]}`} />
+          <label className={labelClass} htmlFor={`meals-${period}`}>Curso | Nombre EN | Nombre ES | Descripción EN | Descripción ES</label>
+          <textarea id={`meals-${period}`} name={`meals_${period}`} rows={5}
+            defaultValue={mealLines(template?.meals?.filter((m) => m.meal_period === period))}
+            placeholder={'entrada | Caprese salad | Ensalada caprese\nprincipal | Grilled sea bass | Lubina a la parrilla\npostre | Lemon delight | Delicia de limón'}
+            className={inputClass} />
+          <p className="text-xs text-[#7A7168]">Un plato por línea. Curso: entrada, principal o postre. Descripciones opcionales. Puedes dejar este bloque vacío si no corresponde.</p>
+        </fieldset>
+      ))}
+      {(template?.meals?.some((m) => !m.meal_period) || template?.menu_image_url) && (
+        <fieldset className="space-y-3 rounded-2xl border border-amber-300 p-4">
+          <legend className="px-2 text-sm font-semibold">Menú anterior sin asignar</legend>
+          <p className="text-xs text-[#7A7168]">Estos platos se conservan. Para separarlos, mueve sus líneas al bloque de desayuno, almuerzo o cena correspondiente.</p>
+          <ImageField name="menu_image_url" defaultValue={template?.menu_image_url} label="Foto anterior" />
+          <textarea name="meals" rows={4} defaultValue={mealLines(template?.meals?.filter((m) => !m.meal_period))} className={inputClass} />
+        </fieldset>
+      )}
 
       <div className="flex gap-2">
         <button

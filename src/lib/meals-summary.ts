@@ -7,6 +7,7 @@
 
 export type SummaryMeal = {
   id: string
+  meal_period?: string | null
   course: string
   name: Record<string, string> | null
 }
@@ -30,6 +31,8 @@ const travelersForDay = (day: SummaryDay, travelers: SummaryTraveler[]) =>
   travelers.filter((traveler) => (traveler.trip_number ?? 1) === (day.trip_number ?? 1))
 
 export type MealSelection = { meal_id: string; traveler_id: string }
+
+export const mealSlot = (meal: { course: string; meal_period?: string | null }) => meal.meal_period ? `${meal.meal_period}:${meal.course}` : meal.course
 
 const COURSE_ORDER: string[] = ['breakfast', 'lunch', 'dinner', 'starter', 'main', 'dessert']
 
@@ -60,9 +63,9 @@ export function mealPending(
     // cursos ofrecidos ese día → sus meal ids
     const mealsByCourse = new Map<string, string[]>()
     for (const m of meals) {
-      const arr = mealsByCourse.get(m.course) ?? []
+      const arr = mealsByCourse.get(mealSlot(m)) ?? []
       arr.push(m.id)
-      mealsByCourse.set(m.course, arr)
+      mealsByCourse.set(mealSlot(m), arr)
     }
 
     for (const traveler of travelersForDay(day, travelers)) {
@@ -110,9 +113,9 @@ export function mealTally(
     .map((day) => {
       const byCourse = new Map<string, { meal: SummaryMeal; eaters: SummaryTraveler[] }[]>()
       for (const meal of day.meals ?? []) {
-        const arr = byCourse.get(meal.course) ?? []
+        const arr = byCourse.get(mealSlot(meal)) ?? []
         arr.push({ meal, eaters: travelersByMeal.get(meal.id) ?? [] })
-        byCourse.set(meal.course, arr)
+        byCourse.set(mealSlot(meal), arr)
       }
       // cursos conocidos primero, luego cualquier otro
       const orderedCourses = [
@@ -134,6 +137,12 @@ export const COURSE_LABEL: Record<string, string> = {
   starter: 'Entrada',
   main: 'Principal',
   dessert: 'Postre',
+}
+
+for (const period of ['breakfast', 'lunch', 'dinner']) {
+  for (const course of ['starter', 'main', 'dessert']) {
+    COURSE_LABEL[`${period}:${course}`] = `${COURSE_LABEL[period]} · ${COURSE_LABEL[course]}`
+  }
 }
 
 /**
@@ -165,9 +174,9 @@ export function mealByTraveler(
     .map((day) => {
       const mealsByCourse = new Map<string, SummaryMeal[]>()
       for (const meal of day.meals ?? []) {
-        const arr = mealsByCourse.get(meal.course) ?? []
+        const arr = mealsByCourse.get(mealSlot(meal)) ?? []
         arr.push(meal)
-        mealsByCourse.set(meal.course, arr)
+        mealsByCourse.set(mealSlot(meal), arr)
       }
       const orderedCourses = [
         ...COURSE_ORDER.filter((c) => mealsByCourse.has(c)),

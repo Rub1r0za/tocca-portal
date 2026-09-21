@@ -14,6 +14,7 @@ type DayWithMeals = {
   title: Record<string, string>
   meals: Meal[]
   trip_number: 1 | 2 | 3
+  menu_images?: Partial<Record<'breakfast' | 'lunch' | 'dinner', string>>
   menu_image_url: string | null
 }
 
@@ -51,7 +52,7 @@ export default async function MealsPage({
 
   const daysWithMeals = days.filter(
     (day) =>
-      ((day.meals && day.meals.length > 0) || day.menu_image_url) &&
+      ((day.meals && day.meals.length > 0) || day.menu_image_url || Object.values(day.menu_images ?? {}).some(Boolean)) &&
       travelers.some((traveler) => (traveler.trip_number ?? 1) === (day.trip_number ?? 1)),
   )
 
@@ -70,6 +71,7 @@ export default async function MealsPage({
             selections={selections}
             bookingId={booking.id}
             locale={locale}
+            locked={booking.meals_locked ?? false}
           />
         )}
       </div>

@@ -3,7 +3,7 @@
 // familia) compartiendo los mismos días: para ordenar al restaurante o cuadrar
 // una actividad hace falta verlo todo junto, por día y por persona.
 
-import { COURSE_LABEL } from './meals-summary'
+import { COURSE_LABEL, mealSlot } from './meals-summary'
 
 export type Person = {
   id: string
@@ -37,7 +37,7 @@ type DayRow = {
   day_number: number
   day_date: string | null
   title: Record<string, string> | null
-  meals: { id: string; course: string; name: Record<string, string> | null }[] | null
+  meals: { id: string; meal_period?: string | null; course: string; name: Record<string, string> | null }[] | null
   trip_number: 1 | 2 | 3
 }
 
@@ -77,7 +77,7 @@ export function mealsByDay(
       for (const day of dayRows) {
         const mealsByCourse = new Map<string, typeof day.meals>()
         for (const meal of day.meals ?? []) {
-          mealsByCourse.set(meal.course, [...(mealsByCourse.get(meal.course) ?? []), meal])
+          mealsByCourse.set(mealSlot(meal), [...(mealsByCourse.get(mealSlot(meal)) ?? []), meal])
         }
         const courses = [...mealsByCourse.keys()].sort(
           (a, b) => courseRank(a) - courseRank(b),

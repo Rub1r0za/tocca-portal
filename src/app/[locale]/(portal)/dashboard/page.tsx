@@ -103,7 +103,7 @@ export default async function DashboardPage({
     const [{ data: dayRows }, { data: selectionRows }] = await Promise.all([
       supabase
         .from('journey_days')
-        .select('id, day_number, title, meals (id, course, name)')
+        .select('id, day_number, title, meals (id, course, meal_period, name)')
         .eq('booking_id', booking.id),
       supabase.from('meal_selections').select('meal_id, traveler_id').eq('booking_id', booking.id),
     ])

@@ -1,14 +1,15 @@
 'use client'
 
-import { Fragment, useTransition, useOptimistic } from 'react'
+import { Fragment, useTransition, useOptimistic, useState, useRef } from 'react'
 import { useTranslations } from 'next-intl'
-import { Check } from 'lucide-react'
+import { Check, Lock } from 'lucide-react'
 import { selectMeal } from './actions'
 import { splitAllergens } from '@/lib/format'
 import { cn } from '@/lib/utils'
 
 type Meal = {
   id: string
+  meal_period?: 'breakfast' | 'lunch' | 'dinner' | null
   course: 'breakfast' | 'lunch' | 'dinner' | 'starter' | 'main' | 'dessert'
   name: Record<string, string> | null
   description: Record<string, string> | null
@@ -27,21 +28,26 @@ export function MealDay({
   selections,
   bookingId,
   locale,
+  locked,
 }: {
-  day: { id: string; day_number: number; title: Record<string, string>; meals: Meal[]; menu_image_url: string | null }
+  day: { id: string; day_number: number; title: Record<string, string>; meals: Meal[]; menu_image_url: string | null; menu_images?: Partial<Record<'breakfast' | 'lunch' | 'dinner', string>> }
   travelers: Traveler[]
   selections: Selection[]
   bookingId: string
   locale: string
+  locked: boolean
 }) {
   const t = useTranslations('meals')
   const [isPending, startTransition] = useTransition()
+  const saving = useRef(false)
+  const [saveError, setSaveError] = useState(false)
   const [optimisticSelections, setOptimistic] = useOptimistic(
     selections,
     (state: Selection[], newSel: Selection) => {
-      const course = day.meals.find((m) => m.id === newSel.meal_id)?.course
+      const selected = day.meals.find((m) => m.id === newSel.meal_id)
+      const course = selected?.course
       if (!course) return state
-      const sameCourseMeals = day.meals.filter((m) => m.course === course).map((m) => m.id)
+      const sameCourseMeals = day.meals.filter((m) => m.course === course && (m.meal_period ?? null) === (selected?.meal_period ?? null)).map((m) => m.id)
       return [
         ...state.filter(
           (s) => !(sameCourseMeals.includes(s.meal_id) && s.traveler_id === newSel.traveler_id)
@@ -54,27 +60,39 @@ export function MealDay({
   const title = day.title?.[locale] ?? day.title?.['en'] ?? ''
 
   function handleSelect(meal: Meal, travelerId: string) {
+    if (locked || saving.current) return
+    saving.current = true
+    setSaveError(false)
     startTransition(async () => {
       setOptimistic({ meal_id: meal.id, traveler_id: travelerId })
-      await selectMeal({
-        mealId: meal.id,
-        travelerId,
-        bookingId,
-        course: meal.course,
-        journeyDayId: day.id,
-      })
+      try {
+        const result = await selectMeal({
+          mealId: meal.id,
+          travelerId,
+          bookingId,
+          course: meal.course,
+          journeyDayId: day.id,
+        })
+        setSaveError(!result.ok)
+      } catch {
+        setSaveError(true)
+      } finally {
+        saving.current = false
+      }
     })
   }
 
-  const mealsByCourse = COURSES.reduce<Record<string, Meal[]>>((acc, course) => {
-    acc[course] = day.meals.filter((m) => m.course === course)
-    return acc
-  }, {})
-
-  const hasMeals = day.meals.length > 0
+  const hasMeals = day.meals.length > 0 || Object.values(day.menu_images ?? {}).some(Boolean)
 
   return (
     <section className="space-y-5">
+      {locked && (
+        <div className="rounded-2xl border border-gold/30 bg-gold/10 px-4 py-3 text-sm text-foreground">
+          <p className="flex items-center gap-2 font-medium text-gold"><Lock className="size-4" />{locale === 'es' ? 'Selecciones cerradas' : 'Selections closed'}</p>
+          <p className="mt-1 text-xs text-mist">{locale === 'es' ? 'Puedes consultar tus elecciones, pero ya no se permiten cambios.' : 'You can review your choices, but changes are no longer allowed.'}</p>
+        </div>
+      )}
+      {saveError && <p role="alert" className="text-sm text-destructive">{locale === 'es' ? 'No pudimos confirmar el cambio. Revisa tu conexión e inténtalo de nuevo.' : 'We could not confirm the change. Check your connection and try again.'}</p>}
       {/* Day header */}
       <div className="flex items-center gap-3">
         <span className="flex size-8 shrink-0 items-center justify-center rounded-full border border-gold/40 bg-gold/10 text-sm text-gold" style={{ fontFamily: 'var(--font-display)', fontWeight: 600 }}>
@@ -95,14 +113,26 @@ export function MealDay({
 
       {!hasMeals && <p className="text-sm text-mist">{t('noMeals')}</p>}
 
+      {(['breakfast', 'lunch', 'dinner', null] as const).map((period) => {
+        const periodMeals = day.meals.filter((m) => (m.meal_period ?? null) === period)
+        const menuImage = period ? day.menu_images?.[period] : null
+        if (!periodMeals.length && !menuImage) return null
+        return <div key={period ?? 'legacy'} className="space-y-4">
+          {period && <h3 className="text-lg font-semibold text-gold">{t(period)}</h3>}
+          {menuImage && <a href={menuImage} target="_blank" rel="noreferrer" className="block overflow-hidden rounded-2xl border border-hairline bg-white p-2">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={menuImage} alt={period ? t(period) : ''} className="h-auto w-full object-contain" />
+          </a>}
       {COURSES.map((course) => {
-        const options = mealsByCourse[course] ?? []
+        const options = periodMeals.filter((m) => m.course === course)
         if (options.length === 0) return null
 
         return (
           <div key={course} className="overflow-hidden rounded-2xl border border-hairline bg-panel">
             <div className="border-b border-hairline px-5 py-2.5 text-center">
-              <p className="text-xs tracking-[0.22em] text-gold uppercase">{t(course)}</p>
+              <p className="text-xs tracking-[0.22em] text-gold uppercase">
+                {t('selectionTitle', { course: t(course) })}
+              </p>
             </div>
 
             {/* Menu — readable, "Dinner Notes" style */}
@@ -176,10 +206,10 @@ export function MealDay({
                               key={meal.id}
                               type="button"
                               onClick={() => handleSelect(meal, traveler.id)}
-                              disabled={isPending}
+                              disabled={isPending || locked}
                               aria-pressed={isSelected}
                               className={cn(
-                                'inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-xs transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/50',
+                                'inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-xs transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/50 disabled:cursor-not-allowed',
                                 isSelected
                                   ? 'border-gold/60 bg-gold/15 font-medium text-gold'
                                   : 'border-hairline bg-panel text-mist hover:border-gold/40 hover:text-foreground'
@@ -198,6 +228,8 @@ export function MealDay({
             )}
           </div>
         )
+      })}
+        </div>
       })}
     </section>
   )

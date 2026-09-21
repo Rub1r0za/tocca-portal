@@ -57,6 +57,7 @@ export type Booking = {
   notes: string | null
   total_price: number | null
   terms_accepted_at: string | null
+  meals_locked: boolean
   travelers: Traveler[] | null
 }
 
@@ -104,6 +105,7 @@ export type JourneyDay = {
   location: string | null
   image_url: string | null
   menu_image_url: string | null
+  menu_images?: MenuImages
   day_date: string | null
   schedule: ScheduleItem[] | null
   included: Localized[] | null
@@ -117,7 +119,11 @@ export type JourneyDay = {
   trip_number: 1 | 2 | 3
 }
 
+export type MealPeriod = 'breakfast' | 'lunch' | 'dinner'
+export type MenuImages = Partial<Record<MealPeriod, string>>
+
 export type TemplateMeal = {
+  meal_period?: MealPeriod | null
   course: MealCourse
   name: Localized
   description: Localized
@@ -131,6 +137,7 @@ export type DayTemplate = {
   location: string | null
   image_url: string | null
   menu_image_url: string | null
+  menu_images?: MenuImages
   schedule: ScheduleItem[] | null
   included: Localized[] | null
   meeting_point: Localized | null
@@ -145,6 +152,7 @@ export type DayTemplate = {
 }
 
 export type Meal = {
+  meal_period?: MealPeriod | null
   id: string
   journey_day_id: string
   course: MealCourse
