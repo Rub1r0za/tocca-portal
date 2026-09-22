@@ -11,6 +11,7 @@ import { TravelersSection } from './travelers-section'
 import { DeleteBookingButton } from './delete-booking-button'
 import { ThankYouButton } from './thank-you-button'
 import { cn } from '@/lib/utils'
+import { BookingVisibilityForm } from './booking-visibility-form'
 
 const STATUS_CLASS: Record<string, string> = {
   pending: 'bg-amber-50 text-amber-700 border-amber-200',
@@ -124,7 +125,7 @@ export default async function BookingDetailPage({
       {/* Quick nav */}
       <div className="mb-6 flex flex-wrap gap-2">
         {[
-          { href: `/${locale}/admin/bookings/${id}/journey`, label: 'Días del itinerario' },
+          { href: `/${locale}/admin/bookings/${id}/journey`, label: 'Días de la guía de viaje' },
           { href: `/${locale}/admin/bookings/${id}/meals`, label: 'Comidas' },
           { href: `/${locale}/admin/bookings/${id}/timeline`, label: 'Timeline' },
           { href: `/${locale}/admin/bookings/${id}/payments`, label: 'Pagos' },
@@ -141,6 +142,7 @@ export default async function BookingDetailPage({
       </div>
 
       <div className="space-y-5">
+        <BookingVisibilityForm bookingId={id} locale={locale} wellness={booking.wellness_enabled !== false} activities={booking.activities_enabled !== false} />
         {/* Status */}
         <div className="rounded-2xl border border-[rgba(62,45,35,0.12)] bg-white p-5 shadow-[0_1px_4px_rgba(62,45,35,0.06)]">
           <h2 className="mb-4 text-base font-medium text-[#3E2D23]">Estado de la reserva</h2>
@@ -203,7 +205,7 @@ export default async function BookingDetailPage({
         <div className="rounded-2xl border border-red-200 bg-red-50/40 p-5">
           <h2 className="mb-1 text-base font-medium text-red-700">Eliminar reserva</h2>
           <p className="mb-4 text-sm text-[#7A7168]">
-            Borra la reserva y todo su contenido (viajeros, días del itinerario y comidas). No se puede deshacer.
+            Borra la reserva y todo su contenido (viajeros, días de la guía de viaje y comidas). No se puede deshacer.
           </p>
           <DeleteBookingButton bookingId={id} locale={locale} />
         </div>

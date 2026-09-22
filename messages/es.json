@@ -3,7 +3,7 @@
     "label": "Navegación principal",
     "guestView": "Inicio",
     "timeline": "Cronograma",
-    "journey": "Mi Viaje",
+    "journey": "Guía de viaje",
     "activities": "Día Libre",
     "meals": "Comidas",
     "wellness": "Bienestar",
@@ -29,11 +29,11 @@
       "empty": "Tu cronograma de viaje aparecerá aquí."
     },
     "journey": {
-      "title": "Mi viaje exclusivo",
+      "title": "Guía de viaje",
       "subtitle": "Día a día en la Costa Amalfitana",
       "searchPlaceholder": "Busca días, lugares…",
       "noResults": "Ningún día coincide con tu búsqueda.",
-      "empty": "Tu itinerario se está preparando."
+      "empty": "Tu guía de viaje se está preparando."
     },
     "activities": {
       "title": "Día Libre",
@@ -138,7 +138,7 @@
     "day": "Día {n}"
   },
   "journeyDetail": {
-    "schedule": "Itinerario del día",
+    "schedule": "Guía de viaje del día",
     "included": "Qué incluye",
     "meetingPoint": "Punto de encuentro",
     "notes": "Bueno saber",

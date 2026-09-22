@@ -127,7 +127,7 @@ export async function updateBookingStatus(
       html: emailLayout(
         'Benvenuti in Costiera Amalfitana ✨',
         `<p>Hola ${updated.applicant_name || ''},</p>
-         <p>Tu reserva fue <strong>aprobada</strong>. Ya tienes acceso completo al portal de tu viaje: itinerario día a día, selección de comidas, experiencias opcionales y wellness.</p>
+         <p>Tu reserva fue <strong>aprobada</strong>. Ya tienes acceso completo al portal de tu viaje: guía de viaje día a día, selección de comidas, experiencias opcionales y wellness.</p>
          <p style="margin-top:20px;"><a href="https://tocca-portal.vercel.app/login" style="background:#23374D;color:#ffffff;padding:12px 24px;border-radius:10px;text-decoration:none;">Entrar a mi portal →</a></p>`,
       ),
     })
@@ -286,6 +286,8 @@ export async function updateTravelerMealsVisibility(
 // ── Journey days ────────────────────────────────────────────────────────────
 
 const daySchema = z.object({
+  schedule_en: z.string().optional(),
+  schedule_es: z.string().optional(),
   trip_number: z.coerce.number().int().min(1).max(3).default(1),
   day_number: z.coerce.number().int().min(1),
   title_en: z.string().min(1),
@@ -307,6 +309,7 @@ const daySchema = z.object({
 
 function dayPayload(d: z.infer<typeof daySchema>) {
   return {
+    ...(d.schedule_en !== undefined || d.schedule_es !== undefined ? { schedule: zipSchedule(d.schedule_en, d.schedule_es) } : {}),
     trip_number: d.trip_number,
     day_number: d.day_number,
     title: i18n(d.title_en, d.title_es),
@@ -351,7 +354,7 @@ export async function updateJourneyDay(
   locale: string,
   _prev: { error?: string } | null,
   formData: FormData,
-): Promise<{ error?: string }> {
+): Promise<{ error?: string; success?: boolean }> {
   const raw = Object.fromEntries(formData)
   const parsed = daySchema.safeParse(raw)
   if (!parsed.success) return { error: 'Datos inválidos' }
@@ -376,7 +379,20 @@ export async function updateJourneyDay(
   if (error) return { error: error.message }
 
   revalidatePath(`/${locale}/admin/bookings/${bookingId}/journey`)
-  return {}
+  revalidatePath('/[locale]/(portal)', 'layout')
+  return { success: true }
+}
+
+export async function updateBookingVisibility(bookingId: string, locale: string, _prev: { error?: string; success?: boolean } | null, formData: FormData): Promise<{ error?: string; success?: boolean }> {
+  const admin = await adminDb()
+  const { data, error } = await admin.from('bookings').update({
+    wellness_enabled: formData.get('wellness_enabled') === 'on',
+    activities_enabled: formData.get('activities_enabled') === 'on',
+  }).eq('id', bookingId).select('id').single()
+  if (error || !data) return { error: error?.message ?? 'Reserva no encontrada' }
+  revalidatePath(`/${locale}/admin/bookings/${bookingId}`)
+  revalidatePath('/[locale]/(portal)', 'layout')
+  return { success: true }
 }
 
 export async function deleteJourneyDay(dayId: string, bookingId: string, locale: string) {

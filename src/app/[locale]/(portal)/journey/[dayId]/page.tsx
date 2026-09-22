@@ -69,7 +69,7 @@ export default async function JourneyDayPage({
           )}
         </div>
 
-        {day.is_free_day && (
+        {day.is_free_day && booking.activities_enabled !== false && (
           <Link
             href={`/${locale}/activities`}
             className="group flex items-center gap-4 rounded-2xl border border-azure/30 bg-azure/5 p-5 transition-all hover:border-azure/50 hover:bg-azure/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-azure/50"

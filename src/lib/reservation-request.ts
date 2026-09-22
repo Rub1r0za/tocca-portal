@@ -32,13 +32,14 @@ export async function saveReservation(kind: 'activity' | 'wellness', input: z.in
     if (authError) return mutationFailure(`${kind}.auth`, authError)
     if (!user) return { ok: false, error: 'unauthorized' }
     const [booking, option, travelers] = await Promise.all([
-      supabase.from('bookings').select('id').eq('id', data.bookingId).eq('user_id', user.id).eq('status', 'approved').maybeSingle(),
+      supabase.from('bookings').select('*').eq('id', data.bookingId).eq('user_id', user.id).eq('status', 'approved').maybeSingle(),
       supabase.from(catalog).select('*').eq('id', data.targetId).eq('active', true).maybeSingle(),
       supabase.from('travelers').select('id, trip_number').eq('booking_id', data.bookingId).in('id', data.travelerIds),
     ])
     const lookupError = booking.error ?? option.error ?? travelers.error
     if (lookupError) return mutationFailure(`${kind}.lookup`, lookupError)
     if (!booking.data || !option.data) return { ok: false, error: 'unavailable' }
+    if (booking.data[kind === 'activity' ? 'activities_enabled' : 'wellness_enabled'] === false) return { ok: false, error: 'unavailable' }
     const travelerIds = [...new Set(data.travelerIds)].sort()
     if (travelers.data?.length !== travelerIds.length || travelers.data.some(t => (t.trip_number ?? 1) !== (option.data.trip_number ?? 1))) {
       return { ok: false, error: 'invalid_travelers' }

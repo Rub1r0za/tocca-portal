@@ -1,6 +1,6 @@
 // El cronograma del viajero sale de `timeline_events` cuando el admin los carga
 // a mano. Si esa tabla está vacía —que es lo normal, porque nadie la llena— se
-// deriva del itinerario: cada día aporta las paradas de su `schedule`, que ya
+// deriva de la guía de viaje: cada día aporta las paradas de su `schedule`, que ya
 // vienen cargadas desde las plantillas. Así el cronograma nunca sale en blanco.
 
 import type { Booking, JourneyDay, TimelineEventType } from './types'
@@ -22,7 +22,7 @@ function typeFor(text: string): TimelineEventType {
 }
 
 /**
- * Convierte los días del itinerario en grupos de cronograma.
+ * Convierte los días de la guía de viaje en grupos de cronograma.
  * `dayLabel` traduce "Día N" y se usa como encabezado cuando el día no tiene
  * fecha resoluble (sin `day_date` y sin `start_date` en la reserva).
  */

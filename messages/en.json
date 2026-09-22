@@ -3,7 +3,7 @@
     "label": "Main navigation",
     "guestView": "Home",
     "timeline": "Timeline",
-    "journey": "My Journey",
+    "journey": "Travel Guide",
     "activities": "Free Day",
     "meals": "Meals",
     "wellness": "Wellness",
@@ -29,11 +29,11 @@
       "empty": "Your travel timeline will appear here."
     },
     "journey": {
-      "title": "My Signature Journey",
+      "title": "Travel Guide",
       "subtitle": "Day by day on the Amalfi Coast",
       "searchPlaceholder": "Search days, places…",
       "noResults": "No days match your search.",
-      "empty": "Your itinerary is being prepared."
+      "empty": "Your travel guide is being prepared."
     },
     "activities": {
       "title": "Free Day",
@@ -138,7 +138,7 @@
     "day": "Day {n}"
   },
   "journeyDetail": {
-    "schedule": "Schedule",
+    "schedule": "Travel Guide",
     "included": "What's included",
     "meetingPoint": "Meeting point",
     "notes": "Good to know",

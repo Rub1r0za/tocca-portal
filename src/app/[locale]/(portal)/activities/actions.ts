@@ -22,12 +22,13 @@ export async function toggleActivity(input: { activityId: string; travelerId: st
     if (authError) return mutationFailure('activity.auth', authError)
     if (!user) return { ok: false, error: 'unauthorized' }
     const [booking, traveler, activity] = await Promise.all([
-      supabase.from('bookings').select('id').eq('id', data.bookingId).eq('user_id', user.id).eq('status', 'approved').maybeSingle(),
+      supabase.from('bookings').select('*').eq('id', data.bookingId).eq('user_id', user.id).eq('status', 'approved').maybeSingle(),
       supabase.from('travelers').select('trip_number').eq('id', data.travelerId).eq('booking_id', data.bookingId).maybeSingle(),
       supabase.from('activities').select('trip_number').eq('id', data.activityId).eq('active', true).maybeSingle(),
     ])
     const lookupError = booking.error ?? traveler.error ?? activity.error
     if (lookupError) return mutationFailure('activity.lookup', lookupError)
+    if (booking.data?.activities_enabled === false) return { ok: false, error: 'unavailable' }
     if (!booking.data || !traveler.data || !activity.data || traveler.data.trip_number !== activity.data.trip_number) return { ok: false, error: 'unavailable' }
     const { error } = data.selected
       ? await supabase.from('activity_selections').upsert({ activity_id: data.activityId, traveler_id: data.travelerId, booking_id: data.bookingId }, { onConflict: 'activity_id,traveler_id', ignoreDuplicates: true })

@@ -76,11 +76,11 @@ export const BEFORE_YOU_GO: TravelTip[] = [
   {
     icon: 'phone',
     title: {
-      es: "Revisa tu itinerario cada día",
+      es: "Revisa tu guía de viaje cada día",
       en: "Check your journey daily",
     },
     body: {
-      es: "Antes de salir cada día, revisa el itinerario del día en la app. Encontrarás punto de encuentro, recomendaciones, tips diarios e información útil para que aproveches al máximo cada experiencia.",
+      es: "Antes de salir cada día, revisa la guía de viaje del día en la app. Encontrarás punto de encuentro, recomendaciones, tips diarios e información útil para que aproveches al máximo cada experiencia.",
       en: "Before heading out each day, review that day’s journey in the app. You’ll find meeting details, recommendations, daily tips, and helpful “good to know” information designed to help you make the most of every experience.",
     },
   },

@@ -51,7 +51,7 @@ export default async function JourneyAdminPage({
           className="text-2xl text-[#3E2D23]"
           style={{ fontFamily: 'var(--font-display)', fontWeight: 500 }}
         >
-          Días del itinerario
+          Días de la guía de viaje
         </h1>
         <span className="rounded-full border border-[rgba(62,45,35,0.12)] bg-white px-3 py-1 text-xs text-[#7A7168]">
           {days?.length ?? 0} día{days?.length !== 1 ? 's' : ''}

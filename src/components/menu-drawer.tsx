@@ -8,6 +8,7 @@ import { X, LogOut } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
 import { menuItems } from './nav-items'
+import { usePortalVisibility } from './portal-visibility'
 import { LocaleSwitch } from './locale-switch'
 
 export function MenuDrawer({
@@ -38,7 +39,8 @@ export function MenuDrawer({
       .then(({ data }) => setMealsVisible(data?.travelers?.some((traveler) => traveler.meals_enabled) ?? false))
   }, [])
 
-  const items = menuItems.filter((item) => item.key !== 'meals' || mealsVisible)
+  const visibility = usePortalVisibility()
+  const items = menuItems.filter((item) => (item.key !== 'meals' || mealsVisible) && (item.key !== 'wellness' || visibility.wellness) && (item.key !== 'activities' || visibility.activities))
 
   useEffect(() => {
     if (!open) return

@@ -20,7 +20,7 @@ export function DeleteBookingButton({
         onClick={(e) => {
           if (
             !confirm(
-              '¿Eliminar esta reserva por completo? Se borrarán también sus viajeros, días del itinerario y comidas. Esta acción no se puede deshacer.',
+              '¿Eliminar esta reserva por completo? Se borrarán también sus viajeros, días de la guía de viaje y comidas. Esta acción no se puede deshacer.',
             )
           )
             e.preventDefault()

@@ -58,7 +58,7 @@ export default async function MealsPage({
 
   return (
     <div>
-      <AppHeader title={tSections('meals.title')} subtitle={tSections('meals.subtitle')} locale={locale} />
+      <AppHeader title={tSections('meals.title')} locale={locale} />
       <div className="space-y-8 px-5 py-6">
         {daysWithMeals.length === 0 ? (
           <EmptyState title={tSections('meals.empty')} />

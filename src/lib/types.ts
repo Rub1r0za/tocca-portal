@@ -58,6 +58,8 @@ export type Booking = {
   total_price: number | null
   terms_accepted_at: string | null
   meals_locked: boolean
+  wellness_enabled: boolean
+  activities_enabled: boolean
   travelers: Traveler[] | null
 }
 

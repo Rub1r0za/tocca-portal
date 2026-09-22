@@ -223,13 +223,13 @@ export default async function MealsAdminPage({
       {list.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-[rgba(62,45,35,0.2)] bg-white p-8 text-center">
           <p className="text-sm text-[#7A7168]">
-            Esta reserva no tiene días de itinerario aún. Las comidas se asignan por día:
+            Esta reserva no tiene días de la guía de viaje aún. Las comidas se asignan por día:
           </p>
           <Link
             href={`/${locale}/admin/bookings/${id}/journey`}
             className="mt-3 inline-block text-sm text-[#4A9A92] hover:underline"
           >
-            Crear días del itinerario primero →
+            Crear días de la guía de viaje primero →
           </Link>
         </div>
       ) : (

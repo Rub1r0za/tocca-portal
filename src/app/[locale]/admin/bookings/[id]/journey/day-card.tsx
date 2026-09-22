@@ -23,6 +23,7 @@ type Day = {
   tocca_tips: Array<Record<string, string>> | null
   good_to_know: Array<Record<string, string>> | null
   is_free_day: boolean
+  schedule?: Array<{ time: string; title: Record<string, string> }>
 }
 
 function linesOf(items: Array<Record<string, string>> | null | undefined, lang: string) {
@@ -48,6 +49,13 @@ function EditDayForm({
       {state?.error && (
         <p className="text-xs text-red-600">{state.error}</p>
       )}
+      {state?.success && <p role="status" className="text-sm text-teal-700">Guía de viaje guardada.</p>}
+      <div className="grid gap-4 sm:grid-cols-2">
+        {['en', 'es'].map((lang) => <label key={lang} className={labelClass}>
+          Horarios {lang.toUpperCase()} (hora | actividad, una por línea)
+          <textarea name={`schedule_${lang}`} rows={5} className={inputClass} defaultValue={(day.schedule ?? []).map((item) => `${item.time} | ${item.title?.[lang] ?? ''}`).join('\n')} />
+        </label>)}
+      </div>
       <div className="grid gap-4 sm:grid-cols-3">
         <div>
           <label className={labelClass}>Número de día</label>

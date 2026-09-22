@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl'
 import { useEffect, useState } from 'react'
 import { cn } from '@/lib/utils'
 import { navItems } from './nav-items'
+import { usePortalVisibility } from './portal-visibility'
 import { createClient } from '@/lib/supabase/client'
 
 export function BottomNav({ locale }: { locale: string }) {
@@ -25,7 +26,8 @@ export function BottomNav({ locale }: { locale: string }) {
       .then(({ data }) => setMealsVisible(data?.travelers?.some((traveler) => traveler.meals_enabled) ?? false))
   }, [])
 
-  const items = navItems.filter((item) => item.key !== 'meals' || mealsVisible)
+  const visibility = usePortalVisibility()
+  const items = navItems.filter((item) => (item.key !== 'meals' || mealsVisible) && (item.key !== 'wellness' || visibility.wellness) && (item.key !== 'activities' || visibility.activities))
 
   return (
     <nav
@@ -56,7 +58,7 @@ export function BottomNav({ locale }: { locale: string }) {
                     <span className="absolute -bottom-1 left-1/2 size-1 -translate-x-1/2 rounded-full bg-azure" />
                   )}
                 </span>
-                <span className="w-full truncate text-[0.6rem] leading-tight tracking-wide">
+                <span className="w-full text-[0.6rem] leading-tight tracking-wide">
                   {t(key)}
                 </span>
               </Link>

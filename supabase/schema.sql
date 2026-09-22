@@ -41,6 +41,8 @@ create table bookings (
   applicant_phone  text,
   notes            text,
   meals_locked     boolean not null default false,
+  wellness_enabled boolean not null default true,
+  activities_enabled boolean not null default true,
   created_at       timestamptz not null default now(),
   updated_at       timestamptz not null default now()
 );
