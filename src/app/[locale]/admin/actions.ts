@@ -1,5 +1,7 @@
 'use server'
 
+import { zipSchedule } from '@/lib/schedule'
+
 import { createAdminClient } from '@/lib/supabase/admin'
 import { requireAdmin } from '@/lib/admin-auth'
 import { revalidatePath } from 'next/cache'
@@ -375,6 +377,8 @@ export async function updateJourneyDay(
     .update({ ...dayPayload(parsed.data), trip_number: current.trip_number ?? 1 })
     .eq('id', dayId)
     .eq('booking_id', bookingId)
+    .select('id')
+    .single()
 
   if (error) return { error: error.message }
 
@@ -899,31 +903,6 @@ function parseTemplateMeals(raw?: string) {
     .filter((m) => m.name.en || m.name.es)
 }
 
-/** Zip "HH:MM | texto" per-line textareas into [{ time, title: {en, es} }]. */
-function zipSchedule(en?: string, es?: string) {
-  const parse = (raw?: string) =>
-    (raw || '')
-      .split('\n')
-      .map((l) => l.trim())
-      .filter(Boolean)
-      .map((l) => {
-        const sep = l.indexOf('|')
-        return sep === -1
-          ? { time: '', text: l }
-          : { time: l.slice(0, sep).trim(), text: l.slice(sep + 1).trim() }
-      })
-  const enItems = parse(en)
-  const esItems = parse(es)
-  const len = Math.max(enItems.length, esItems.length)
-  return Array.from({ length: len }, (_, i) => ({
-    time: enItems[i]?.time || esItems[i]?.time || '',
-    title: {
-      en: enItems[i]?.text || esItems[i]?.text || '',
-      es: esItems[i]?.text || enItems[i]?.text || '',
-    },
-  }))
-}
-
 export async function saveDayTemplate(
   templateId: string | null,
   locale: string,
@@ -965,7 +944,7 @@ export async function saveDayTemplate(
 
   const admin = await adminDb()
   const { error } = templateId
-    ? await admin.from('day_templates').update(payload).eq('id', templateId)
+    ? await admin.from('day_templates').update(payload).eq('id', templateId).select('id').single()
     : await admin.from('day_templates').insert(payload)
 
   if (error) return { error: error.message }

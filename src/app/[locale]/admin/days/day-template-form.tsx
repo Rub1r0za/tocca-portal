@@ -4,6 +4,7 @@ import { useActionState } from 'react'
 import { Loader2 } from 'lucide-react'
 import type { DayTemplate } from '@/lib/types'
 import { saveDayTemplate } from '../actions'
+import { ScheduleFields } from '@/components/admin/schedule-fields'
 import { ImageField } from '@/components/admin/image-field'
 
 const inputClass =
@@ -12,13 +13,6 @@ const labelClass = 'mb-1.5 block text-[0.7rem] font-semibold tracking-[0.18em] t
 
 function linesOf(items: Array<Record<string, string>> | null | undefined, lang: string) {
   return (items ?? []).map((i) => i?.[lang] ?? '').join('\n')
-}
-
-function scheduleLines(
-  items: Array<{ time: string; title: Record<string, string> }> | null | undefined,
-  lang: string,
-) {
-  return (items ?? []).map((i) => `${i.time} | ${i.title?.[lang] ?? ''}`).join('\n')
 }
 
 const COURSE_ES: Record<string, string> = { breakfast: 'desayuno', lunch: 'almuerzo', dinner: 'cena', starter: 'entrada', main: 'principal', dessert: 'postre' }
@@ -53,7 +47,7 @@ export function DayTemplateForm({
   const [state, action, pending] = useActionState(bound, null)
 
   return (
-    <form action={action} className="space-y-4">
+    <form translate="no" action={action} className="space-y-4">
       {state?.error && <p role="alert" className="text-xs text-red-600">{state.error}</p>}
       {state?.success && <p role="status" className="text-sm text-[#4A9A92]">Guardado. Los menús se actualizaron en las reservas vinculadas.</p>}
 
@@ -120,16 +114,7 @@ export function DayTemplateForm({
         </div>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2">
-        <div>
-          <label className={labelClass}>Horario EN (una línea: hora | texto)</label>
-          <textarea name="schedule_en" rows={3} defaultValue={scheduleLines(template?.schedule, 'en')} placeholder={'7:00 PM | Welcome Cocktail\n7:30 PM | Welcome Dinner'} className={inputClass} style={{ resize: 'vertical' }} />
-        </div>
-        <div>
-          <label className={labelClass}>Horario ES</label>
-          <textarea name="schedule_es" rows={3} defaultValue={scheduleLines(template?.schedule, 'es')} placeholder={'7:00 PM | Cóctel de bienvenida\n7:30 PM | Cena de bienvenida'} className={inputClass} style={{ resize: 'vertical' }} />
-        </div>
-      </div>
+      <ScheduleFields items={template?.schedule} />
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div>

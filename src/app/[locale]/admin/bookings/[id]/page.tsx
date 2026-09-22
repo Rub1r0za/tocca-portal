@@ -126,6 +126,7 @@ export default async function BookingDetailPage({
       <div className="mb-6 flex flex-wrap gap-2">
         {[
           { href: `/${locale}/admin/bookings/${id}/journey`, label: 'Días de la guía de viaje' },
+          { href: '#visibilidad', label: 'Mostrar / ocultar Wellness y actividades' },
           { href: `/${locale}/admin/bookings/${id}/meals`, label: 'Comidas' },
           { href: `/${locale}/admin/bookings/${id}/timeline`, label: 'Timeline' },
           { href: `/${locale}/admin/bookings/${id}/payments`, label: 'Pagos' },

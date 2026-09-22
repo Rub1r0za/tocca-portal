@@ -3,6 +3,7 @@
 import { useState, useActionState } from 'react'
 import { Pencil, Trash2, ChevronDown, ChevronUp, Loader2 } from 'lucide-react'
 import { updateJourneyDay, deleteJourneyDay } from '../../../actions'
+import { ScheduleFields } from '@/components/admin/schedule-fields'
 import { ImageField } from '@/components/admin/image-field'
 
 const inputClass =
@@ -45,17 +46,12 @@ function EditDayForm({
   const [state, action, pending] = useActionState(bound, null)
 
   return (
-    <form action={action} className="mt-4 space-y-4 border-t border-[rgba(62,45,35,0.08)] pt-4">
+    <form translate="no" action={action} className="mt-4 space-y-4 border-t border-[rgba(62,45,35,0.08)] pt-4">
       {state?.error && (
         <p className="text-xs text-red-600">{state.error}</p>
       )}
       {state?.success && <p role="status" className="text-sm text-teal-700">Guía de viaje guardada.</p>}
-      <div className="grid gap-4 sm:grid-cols-2">
-        {['en', 'es'].map((lang) => <label key={lang} className={labelClass}>
-          Horarios {lang.toUpperCase()} (hora | actividad, una por línea)
-          <textarea name={`schedule_${lang}`} rows={5} className={inputClass} defaultValue={(day.schedule ?? []).map((item) => `${item.time} | ${item.title?.[lang] ?? ''}`).join('\n')} />
-        </label>)}
-      </div>
+      <ScheduleFields items={day.schedule} />
       <div className="grid gap-4 sm:grid-cols-3">
         <div>
           <label className={labelClass}>Número de día</label>
