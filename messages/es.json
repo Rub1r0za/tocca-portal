@@ -97,7 +97,10 @@
     "emailNotConfirmed": "Tu cuenta aún no está confirmada. Busca el correo de confirmación (revisa spam) o escríbenos para activarla.",
     "rateLimited": "Demasiados intentos seguidos. Espera unos minutos y vuelve a intentarlo.",
     "userExists": "Ya existe una cuenta con este correo. Inicia sesión o usa \"¿Olvidaste tu contraseña?\".",
-    "invalidEmail": "Ese correo no parece válido."
+    "invalidEmail": "Ese correo no parece válido.",
+    "resetSubtitle": "Ingresa el correo de tu cuenta y te enviaremos un enlace para restablecer tu contraseña.",
+    "resetSubmit": "Enviar enlace de recuperación",
+    "recoveryError": "No pudimos solicitar el enlace. Revisa tu conexión e intenta de nuevo."
   },
   "dashboard": {
     "ciao": "Ciao, {name}",

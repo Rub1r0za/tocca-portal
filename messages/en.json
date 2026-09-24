@@ -97,7 +97,10 @@
     "emailNotConfirmed": "Your account is not confirmed yet. Look for the confirmation email (check spam) or contact us to activate it.",
     "rateLimited": "Too many attempts in a row. Please wait a few minutes and try again.",
     "userExists": "An account with this email already exists. Sign in, or use \"Forgot your password?\".",
-    "invalidEmail": "That email address does not look valid."
+    "invalidEmail": "That email address does not look valid.",
+    "resetSubtitle": "Enter your account email and we will send you a link to reset your password.",
+    "resetSubmit": "Send password reset link",
+    "recoveryError": "We could not request the link. Check your connection and try again."
   },
   "dashboard": {
     "ciao": "Ciao, {name}",

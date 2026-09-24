@@ -9,7 +9,7 @@ import { z } from 'zod'
 
 const emailSchema = z.string().email()
 
-type Mode = 'signin' | 'signup' | 'magic'
+type Mode = 'signin' | 'signup' | 'magic' | 'reset'
 type Status = 'idle' | 'busy' | 'sent' | 'confirm-sent' | 'reset-sent'
 
 export default function LoginForm() {
@@ -61,6 +61,10 @@ export default function LoginForm() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setError('')
+    if (mode === 'reset') {
+      await handleForgotPassword()
+      return
+    }
     if (!emailSchema.safeParse(email).success) return
 
     const supabase = createClient()
@@ -137,20 +141,27 @@ export default function LoginForm() {
 
   async function handleForgotPassword() {
     setError('')
-    if (!emailSchema.safeParse(email).success) {
-      setError(t('error'))
+    const recoveryEmail = email.trim()
+    if (!emailSchema.safeParse(recoveryEmail).success) {
+      setError(t('invalidEmail'))
       return
     }
+    setEmail(recoveryEmail)
     setStatus('busy')
-    const supabase = createClient()
-    const { error: err } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: callbackUrl(`/${locale}/account/password`),
-    })
-    if (err) {
-      setError(messageFor(err))
+    try {
+      const supabase = createClient()
+      const { error: err } = await supabase.auth.resetPasswordForEmail(recoveryEmail, {
+        redirectTo: callbackUrl(`/${locale}/account/password`),
+      })
+      if (err) {
+        setError(messageFor(err))
+        setStatus('idle')
+      } else {
+        setStatus('reset-sent')
+      }
+    } catch {
+      setError(t('recoveryError'))
       setStatus('idle')
-    } else {
-      setStatus('reset-sent')
     }
   }
 
@@ -205,7 +216,7 @@ export default function LoginForm() {
         ) : (
           <div className="rounded-2xl border border-hairline bg-white px-6 py-8 shadow-[0_4px_24px_rgba(62,45,35,0.10)] sm:px-8">
             <p className="mb-6 text-center text-sm leading-relaxed text-mist">
-              {mode === 'signup' ? t('signupSubtitle') : t('subtitle')}
+              {mode === 'reset' ? t('resetSubtitle') : mode === 'signup' ? t('signupSubtitle') : t('subtitle')}
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -228,7 +239,7 @@ export default function LoginForm() {
                 />
               </div>
 
-              {mode !== 'magic' && (
+              {(mode === 'signin' || mode === 'signup') && (
                 <div>
                   <label
                     htmlFor="password"
@@ -250,7 +261,7 @@ export default function LoginForm() {
                 </div>
               )}
 
-              {error && <p className="text-xs text-destructive">{error}</p>}
+              {error && <p role="alert" className="text-xs text-destructive">{error}</p>}
 
               <button
                 type="submit"
@@ -260,7 +271,7 @@ export default function LoginForm() {
               >
                 {status === 'busy' ? (
                   <Loader2 className="size-4 animate-spin" aria-hidden />
-                ) : mode === 'magic' ? (
+                ) : mode === 'magic' || mode === 'reset' ? (
                   <Send className="size-4" aria-hidden />
                 ) : mode === 'signup' ? (
                   <UserPlus className="size-4" aria-hidden />
@@ -270,10 +281,12 @@ export default function LoginForm() {
                 {status === 'busy'
                   ? mode === 'signup'
                     ? t('creatingAccount')
-                    : mode === 'magic'
+                    : mode === 'magic' || mode === 'reset'
                       ? t('sending')
                       : t('signingIn')
-                  : mode === 'signup'
+                  : mode === 'reset'
+                    ? t('resetSubmit')
+                    : mode === 'signup'
                     ? t('createAccount')
                     : mode === 'magic'
                       ? t('submit')
@@ -298,7 +311,7 @@ export default function LoginForm() {
                   <p>
                     <button
                       type="button"
-                      onClick={handleForgotPassword}
+                      onClick={() => { setMode('reset'); setError('') }}
                       disabled={status === 'busy'}
                       className="text-mist hover:text-foreground hover:underline"
                     >
@@ -328,10 +341,11 @@ export default function LoginForm() {
                   </button>
                 </p>
               )}
-              {mode === 'magic' && (
+              {(mode === 'magic' || mode === 'reset') && (
                 <p>
                   <button
                     type="button"
+                    disabled={status === 'busy'}
                     onClick={() => { setMode('signin'); setError('') }}
                     className="text-mist hover:text-foreground hover:underline"
                   >
