@@ -1,4 +1,5 @@
 import { createAdminClient } from '@/lib/supabase/admin'
+import { readAllRows } from '@/lib/read-all-rows'
 import { Sparkles, HeartPulse, UtensilsCrossed } from 'lucide-react'
 import {
   mealsByDay,
@@ -19,10 +20,10 @@ export default async function SummaryAdminPage() {
   const admin = createAdminClient()
 
   // Las canceladas no se cocinan ni se reservan: quedan fuera del consolidado.
-  const { data: bookingRows } = await admin
+  const bookingRows = await readAllRows((from, to) => admin
     .from('bookings')
     .select('id, title, applicant_name, status')
-    .neq('status', 'cancelled')
+    .neq('status', 'cancelled').order('id').range(from, to))
 
   const bookings = bookingRows ?? []
   const bookingIds = bookings.map((b) => b.id)
@@ -40,26 +41,26 @@ export default async function SummaryAdminPage() {
   }
 
   const [
-    { data: travelerRows },
-    { data: dayRows },
-    { data: selectionRows },
-    { data: actRows },
-    { data: wellRows },
+    travelerRows,
+    dayRows,
+    selectionRows,
+    actRows,
+    wellRows,
   ] = await Promise.all([
-    admin.from('travelers').select('id, booking_id, first_name, last_name, trip_number').in('booking_id', bookingIds),
-    admin
+    readAllRows((from, to) => admin.from('travelers').select('id, booking_id, first_name, last_name, trip_number').in('booking_id', bookingIds).order('id').range(from, to)),
+    readAllRows((from, to) => admin
       .from('journey_days')
       .select('id, booking_id, day_number, day_date, title, trip_number, meals (id, course, meal_period, name)')
-      .in('booking_id', bookingIds),
-    admin.from('meal_selections').select('meal_id, traveler_id').in('booking_id', bookingIds),
-    admin
+      .in('booking_id', bookingIds).order('id').range(from, to)),
+    readAllRows((from, to) => admin.from('meal_selections').select('meal_id, traveler_id').in('booking_id', bookingIds).order('id').range(from, to)),
+    readAllRows((from, to) => admin
       .from('activity_requests')
       .select('id, booking_id, num_guests, traveler_ids, requested_date, status, activities(name, trip_number)')
-      .in('booking_id', bookingIds),
-    admin
+      .in('booking_id', bookingIds).order('id').range(from, to)),
+    readAllRows((from, to) => admin
       .from('wellness_requests')
       .select('id, booking_id, num_guests, traveler_ids, requested_date, status, wellness_options(name, trip_number)')
-      .in('booking_id', bookingIds),
+      .in('booking_id', bookingIds).order('id').range(from, to)),
   ])
 
   const people = new Map<string, Person>(

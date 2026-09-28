@@ -34,5 +34,8 @@ export async function selectMeal(input: z.infer<typeof selectMealSchema>): Promi
     return mutationFailure('meal.save', error)
   }
   revalidatePath('/[locale]/(portal)/meals', 'page')
+  revalidatePath('/[locale]/admin/summary', 'page')
+  revalidatePath('/[locale]/admin/bookings/[id]/meals', 'page')
+  revalidatePath('/[locale]/admin/bookings/[id]', 'page')
   return { ok: true }
 }
